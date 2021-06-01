@@ -8,7 +8,8 @@ import VESinverse_JClark as VI         #This will change when splitting file int
 '''
 
 class VEStesting(unittest.TestCase):
-    def test_3L_R1_D1(self):                #test_number == 4
+#Layer 3 Tests
+    def test_3L_R1_D1(self):            #Test_number == 4
         '''follows from the 3L-R1-D1 page in
             modelTestsForVerification'''
         VI.LAYERS = 3   
@@ -70,7 +71,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 26.783)
         print("\"Predicted\" tests Completed")
 
-    def test_3L_R2_D3(self):            #Test_Number == 1
+    def test_3L_R2_D3(self):            #Test_number == 1
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -105,17 +106,17 @@ class VEStesting(unittest.TestCase):
         print("\"Spacing\" tests Completed")
 
         self.assertEqual(VI.rdat[1], 125)
-        self.assertEqual(VI.rdat[2], 130)
-        self.assertEqual(VI.rdat[3], 140)
-        self.assertEqual(VI.rdat[4], 150)
-        self.assertEqual(VI.rdat[5], 160)
-        self.assertEqual(VI.rdat[6], 170)
-        self.assertEqual(VI.rdat[7], 175)
-        self.assertEqual(VI.rdat[8], 170)
-        self.assertEqual(VI.rdat[9], 130)
-        self.assertEqual(VI.rdat[10], 100)
-        self.assertEqual(VI.rdat[11], 80)
-        self.assertEqual(VI.rdat[12], 60)
+        self.assertEqual(VI.rdat[2], 124)
+        self.assertEqual(VI.rdat[3], 120)
+        self.assertEqual(VI.rdat[4], 115)
+        self.assertEqual(VI.rdat[5], 110)
+        self.assertEqual(VI.rdat[6], 95)
+        self.assertEqual(VI.rdat[7], 40)
+        self.assertEqual(VI.rdat[8], 24)
+        self.assertEqual(VI.rdat[9], 15)
+        self.assertEqual(VI.rdat[10], 10)
+        self.assertEqual(VI.rdat[11], 11)
+        self.assertEqual(VI.rdat[12], 25)
         print("\"Origianl_Data\" tests Completed")
 
         self.assertEqual(round(VI.pltanswerkeep[1], 3), 129.148)
@@ -132,7 +133,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 59.383)
         print("\"Predicted\" tests Completed")
 
-    def test_3L_R2_D1(self):                    #Test_number == 2
+    def test_3L_R2_D1(self):            #Test_number == 2
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -229,17 +230,17 @@ class VEStesting(unittest.TestCase):
         print("\"Spacing\" tests Completed")
 
         self.assertEqual(VI.rdat[1], 125)
-        self.assertEqual(VI.rdat[2], 124)
-        self.assertEqual(VI.rdat[3], 120)
-        self.assertEqual(VI.rdat[4], 115)
-        self.assertEqual(VI.rdat[5], 110)
-        self.assertEqual(VI.rdat[6], 95)
-        self.assertEqual(VI.rdat[7], 40)
-        self.assertEqual(VI.rdat[8], 24)
-        self.assertEqual(VI.rdat[9], 15)
-        self.assertEqual(VI.rdat[10], 10)
-        self.assertEqual(VI.rdat[11], 11)
-        self.assertEqual(VI.rdat[12], 25)
+        self.assertEqual(VI.rdat[2], 130)
+        self.assertEqual(VI.rdat[3], 140)
+        self.assertEqual(VI.rdat[4], 150)
+        self.assertEqual(VI.rdat[5], 160)
+        self.assertEqual(VI.rdat[6], 170)
+        self.assertEqual(VI.rdat[7], 175)
+        self.assertEqual(VI.rdat[8], 170)
+        self.assertEqual(VI.rdat[9], 130)
+        self.assertEqual(VI.rdat[10], 100)
+        self.assertEqual(VI.rdat[11], 80)
+        self.assertEqual(VI.rdat[12], 60)
         print("\"Origianl_Data\" tests Completed")
 
         self.assertEqual(round(VI.pltanswerkeep[1], 3), 123.981)
@@ -256,18 +257,144 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 22.06)
         print("\"Predicted\" tests Completed")
 
+    def test_3L_R1_D2(self):            #Test_number == 5
+     '''follows from the 3L-R2-D2 page in
+            modelTestsForVerification'''
+        VI.LAYERS = 3
+        VI.DATASET = 2
+        VI.RANGE = 1
+        VI.GRAPH = False
+        VI.computePredictions()
+
+        self.assertEqual(round(VI.pkeep[1], 3), 4.969)
+        self.assertEqual(round(VI.pkeep[3], 3), 157.388)
+        print("Layer 1 tests Completed")
+        self.assertEqual(round(VI.pkeep[2], 3), 71.670)
+        self.assertEqual(round(VI.pkeep[4], 3), 83.794)
+        print("Layer 2 tests Completed")
+        self.assertEqual(round(VI.pkeep[5], 3), 2230.04)
+        print("Layer 3 tests Completed")
+        self.assertEqual(round(VI.errmin, 4), 0.1159)
+        print("RMS test Completed")
+
+        self.assertEqual(VI.adat[1], 0.55)
+        self.assertEqual(VI.adat[2], 0.95)
+        self.assertEqual(VI.adat[3], 1.5)
+        self.assertEqual(VI.adat[4], 2.5)
+        self.assertEqual(VI.adat[5], 3)
+        self.assertEqual(VI.adat[6], 4.5)
+        self.assertEqual(VI.adat[7], 5.5)
+        self.assertEqual(VI.adat[8], 9)
+        self.assertEqual(VI.adat[9], 12)
+        self.assertEqual(VI.adat[10], 20)
+        self.assertEqual(VI.adat[11], 30)
+        self.assertEqual(VI.adat[12], 70)
+        print("\"Spacing\" tests Completed")
+
+        self.assertEqual(VI.rdat[1], 125)
+        self.assertEqual(VI.rdat[2], 130)
+        self.assertEqual(VI.rdat[3], 140)
+        self.assertEqual(VI.rdat[4], 150)
+        self.assertEqual(VI.rdat[5], 160)
+        self.assertEqual(VI.rdat[6], 170)
+        self.assertEqual(VI.rdat[7], 175)
+        self.assertEqual(VI.rdat[8], 170)
+        self.assertEqual(VI.rdat[9], 130)
+        self.assertEqual(VI.rdat[10], 100)
+        self.assertEqual(VI.rdat[11], 80)
+        self.assertEqual(VI.rdat[12], 60)
+        print("\"Origianl_Data\" tests Completed")
+
+        self.assertEqual(round(VI.pltanswerkeep[1], 3), 157.671)
+        self.assertEqual(round(VI.pltanswerkeep[2], 3), 157.075)
+        self.assertEqual(round(VI.pltanswerkeep[3], 3), 156.427)
+        self.assertEqual(round(VI.pltanswerkeep[4], 3), 153.796)
+        self.assertEqual(round(VI.pltanswerkeep[5], 3), 151.724)
+        self.assertEqual(round(VI.pltanswerkeep[6], 3), 143.373)
+        self.assertEqual(round(VI.pltanswerkeep[7], 3), 136.93)
+        self.assertEqual(round(VI.pltanswerkeep[8], 3), 116.639)
+        self.assertEqual(round(VI.pltanswerkeep[9], 3), 105.238)
+        self.assertEqual(round(VI.pltanswerkeep[10], 3), 92.771)
+        self.assertEqual(round(VI.pltanswerkeep[11], 3), 90.918)
+        self.assertEqual(round(VI.pltanswerkeep[12], 3), 117.472)
+        print("\"Predicted\" tests Completed")   
+
+    def test_3L_R1_D3(self):            #Test_number == 6
+        '''follows from the 3L-R2-D3 page in
+            modelTestsForVerification'''
+        VI.LAYERS = 3
+        VI.DATASET = 3
+        VI.RANGE = 1
+        VI.GRAPH = False
+        VI.computePredictions()
+
+        self.assertEqual(round(VI.pkeep[1], 3), 3.110)
+        self.assertEqual(round(VI.pkeep[3], 3), 144.197)
+        print("Layer 1 tests Completed")
+        self.assertEqual(round(VI.pkeep[2], 3), 44.508)
+        self.assertEqual(round(VI.pkeep[4], 3), 9.867)
+        print("Layer 2 tests Completed")
+        self.assertEqual(round(VI.pkeep[5], 3), 1075.63)
+        print("Layer 3 tests Completed")
+        self.assertEqual(round(VI.errmin, 5), 0.06624)
+        print("RMS test Completed")
+
+        self.assertEqual(VI.adat[1], 0.55)
+        self.assertEqual(VI.adat[2], 0.95)
+        self.assertEqual(VI.adat[3], 1.5)
+        self.assertEqual(VI.adat[4], 2.5)
+        self.assertEqual(VI.adat[5], 3)
+        self.assertEqual(VI.adat[6], 4.5)
+        self.assertEqual(VI.adat[7], 5.5)
+        self.assertEqual(VI.adat[8], 9)
+        self.assertEqual(VI.adat[9], 12)
+        self.assertEqual(VI.adat[10], 20)
+        self.assertEqual(VI.adat[11], 30)
+        self.assertEqual(VI.adat[12], 70)
+        print("\"Spacing\" tests Completed")
+
+        self.assertEqual(VI.rdat[1], 125)
+        self.assertEqual(VI.rdat[2], 124)
+        self.assertEqual(VI.rdat[3], 120)
+        self.assertEqual(VI.rdat[4], 115)
+        self.assertEqual(VI.rdat[5], 110)
+        self.assertEqual(VI.rdat[6], 95)
+        self.assertEqual(VI.rdat[7], 40)
+        self.assertEqual(VI.rdat[8], 24)
+        self.assertEqual(VI.rdat[9], 15)
+        self.assertEqual(VI.rdat[10], 10)
+        self.assertEqual(VI.rdat[11], 11)
+        self.assertEqual(VI.rdat[12], 25)
+        print("\"Origianl_Data\" tests Completed")
+
+        self.assertEqual(round(VI.pltanswerkeep[1], 3), 144.077)
+        self.assertEqual(round(VI.pltanswerkeep[2], 3), 141.915)
+        self.assertEqual(round(VI.pltanswerkeep[3], 3), 136.358)
+        self.assertEqual(round(VI.pltanswerkeep[4], 3), 117.834)
+        self.assertEqual(round(VI.pltanswerkeep[5], 3), 106.207)
+        self.assertEqual(round(VI.pltanswerkeep[6], 3), 72.117)
+        self.assertEqual(round(VI.pltanswerkeep[7], 3), 54.128)
+        self.assertEqual(round(VI.pltanswerkeep[8], 3), 21.928)
+        self.assertEqual(round(VI.pltanswerkeep[9], 3), 14.173)
+        self.assertEqual(round(VI.pltanswerkeep[10], 3), 11.086)
+        self.assertEqual(round(VI.pltanswerkeep[11], 3), 11.968)
+        self.assertEqual(round(VI.pltanswerkeep[12], 3), 21.272)
+        print("\"Predicted\" tests Completed")
+
+#Layer 2 Tests
+
 if __name__ == '__main__':
     test_number = int(sys.argv[1])
     test = VEStesting()
     if test_number == 1:
         test.test_3L_R2_D3()        #written
     elif test_number == 2:
-        test.test_3L_R2_D1()        
+        test.test_3L_R2_D1()        #Written
     elif test_number == 3:
         test.test_3L_R2_D2()        #Written
     elif test_number == 4:
         test.test_3L_R1_D1()        #Written
     elif test_number == 5:
-        test.test_3L_R1_D2()
+        test.test_3L_R1_D2()        #written
     elif test_number == 6:
-        test.test_3L_R1_D3()
+        test.test_3L_R1_D3()        #Written

@@ -423,8 +423,8 @@ def openGUI():
 
     executionframe = Frame(mainwindow, background="gainsboro")
     executionframe.pack(side=BOTTOM, anchor=SW)
-    execute_VES = Button(executionframe, text="Compute Predictions",
-                         command=computePredictions)
+    execute_VES = Button(executionframe, text="Compute Predictions",      #"Compute Predictions" button
+                         command=computePredictions)                      #Calls the computePredictions() function
     execute_VES.grid(row=1, column=1, padx=10, pady=5)
 
     # plot curves button
@@ -587,7 +587,7 @@ def computePredictions():
     small = [0] * (MAX_LAYERS + 1)
     xlarge = [0] * (MAX_LAYERS + 1)
 
-# Turn off randomization
+    # Turn off randomization
     random.seed(0)
 
     # set number of iterations
@@ -616,7 +616,7 @@ def computePredictions():
         # print( '  iloop is ', iloop)
         for i in range(1, num_layers + 1):
             randNumber = random.random()
-            # print(randNumber, '  random')
+            print(randNumber, '  random')
             p[i] = (xlarge[i] - small[i]) * randNumber + small[i]
         for i in range(num_layers + 1, n + 1):
             randNumber = random.random()

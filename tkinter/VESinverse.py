@@ -486,7 +486,7 @@ def numLayersChanged(*args):
     curr_num_layers = new_num_layers
 
 
-def pickFile():
+def pickFile(test=0):
     global file_view
     global algorithm_choice
 
@@ -494,15 +494,18 @@ def pickFile():
     global rdat
     global ndat
 
-    # get file
-    resistivity_file = filedialog.askopenfilename(initialdir="/",
-                                                  title="Open File",
-                                                  filetypes=(("Text Files", "*.txt"),
-                                                             ("All Files", "*.*")))
 
-    # set label by file button to resistivity file link
-    file_view.config(text=resistivity_file)
+    if test == 0:
+        # get file
+        resistivity_file = filedialog.askopenfilename(initialdir="/",
+                                                    title="Open File",
+                                                    filetypes=(("Text Files", "*.txt"),
+                                                                ("All Files", "*.*")))
 
+        # set label by file button to resistivity file link
+        file_view.config(text=resistivity_file)
+    else:
+        resistivity_file = "/home/ajv234/Documents/VESinverse/InputExample.txt"
     # open the file and read entire file into file_list.
     file_handle = open(resistivity_file, "r")
     file_list = file_handle.readlines()
@@ -557,7 +560,7 @@ def pickFile():
 #     return
 
 
-def computePredictions():
+def computePredictions(test=0):
     '''compute predictions'''
 
     # will cut down global variables in future
@@ -662,8 +665,8 @@ def computePredictions():
     s = 7
     plt.loglog(adat[1:ndat], rdat[1:ndat], 'bo',
                markersize=s)  # original data blue dots
-
-    viewModel()
+    if test == 0:
+        viewModel()
 
 
 def viewModel():

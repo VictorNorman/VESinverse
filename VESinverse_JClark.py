@@ -19,7 +19,7 @@ import sys
 #Only the Test suit should edit these Constants
 LAYERS = 3
 DATASET = 1
-RANGE = 1
+RANGE = 2
 GRAPH = True
 
 # Schlumberger filter

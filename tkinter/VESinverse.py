@@ -595,6 +595,8 @@ def computePredictions():
 
     # get number of layers
     num_layers = num_layers_var.get()
+    # TODO: CHANGE VARIABLE NAME N
+    # WHY IS A GLOBAL VARIABLE A SINGLE LETTER!!!!
     n = 2 * num_layers - 1
 
     # set small[] and xlarge[]
@@ -616,7 +618,7 @@ def computePredictions():
         # print( '  iloop is ', iloop)
         for i in range(1, num_layers + 1):
             randNumber = random.random()
-            print(randNumber, '  random')
+            #print(randNumber, '  random')
             p[i] = (xlarge[i] - small[i]) * randNumber + small[i]
         for i in range(num_layers + 1, n + 1):
             randNumber = random.random()

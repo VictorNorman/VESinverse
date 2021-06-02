@@ -13,6 +13,45 @@ import VESinverse_ajv234 as VI         #This will change when splitting file int
 #TODO: change the comment at the beginning of each method
 
 class VEStesting(unittest.TestCase):
+    
+    def run_tests(self, test_number):
+        #Layer 3 tests    
+        if test_number == 1:
+            self.test_3L_R2_D3()
+        elif test_number == 2:
+            self.test_3L_R2_D1()
+        elif test_number == 3:
+            self.test_3L_R2_D2()
+        elif test_number == 4:
+            self.test_3L_R1_D1()
+        elif test_number == 5:
+            self.test_3L_R1_D2()        
+        elif test_number == 6:
+            self.test_3L_R1_D3()        
+        #Layer 2 tests
+        elif test_number == 7:
+            self.test_2L_R3_D4() 
+        elif test_number == 8:
+            self.test_2L_R3_D5()
+        elif test_number == 9:
+            self.test_2L_R4_D5() 
+        elif test_number == 10:
+            self.test_2L_R3_D6() 
+        elif test_number == 11:
+            self.test_2L_R4_D6()        
+        #Layer 4 tests
+        elif test_number == 12:
+            self.test_4L_R5_D7()
+        elif test_number == 13:
+            self.test_4L_R6_D7()
+        elif test_number == 14:
+            self.test_4L_R7_D7()
+        elif test_number == 15:
+            self.test_4L_R7_D8()
+        elif test_number == 16:
+            self.test_4L_R6_D8()
+        elif test_number == 17:
+            self.test_4L_R5_D8()
 #Layer 3 Tests
     def test_3L_R1_D1(self):            #test_number == 4
         '''follows from the 3L-R1-D1 page in
@@ -21,6 +60,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 1
         VI.RANGE = 1
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 1.240)
@@ -83,6 +123,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 3
         VI.RANGE = 2
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 3.425)
@@ -145,6 +186,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 1
         VI.RANGE = 2
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 1.033)
@@ -207,6 +249,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 2
         VI.RANGE = 2
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 3.194)
@@ -269,6 +312,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 2
         VI.RANGE = 1
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 4.969)
@@ -331,6 +375,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 3
         VI.RANGE = 1
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 3.110)
@@ -394,6 +439,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 4
         VI.RANGE = 3
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 3.919)
@@ -453,6 +499,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 5
         VI.RANGE = 3
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 4.660)
@@ -512,6 +559,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 5
         VI.RANGE = 4
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 4.705)
@@ -571,6 +619,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 6
         VI.RANGE = 3
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 2.682)
@@ -630,6 +679,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 6
         VI.RANGE = 4
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 9.818)
@@ -691,6 +741,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 7
         VI.RANGE = 5
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 1.801)
@@ -756,6 +807,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 7
         VI.RANGE = 6
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 1.772)
@@ -821,6 +873,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 7
         VI.RANGE = 7
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 5.203)
@@ -886,6 +939,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 8
         VI.RANGE = 7
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 4.858)
@@ -951,6 +1005,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 8
         VI.RANGE = 6
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 1.183)
@@ -1016,6 +1071,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 8
         VI.RANGE = 5
         VI.GRAPH = False
+        VI.data_init()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[1], 3), 1.911)
@@ -1075,43 +1131,17 @@ class VEStesting(unittest.TestCase):
         print("\"Predicted\" tests Completed")
 
 if __name__ == '__main__':
-    test_number = int(sys.argv[1])
+    input_number = int(sys.argv[1])
     test = VEStesting()
-#Layer 3 tests    
-    if test_number == 1:
-        test.test_3L_R2_D3()
-    elif test_number == 2:
-        test.test_3L_R2_D1()
-    elif test_number == 3:
-        test.test_3L_R2_D2()
-    elif test_number == 4:
-        test.test_3L_R1_D1()
-    elif test_number == 5:
-        test.test_3L_R1_D2()        
-    elif test_number == 6:
-        test.test_3L_R1_D3()        
-#Layer 2 tests
-    elif test_number == 7:
-        test.test_2L_R3_D4() 
-    elif test_number == 8:
-        test.test_2L_R3_D5()
-    elif test_number == 9:
-        test.test_2L_R4_D5() 
-    elif test_number == 10:
-        test.test_2L_R3_D6() 
-    elif test_number == 11:
-        test.test_2L_R4_D6()        
-#Layer 4 tests
-    elif test_number == 12:
-        test.test_4L_R5_D7()
-    elif test_number == 13:
-        test.test_4L_R6_D7()
-    elif test_number == 14:
-        test.test_4L_R7_D7()
-    elif test_number == 15:
-        test.test_4L_R7_D8()
-    elif test_number == 16:
-        test.test_4L_R6_D8()
-    elif test_number == 17:
-        test.test_4L_R5_D8()
+    if input_number == 18:
+        for i in range(1, 18):
+            print("Runing test", i)
+            test.run_tests(i)
+            print("Finished test", i, "\n\n")
+    else:
+        test.run_tests(input_number)
+
+
+
+    
     

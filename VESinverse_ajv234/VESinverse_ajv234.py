@@ -74,160 +74,178 @@ new_y = [0]*1000
 ndat = 13
 # hard coded data input - spacing and apparent resistivities measured
 # in teh field
+def data_init():
+    
+    global adat
+    global rdat
+    global one30
+    global rms
+    global errmin
+    global index
+    global e
+    global n
+    global spac
+    global m
+    global delx
+    global ep
+    global fctr
+    global small
+    global xlarge
+    global iter
 
-adat = [0., 0.55, 0.95, 1.5, 2.5, 3., 4.5, 5.5, 9., 12., 20., 30., 70.]
+    adat = [0., 0.55, 0.95, 1.5, 2.5, 3., 4.5, 5.5, 9., 12., 20., 30., 70.]
 
-if DATASET == 1:
-    rdat = [0., 125., 110., 95., 40., 24., 15.,
-            10.5, 8., 6., 6.5, 11., 25.]  # DATA 1
-elif DATASET == 2:
-    rdat = [0., 125., 130., 140., 150., 160.,
-            170., 175., 170., 130., 100., 80., 60.]  # DATA 2
-elif DATASET == 3:
-    rdat = [0., 125., 124., 120., 115., 110.,
-            95., 40., 24., 15., 10., 11., 25.]  # DATA 3
-elif DATASET == 4:
-    rdat = [0.,  125., 124., 126., 129., 135.,
-            140., 150., 170., 175., 180., 185., 187.]  # DATA 4
-elif DATASET == 5:
-    rdat = [0.,  125., 124., 126., 122., 120.,
-            110., 85., 65., 40., 30., 26., 25.]  # DATA 5
-elif DATASET == 6:
-    rdat = [0.,  125., 124., 126., 129., 135.,
-            180., 220., 250., 280., 300., 310., 315.]  # DATA 6
-elif DATASET == 7:
-    rdat = [0., 300., 303., 330., 330., 310.,
-            300., 285., 240., 205., 180., 180., 210.]  # DATA 7
-elif DATASET == 9:
-    rdat = [0., 300., 298., 290., 270., 280.,
-            300., 330., 370., 420., 510., 507., 370.]  # DATA 8
-one30 = 1.e30
-rms = one30
-errmin = 1.e10
+    if DATASET == 1:
+        rdat = [0., 125., 110., 95., 40., 24., 15.,
+                10.5, 8., 6., 6.5, 11., 25.]  # DATA 1
+    elif DATASET == 2:
+        rdat = [0., 125., 130., 140., 150., 160.,
+                170., 175., 170., 130., 100., 80., 60.]  # DATA 2
+    elif DATASET == 3:
+        rdat = [0., 125., 124., 120., 115., 110.,
+                95., 40., 24., 15., 10., 11., 25.]  # DATA 3
+    elif DATASET == 4:
+        rdat = [0.,  125., 124., 126., 129., 135.,
+                140., 150., 170., 175., 180., 185., 187.]  # DATA 4
+    elif DATASET == 5:
+        rdat = [0.,  125., 124., 126., 122., 120.,
+                110., 85., 65., 40., 30., 26., 25.]  # DATA 5
+    elif DATASET == 6:
+        rdat = [0.,  125., 124., 126., 129., 135.,
+                180., 220., 250., 280., 300., 310., 315.]  # DATA 6
+    elif DATASET == 7:
+        rdat = [0., 300., 303., 330., 330., 310.,
+                300., 285., 240., 205., 180., 180., 210.]  # DATA 7
+    elif DATASET == 8:
+        rdat = [0., 300., 298., 290., 270., 280.,
+                300., 330., 370., 420., 510., 507., 370.]  # DATA 8
+    one30 = 1.e30
+    rms = one30
+    errmin = 1.e10
 
-# INPUT
-index = 2   # 1 is for shchlumberger and 2 is for Wenner
+    # INPUT
+    index = 2   # 1 is for shchlumberger and 2 is for Wenner
 
-if LAYERS == 3:
-    e = 3
-elif LAYERS == 2:
-    e = 2
-elif LAYERS == 4:
-    e = 4
+    if LAYERS == 3:
+        e = 3
+    elif LAYERS == 2:
+        e = 2
+    elif LAYERS == 4:
+        e = 4
 
-n = 2*e-1
+    n = 2*e-1
 
 
-spac = 0.2  # smallest electrode spacing
-m = 20  # number of points where resistivity is calculated
+    spac = 0.2  # smallest electrode spacing
+    m = 20  # number of points where resistivity is calculated
 
-spac = np.log(spac)
-delx = np.log(10.0)/6.
+    spac = np.log(spac)
+    delx = np.log(10.0)/6.
 
-# these lines apparently find the computer precision ep
-ep = 1.0
-ep = ep/2.0
-fctr = ep+1.
-while fctr > 1.:
+    # these lines apparently find the computer precision ep
+    ep = 1.0
     ep = ep/2.0
     fctr = ep+1.
+    while fctr > 1.:
+        ep = ep/2.0
+        fctr = ep+1.
 
-# this is where the range in parameters should be input from a GUI
-# I'm hard coding this in for now
+    # this is where the range in parameters should be input from a GUI
+    # I'm hard coding this in for now
 
-# enter thickenss range for each layer and then resistivity range.
-# for 3 layers small[1] and small[2] are low end of thickness range
-# small[3], small[4] and small[5] are the low end of resistivities
-if RANGE == 1:
-    # range 1  3-layer case (narrow range)
-    small[1] = 1.
-    xlarge[1] = 5
-    small[2] = 10.
-    xlarge[2] = 75.
-    small[3] = 20.
-    xlarge[3] = 200.
-    small[4] = 2.
-    xlarge[4] = 100
-    small[5] = 500.
-    xlarge[5] = 3000.
-elif RANGE == 2:
-    # range 2 3-layer case (broad range)
-    small[1] = 1.
-    xlarge[1] = 10
-    small[2] = 1.
-    xlarge[2] = 50.
-    small[3] = 1.
-    xlarge[3] = 500.
-    small[4] = 1.
-    xlarge[4] = 500.
-    small[5] = 1.
-    xlarge[5] = 500.
-elif RANGE == 3:
-    # range 3  2-layer case (broad range)
-    small[1] = 1.
-    xlarge[1] = 20
-    small[2] = 1.
-    xlarge[2] = 500.
-    small[3] = 1.
-    xlarge[3] = 500
-elif RANGE == 4:
-    # range 4  2-layer case (small range)
-    small[1] = 1.
-    xlarge[1] = 10
-    small[2] = 50.
-    xlarge[2] = 200.
-    small[3] = 1.
-    xlarge[3] = 50.
-elif RANGE == 5:
-    # range 5 4-layer case (small range)
-    small[1] = 1.
-    xlarge[1] = 2
-    small[2] = 1.
-    xlarge[2] = 50.
-    small[3] = 1.
-    xlarge[3] = 50.
-    small[4] = 200.
-    xlarge[4] = 400.
-    small[5] = 400.
-    xlarge[5] = 500.
-    small[6] = 1.
-    xlarge[6] = 500.
-    small[7] = 1.
-    xlarge[7] = 500.
-elif RANGE == 6:
-    # range 6 4-layer case (broad range)
-    small[1] = 1
-    xlarge[1] = 2
-    small[2] = 1.
-    xlarge[2] = 2.
-    small[3] = 1.
-    xlarge[3] = 50.
-    small[4] = 1.
-    xlarge[4] = 500.
-    small[5] = 1.
-    xlarge[5] = 500.
-    small[6] = 1.
-    xlarge[6] = 500.
-    small[7] = 1.
-    xlarge[7] = 500.
-elif RANGE == 7:
-    # range 7 4-layer case (broadest range)
-    small[1] = 1
-    xlarge[1] = 50
-    small[2] = 1.
-    xlarge[2] = 50.
-    small[3] = 1.
-    xlarge[3] = 50.
-    small[4] = 1.
-    xlarge[4] = 500.
-    small[5] = 1.
-    xlarge[5] = 500.
-    small[6] = 1.
-    xlarge[6] = 500.
-    small[7] = 1.
-    xlarge[7] = 500.
+    # enter thickenss range for each layer and then resistivity range.
+    # for 3 layers small[1] and small[2] are low end of thickness range
+    # small[3], small[4] and small[5] are the low end of resistivities
+    if RANGE == 1:
+        # range 1  3-layer case (narrow range)
+        small[1] = 1.
+        xlarge[1] = 5
+        small[2] = 10.
+        xlarge[2] = 75.
+        small[3] = 20.
+        xlarge[3] = 200.
+        small[4] = 2.
+        xlarge[4] = 100
+        small[5] = 500.
+        xlarge[5] = 3000.
+    elif RANGE == 2:
+        # range 2 3-layer case (broad range)
+        small[1] = 1.
+        xlarge[1] = 10
+        small[2] = 1.
+        xlarge[2] = 50.
+        small[3] = 1.
+        xlarge[3] = 500.
+        small[4] = 1.
+        xlarge[4] = 500.
+        small[5] = 1.
+        xlarge[5] = 500.
+    elif RANGE == 3:
+        # range 3  2-layer case (broad range)
+        small[1] = 1.
+        xlarge[1] = 20
+        small[2] = 1.
+        xlarge[2] = 500.
+        small[3] = 1.
+        xlarge[3] = 500
+    elif RANGE == 4:
+        # range 4  2-layer case (small range)
+        small[1] = 1.
+        xlarge[1] = 10
+        small[2] = 50.
+        xlarge[2] = 200.
+        small[3] = 1.
+        xlarge[3] = 50.
+    elif RANGE == 5:
+        # range 5 4-layer case (small range)
+        small[1] = 1.
+        xlarge[1] = 2
+        small[2] = 1.
+        xlarge[2] = 50.
+        small[3] = 1.
+        xlarge[3] = 50.
+        small[4] = 200.
+        xlarge[4] = 400.
+        small[5] = 400.
+        xlarge[5] = 500.
+        small[6] = 1.
+        xlarge[6] = 500.
+        small[7] = 1.
+        xlarge[7] = 500.
+    elif RANGE == 6:
+        # range 6 4-layer case (broad range)
+        small[1] = 1
+        xlarge[1] = 2
+        small[2] = 1.
+        xlarge[2] = 2.
+        small[3] = 1.
+        xlarge[3] = 50.
+        small[4] = 1.
+        xlarge[4] = 500.
+        small[5] = 1.
+        xlarge[5] = 500.
+        small[6] = 1.
+        xlarge[6] = 500.
+        small[7] = 1.
+        xlarge[7] = 500.
+    elif RANGE == 7:
+        # range 7 4-layer case (broadest range)
+        small[1] = 1
+        xlarge[1] = 50
+        small[2] = 1.
+        xlarge[2] = 50.
+        small[3] = 1.
+        xlarge[3] = 50.
+        small[4] = 1.
+        xlarge[4] = 500.
+        small[5] = 1.
+        xlarge[5] = 500.
+        small[6] = 1.
+        xlarge[6] = 500.
+        small[7] = 1.
+        xlarge[7] = 500.
 
-iter = 10000  # number of iterations for the Monte Carlo guesses. to be input on GUI
+    iter = 10000  # number of iterations for the Monte Carlo guesses. to be input on GUI
 
 
 def readData():
@@ -387,12 +405,6 @@ def splint(n, x, xa=[], ya=[], y2a=[]):
 
     return y
 
-
-# main here
-if __name__ == '__main__':
-    computePredictions()
-
-
 def computePredictions():
 
     # TODO: This should be GONE by the end of Summer
@@ -492,3 +504,8 @@ def computePredictions():
         plt.show()
         plt.grid(True)
         sys.exit(0)
+
+# main here
+if __name__ == '__main__':
+    data_init()
+    computePredictions()

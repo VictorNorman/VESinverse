@@ -137,7 +137,7 @@ def data_init():
     elif LAYERS == 4:
         layer = 4
 
-    layer_index = (2 * layer - 1) -1     # layer (e) and layer_index (n) variables have been updated
+    layer_index = 2 * layer - 1    # layer (e) and layer_index (n) variables have been updated
 
     electrode_spacing = 0.2  # smallest electrode spacing
     resistivity_points_number = 20  # number of points where resistivity is calculated (Variable was m)
@@ -285,18 +285,19 @@ def error():
     return rms
 
 
-def transf(y, i):
+def transf(y, i):                       #follow trace up to find where the break is 
     u = 1./np.exp(y)
     t[0] = p[layer_index]
-    for j in range(2, layer, 1):
+    for j in range(0, layer, 1):
         pwr = -2. * u * p[layer + 1 - j]
         if pwr < np.log(2. * ep):
             pwr = np.log(2. * ep)
         a = np.exp(pwr)
         b = (1. - a)/(1. + a)
-        rs = p[layer_index + 1 - j]
+        rs = p[layer_index - j]
         tpr = b*rs
         t[j] = (tpr + t[j - 1]) / (1. + tpr * t[j - 1] / (rs * rs))
+        
     r[i] = t[layer]
     return
 
@@ -336,7 +337,7 @@ def rmsfit():
 
     x = electrode_spacing
     # print("A-Spacing   App. Resistivity")
-    for i in range(1, resistivity_points_number, 1):
+    for i in range(0, resistivity_points_number, 1):
         a = np.exp(x)
         asav[i] = a
         asavl[i] = np.log10(a)

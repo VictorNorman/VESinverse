@@ -17,9 +17,9 @@ import sys
 
 #For Testing Purposes
 #Only the Test suit should edit these Constants
-LAYERS = 2
-DATASET = 4
-RANGE = 3
+LAYERS = 4
+DATASET = 7
+RANGE = 5
 GRAPH = True
 
 # Schlumberger filter

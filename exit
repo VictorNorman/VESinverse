@@ -1,0 +1,113 @@
+[33mcommit 33eca1b2817f3ed61aa8157a8bb745dd81564147[m[33m ([m[1;36mHEAD -> [m[1;32majv234_code_clean_up[m[33m, [m[1;31morigin/ajv234_code_clean_up[m[33m)[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 12:34:10 2021 -0400
+
+    index by 0
+
+[33mcommit 8a19c1a03530e51d85c0db83162a21b8e6e2a22c[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 12:20:59 2021 -0400
+
+    middle of converting all arrays to index 0
+
+[33mcommit b510df402ebd9bb463f520a469dde6b7ed2cd20f[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 11:54:16 2021 -0400
+
+    some incremental changes, a few variable name changes
+
+[33mcommit d25bd1abf358f4227f6ed9a80f865390706fdcda[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 11:03:45 2021 -0400
+
+    updated VESinverse_ajv234.py and ajv234_tests.py so that by running the tests with an 18 will run sequentially through all of the tests
+
+[33mcommit 7a8dc50fcec95f16c9feb6556dd3dad41bdb1a5e[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 10:26:54 2021 -0400
+
+    Initial clean up with pycodestyle
+
+[33mcommit 7010c3147454dea7c63f327b637df4ef5d3eeab2[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 10:25:36 2021 -0400
+
+    Initial clean up with pycodestyle
+
+[33mcommit b938e32414af4b762993ab18c07ef29f8bd5a35a[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 09:14:19 2021 -0400
+
+    started to turn into class
+
+[33mcommit bad7f32a36afec29976ba37dee44e26de7e9c47c[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Wed Jun 2 08:55:21 2021 -0400
+
+    Finished the tests
+
+[33mcommit 7ff7a27c2fd694c350398daa6ebb08803873b2d7[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 16:35:42 2021 -0400
+
+    Layer 2 Tests completed
+
+[33mcommit adebd559b95762bea6ae7b40884d7b02030fe00c[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 16:05:59 2021 -0400
+
+    Tests 7 and 8 Completed
+
+[33mcommit f8ec3b567c4e26e23c11837309214e7dde7e7229[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 15:43:00 2021 -0400
+
+    Layer 3 Tests finished
+
+[33mcommit b49a215899b15a02a3a19689898481fdde84f42c[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 15:20:04 2021 -0400
+
+    Tests 1-4 done
+
+[33mcommit 02d2d8cc7ac7d9038b9ad4cf5645cedaa1bad890[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 13:01:11 2021 -0400
+
+    Test 1 update
+
+[33mcommit a9d49bc4fdd0591090c5ec4079ee2469f9ae5c5f[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 12:32:28 2021 -0400
+
+    New Test file to test the base VESinverse.py not the GUI Version
+
+[33mcommit 02673b51edd6c5a327cf23d0783504cae40270f8[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 12:14:15 2021 -0400
+
+    Test 1 half way
+
+[33mcommit e1e37f66d63868f97a797f5bf6ed0311d4b7c562[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 11:37:24 2021 -0400
+
+    strange tkinter variables
+
+[33mcommit 06ee8e8247466f0f1d4a98b71b0f9f7d4d957bdc[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 11:07:43 2021 -0400
+
+    Added tests.py
+
+[33mcommit 83ae2cb53e2111f6cacbced7d929a58487a78ac4[m
+Author: ajv234 <ajv234@maroon20.cs.calvin.edu>
+Date:   Tue Jun 1 10:04:54 2021 -0400
+
+    Added Becca's Code
+
+[33mcommit 4b6648d7a278464e1a9fb733d4504ccde007fceb[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Victor Norman <vtn2@calvin.edu>
+Date:   Tue Jun 1 09:57:23 2021 -0400
+
+    original from James Clark, with testing data

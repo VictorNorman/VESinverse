@@ -25,14 +25,14 @@ GRAPH = True
 ARRAYSIZE = 65
 
 # Schlumberger filter
-fltr1 = [0., .00046256, -.0010907, .0017122, -.0020687,
+fltr1 = [.00046256, -.0010907, .0017122, -.0020687,
          .0043048, -.0021236, .015995, .017065, .098105, .21918, .64722,
          1.1415, .47819, -3.515, 2.7743, -1.201, .4544, -.19427, .097364,
          -.054099, .031729, -.019109, .011656, -.0071544, .0044042,
          -.002715, .0016749, -.0010335, .00040124]
 
 # Wenner Filter
-fltr2 = [0., .000238935, .00011557, .00017034, .00024935,
+fltr2 = [.000238935, .00011557, .00017034, .00024935,
          .00036665, .00053753, .0007896, .0011584, .0017008, .0024959,
          .003664, .0053773, .007893, .011583, .016998, .024934, .036558,
          .053507, .078121, .11319, .16192, .22363, .28821, .30276, .15523,
@@ -138,6 +138,7 @@ def data_init():
         layer = 4
 
     layer_index = 2 * layer - 1    # layer (e) and layer_index (n) variables have been updated
+
 
     electrode_spacing = 0.2  # smallest electrode spacing
     resistivity_points_number = 20  # number of points where resistivity is calculated (Variable was m)
@@ -258,7 +259,6 @@ def readData():
     for i in range(0, ndat, 1):
         adatl[i] = np.log10(adat[i])
         rdatl[i] = np.log10(rdat[i])
-
     return
 
 
@@ -285,28 +285,27 @@ def error():
     return rms
 
 
-def transf(y, i):                       #follow trace up to find where the break is 
+def transf(y, i): 
     u = 1./np.exp(y)
-    t[0] = p[layer_index]
+    t[0] = p[layer_index-1]
     for j in range(0, layer, 1):
-        pwr = -2. * u * p[layer + 1 - j]
+        pwr = -2. * u * p[layer - j -1]
         if pwr < np.log(2. * ep):
             pwr = np.log(2. * ep)
         a = np.exp(pwr)
         b = (1. - a)/(1. + a)
-        rs = p[layer_index - j]
+        rs = p[layer_index - j -1]
         tpr = b*rs
         t[j] = (tpr + t[j - 1]) / (1. + tpr * t[j - 1] / (rs * rs))
-        
-    r[i] = t[layer]
+    r[i] = t[layer-1]
     return
 
 
-def filters(b, k):
+def filters(fltr, k):                                  # This b is a local Variable not the same as the other b's
     for i in range(0, resistivity_points_number, 1):
         re = 0.
         for j in range(0, k, 1):
-            re = re + b[j] * r[i + k - j]
+            re = re + fltr[j] * r[i + k - j]
         r[i] = re
     return
 
@@ -331,6 +330,7 @@ def rmsfit():
             r[i] = 2. * a - r[i]
             y = y + delx
         filters(fltr2, 34)
+
     else:
         print(" type of survey not indicated")
         sys.exit()
@@ -341,7 +341,10 @@ def rmsfit():
         a = np.exp(x)
         asav[i] = a
         asavl[i] = np.log10(a)
-        rl[i] = np.log10(r[i])
+        if r[i] <= 0:
+            print(r[i], '\n', i, '\n', p, '\n', t)
+            raise Exception("only positive number above 0")
+        rl[i] = np.log10(r[i])                              # Line in question, encountered invalid value --- why? --- there are negitave numbers somewhere in r
         x = x + delx
         # print("%7.2f   %9.3f " % ( asav[i], r[i]))
 
@@ -369,10 +372,10 @@ def spline(n, yp1, ypn, x=[], y=[], y2=[]):
     for i in range(0, n):
         # print(i,x[i])
         sig = (x[i] - x[i - 1]) / (x[i + 1] - x[i - 1])
-        p = sig * y2[i - 1] + 2.
-        y2[i] = (sig - 1.) / p
+        notp = sig * y2[i - 1] + 2.
+        y2[i] = (sig - 1.) / notp
         u[i] = ((6. * ((y[i + 1] - y[i]) / (x[i + 1] - x[i]) - (y[i] - y[i - 1]) /
-                     (x[i] - x[i - 1])) / (x[i + 1] - x[i - 1]) - sig * u[i - 1]) / p)
+                     (x[i] - x[i - 1])) / (x[i + 1] - x[i - 1]) - sig * u[i - 1]) / notp)
 
     if ypn > one29:
         qn = 0.
@@ -380,7 +383,7 @@ def spline(n, yp1, ypn, x=[], y=[], y2=[]):
     else:
         qn = 0.5
         un = (3. / (x[n] - x[n - 1])) * (ypn - (y[n] - y[n - 1]) / (x[n] - x[n - 1]))
-
+    
     y2[n] = (un - qn * u[n - 1]) / (qn * y2[n - 1] + 1.)
     for k in range(n-1, -1, -1):
         y2[k] = y2[k] * y2[k + 1] + u[k]
@@ -467,7 +470,7 @@ def computePredictions():
         print(i, pkeep[i], pkeep[layer+i-1])
 
     print(layer, '  Infinite ', pkeep[layer_index])
-    for i in range(0, resistivity_points_number+1, 1):
+    for i in range(0, resistivity_points_number, 1):
         asavl[i] = np.log10(asav[i])
 
 # output the error of fit

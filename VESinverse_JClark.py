@@ -18,7 +18,7 @@ import sys
 #For Testing Purposes
 #Only the Test suit should edit these Constants
 LAYERS = 4
-DATASET = 7
+DATASET = 8
 RANGE = 5
 GRAPH = True
 
@@ -91,7 +91,7 @@ elif DATASET == 6:
     rdat=[0.,  125., 124., 126., 129., 135., 180., 220., 250., 280., 300., 310., 315. ]  #DATA 6
 elif DATASET == 7:
     rdat=[0., 300., 303., 330., 330., 310., 300., 285., 240., 205., 180., 180., 210.]  #DATA 7
-elif DATASET == 9:
+elif DATASET == 8:
     rdat=[0., 300., 298., 290., 270., 280., 300., 330., 370., 420., 510., 507., 370.]  #DATA 8
 one30 = 1.e30
 rms = one30

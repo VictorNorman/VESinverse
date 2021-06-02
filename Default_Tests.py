@@ -5,6 +5,10 @@ import VESinverse_JClark as VI         #This will change when splitting file int
 ''' The tests are numbered by the page
     in the excel Doc
     i.e. sheet 2 of 17 has the 3L-R2-D1 data so the test for that data is numbered 2
+
+    As of right now this script cannot change which DATASET, LAYER, and RANGE, 
+        to test each variation, the Constants in VESinverse_JClark.py must be changed manually
+        when the code is cleaned up, I hope to have this script change those Constants
 '''
 #TODO: change the comment at the beginning of each method
 
@@ -1073,6 +1077,7 @@ class VEStesting(unittest.TestCase):
 if __name__ == '__main__':
     test_number = int(sys.argv[1])
     test = VEStesting()
+#Layer 3 tests    
     if test_number == 1:
         test.test_3L_R2_D3()
     elif test_number == 2:
@@ -1085,7 +1090,7 @@ if __name__ == '__main__':
         test.test_3L_R1_D2()        
     elif test_number == 6:
         test.test_3L_R1_D3()        
-
+#Layer 2 tests
     elif test_number == 7:
         test.test_2L_R3_D4() 
     elif test_number == 8:
@@ -1096,7 +1101,7 @@ if __name__ == '__main__':
         test.test_2L_R3_D6() 
     elif test_number == 11:
         test.test_2L_R4_D6()        
-
+#Layer 4 tests
     elif test_number == 12:
         test.test_4L_R5_D7()
     elif test_number == 13:

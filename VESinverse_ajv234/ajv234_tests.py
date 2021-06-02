@@ -1,6 +1,6 @@
 import unittest
 import sys
-import VESinverse_ajv234 as VI         #This will change when splitting file into GUI and Computation
+from VESinverse_ajv234 import VESinverse     #This will change when splitting file into GUI and Computation
 
 ''' The tests are numbered by the page
     in the excel Doc
@@ -1133,6 +1133,7 @@ class VEStesting(unittest.TestCase):
 if __name__ == '__main__':
     input_number = int(sys.argv[1])
     test = VEStesting()
+    VI = VESinverse()
     if input_number == 18:
         for i in range(1, 18):
             print("Runing test", i)

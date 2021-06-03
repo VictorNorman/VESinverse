@@ -80,6 +80,9 @@ class VESinverse:
         self.new_y = [0]*1000
         self.ndat = 12
 
+        # number of iterations for the Monte Carlo guesses. to be input on GUI
+        self.iter = 10000
+
     def data_init(self):
         # hard coded data input - spacing and
         # apparent resistivities measured in the field
@@ -237,9 +240,9 @@ class VESinverse:
             self.xlarge[5] = 500.
             self.small[6] = 1.
             self.xlarge[6] = 500.
-
-        # number of iterations for the Monte Carlo guesses. to be input on GUI
-        self.iter = 10000
+    
+    def get_iter(self):
+        return self.iter
 
     def readData(self):
         # normally this is where the data would be read from the csv file

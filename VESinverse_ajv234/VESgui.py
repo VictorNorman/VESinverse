@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 import sys
 from VESinverse_ajv234 import VESinverse
 
@@ -86,11 +87,11 @@ class VESgui:
         # ------------  edited by AJ Vrieland
         
         # file explore button
-        file_view = Label(self.preframe, bg="gainsboro", text="No file",
+        self.file_view = Label(self.preframe, bg="gainsboro", text="No file",
                         width=40, wraplength=220, justify="center")
-        file_view.grid(row=2, column=2)
-        file_explore = Button(self.preframe, text="Select Resistivity Data File")
-                            #command=pickFile)              # Will create command later
+        self.file_view.grid(row=2, column=2)
+        file_explore = Button(self.preframe, text="Select Resistivity Data File",
+                            command=self.pickFile)              # Will create command later
         file_explore.grid(row=1, column=1, rowspan=2)
 
         # drop down menu to pic number of layers
@@ -182,6 +183,71 @@ class VESgui:
         # Move the "Infinite Thickness" label
         inf_thickness_label = self.thick_min_entries[self.MAX_LAYERS - 1]
         inf_thickness_label.grid(row=curr_num_layers+2, column=1, columnspan=2)
+    
+    def pickFile(self):
+        # # get file
+        # resistivity_file = filedialog.askopenfilename(initialdir="/",
+        #                                             title="Open File",
+        #                                             filetypes=(("Text Files", "*.txt"),
+        #                                                         ("All Files", "*.*")))
+
+        # dir for testing
+        resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
+                                                    title="Open File",
+                                                    filetypes=(("Text Files", "*.txt"),
+                                                                ("All Files", "*.*")))
+        self.file_view.config(text=resistivity_file)
+        file_handle = open(resistivity_file, "r")
+        file_list = file_handle.readlines()
+
+        # when printing, skip first 2 lines: data starts in line 3.
+        for i in range(0, len(file_list)):
+            print(file_list[i])
+
+        # algorithm to use is on line 1 (second line).
+        if int(file_list[1].strip()) == 1:
+            algorithm_choice = 1
+        elif int(file_list[1].strip()) == 2:
+            algorithm_choice = 2
+        else:
+            print('Algorithm choice on line 2 must be 1 or 2', file=sys.stderr)
+            sys.exit(-1)
+    
+        # number of data values
+        data_length = len(file_list) - 3 
+        self.VI.set_ndat(data_length)
+
+        g_adat = [0]*data_length          # g_adat and g_rdat (gui_xdat) are temporary arrays that this function uses and then
+        g_rdat = [0]*data_length          # passes through the VI's adat and rdat setter
+
+        # for each data line
+        for i in range(3, len(file_list)):
+            fields = file_list[i].split()
+            spacing_val = float(fields[0].strip())
+            # print('-->' + spacing_val + '<--')
+            resis_val = float(fields[1].strip())
+            # print('-->' + resis_val + '<--')
+            # indexes in these array start at 0, so subtract 2
+
+            # TODO: better name for adat or spacing_val?: what are these values?
+            g_adat[i-3] = spacing_val
+            g_rdat[i-3] = resis_val
+
+        print('\n\ng_adat:', g_adat, '\ng_rdat:', g_rdat)
+        self.VI.set_adat(g_adat)
+        self.VI.set_rdat(g_rdat)
+
+        # TODO: do we handle files with the ending line of 0 0 ? Should we?
+
+        # Instead of doing v I am just calling the function readData() from VESinverse
+        # compute log10 values of adat and rdat
+        # TODO: the values in adatl and rdatl are indexed starting a 1: yuck!
+        # TODO: we don't convert adat[0] or rdat[0]... correct?
+        # for i in range(1, ndat):
+        #     adatl[i] = np.log10(adat[i])
+        #     rdatl[i] = np.log10(rdat[i])
+        self.VI.readData()
+
 
 if __name__ == '__main__':
     window = Tk()

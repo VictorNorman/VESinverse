@@ -253,12 +253,27 @@ class VESinverse:
     def set_layers(self, new_layer_number):
         self.layer = new_layer_number
 
+    def get_adat(self):
+        return self.adat
+    
+    def set_adat(self, gui_adat_array):
+        self.adat = gui_adat_array
+    
+    def get_rdat(self):
+        return self.rdat
+    
+    def set_rdat(self, gui_rdat_array):
+        self.rdat = gui_rdat_array
+    
+    def set_ndat(self, new_ndat_number):
+        self.ndat = new_ndat_number
+
     # ---------------------------------------------
 
     def readData(self):
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
-
+        print('\n\nadat:', self.adat, '\nrdat:', self.rdat)
         for i in range(0, self.ndat, 1):
             self.adatl[i] = np.log10(self.adat[i])
             self.rdatl[i] = np.log10(self.rdat[i])

@@ -233,7 +233,6 @@ class VESgui:
             g_adat[i-3] = spacing_val
             g_rdat[i-3] = resis_val
 
-        print('\n\ng_adat:', g_adat, '\ng_rdat:', g_rdat)
         self.VI.set_adat(g_adat)
         self.VI.set_rdat(g_rdat)
 

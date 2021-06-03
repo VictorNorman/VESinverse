@@ -273,7 +273,6 @@ class VESinverse:
     def readData(self):
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
-        print('\n\nadat:', self.adat, '\nrdat:', self.rdat)
         for i in range(0, self.ndat, 1):
             self.adatl[i] = np.log10(self.adat[i])
             self.rdatl[i] = np.log10(self.rdat[i])

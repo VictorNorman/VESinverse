@@ -257,7 +257,7 @@ class VESinverse:
             # print(i,sum1,rdat[i],rdatl[i],ans)
             self.pltanswerl[i] = ans
             self.pltanswer[i] = np.power(10, ans)
-        self.rms = np.sqrt(sumerror/(self.ndat-1))
+        self.rms = np.sqrt(sumerror/(self.ndat))
 
         # check the spline routine
         # for i in range(1,m+1,1):
@@ -340,7 +340,9 @@ class VESinverse:
     # spacing where the measured resistivity was taken - to compare observation
     # to prediction
 
-
+    # What does this do? It doesn't modify any self. variable
+    # x, y, y2 and p are the only ones that are self. variables and the first three are local
+    # and the operations done on p mean that it cannot be self.p because it is an array
     def spline(self, n, yp1, ypn, x=[], y=[], y2=[]):       # n in this case is one30
         u = [0] * 1000
         one29 = 0.99e30
@@ -429,7 +431,7 @@ class VESinverse:
         for i in range(0, self.layer - 1, 1):
             print(i, self.pkeep[i], self.pkeep[self.layer+i-1])     #self.pkeep[self.layer+i-1] needs to be changed
 
-        print(self.layer, '  Infinite ', self.pkeep[self.layer_index])
+        print(self.layer, '  Infinite ', self.pkeep[self.layer_index-1])
         for i in range(0, self.resistivity_points_number, 1):
             self.asavl[i] = np.log10(self.asav[i])
 

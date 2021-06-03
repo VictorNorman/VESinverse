@@ -1139,10 +1139,6 @@ if __name__ == '__main__':
             test.run_tests(i)
             print("Finished test", i, "\n\n")
     else:
+        print('\n\nRunning test', input_number)
         test.run_tests(input_number)
-        test.run_tests(input_number)
-
-
-
-    
-    
+        print('\n\nFinished test,', input_number)

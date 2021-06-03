@@ -1,21 +1,18 @@
 import unittest
 import sys
-from VESinverse_ajv234 import VESinverse     #This will change when splitting file into GUI and Computation
+from VESinverse_ajv234 import VESinverse
 
 ''' The tests are numbered by the page
     in the excel Doc
-    i.e. sheet 2 of 17 has the 3L-R2-D1 data so the test for that data is numbered 2
-
-    As of right now this script cannot change which DATASET, LAYER, and RANGE, 
-        to test each variation, the Constants in VESinverse_JClark.py must be changed manually
-        when the code is cleaned up, I hope to have this script change those Constants
+    i.e. sheet 2 of 17 has the 3L-R2-D1 data so the test
+        for that data is numbered 2
 '''
-#TODO: change the comment at the beginning of each method
+
 
 class VEStesting(unittest.TestCase):
-    
+
     def run_tests(self, test_number):
-        #Layer 3 tests    
+        # Layer 3 tests
         if test_number == 1:
             self.test_3L_R2_D3()
         elif test_number == 2:
@@ -25,21 +22,21 @@ class VEStesting(unittest.TestCase):
         elif test_number == 4:
             self.test_3L_R1_D1()
         elif test_number == 5:
-            self.test_3L_R1_D2()        
+            self.test_3L_R1_D2()
         elif test_number == 6:
-            self.test_3L_R1_D3()        
-        #Layer 2 tests
+            self.test_3L_R1_D3()
+        # Layer 2 tests
         elif test_number == 7:
-            self.test_2L_R3_D4() 
+            self.test_2L_R3_D4()
         elif test_number == 8:
             self.test_2L_R3_D5()
         elif test_number == 9:
-            self.test_2L_R4_D5() 
+            self.test_2L_R4_D5()
         elif test_number == 10:
-            self.test_2L_R3_D6() 
+            self.test_2L_R3_D6()
         elif test_number == 11:
-            self.test_2L_R4_D6()        
-        #Layer 4 tests
+            self.test_2L_R4_D6()
+        # Layer 4 tests
         elif test_number == 12:
             self.test_4L_R5_D7()
         elif test_number == 13:
@@ -52,11 +49,12 @@ class VEStesting(unittest.TestCase):
             self.test_4L_R6_D8()
         elif test_number == 17:
             self.test_4L_R5_D8()
-#Layer 3 Tests
-    def test_3L_R1_D1(self):            #test_number == 4
+# Layer 3 Tests
+
+    def test_3L_R1_D1(self):            # test_number == 4
         '''follows from the 3L-R1-D1 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3   
+        VI.LAYERS = 3
         VI.DATASET = 1
         VI.RANGE = 1
         VI.GRAPH = False
@@ -116,7 +114,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 26.783)
         print("\"Predicted\" tests Completed")
 
-    def test_3L_R2_D3(self):            #test_number == 1
+    def test_3L_R2_D3(self):            # test_number == 1
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -179,7 +177,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 22.06)
         print("\"Predicted\" tests Completed")
 
-    def test_3L_R2_D1(self):            #test_number == 2
+    def test_3L_R2_D1(self):            # test_number == 2
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -242,7 +240,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 22.966)
         print("\"Predicted\" tests Completed")
 
-    def test_3L_R2_D2(self):            #test_number == 3
+    def test_3L_R2_D2(self):            # test_number == 3
         '''follows from the 3L-R2-D2 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -305,7 +303,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 59.383)
         print("\"Predicted\" tests Completed")
 
-    def test_3L_R1_D2(self):            #test_number == 5
+    def test_3L_R1_D2(self):            # test_number == 5
         '''follows from the 3L-R2-D2 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -366,9 +364,9 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[10], 3), 92.771)
         self.assertEqual(round(VI.pltanswerkeep[11], 3), 90.918)
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 117.472)
-        print("\"Predicted\" tests Completed")   
+        print("\"Predicted\" tests Completed")
 
-    def test_3L_R1_D3(self):            #test_number == 6
+    def test_3L_R1_D3(self):            # test_number == 6
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 3
@@ -431,8 +429,8 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 21.272)
         print("\"Predicted\" tests Completed")
 
-#Layer 2 Tests 
-    def test_2L_R3_D4(self):            #test_number == 7
+# Layer 2 Tests
+    def test_2L_R3_D4(self):            # test_number == 7
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 2
@@ -492,7 +490,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 200.935)
         print("\"Predicted\" tests Completed")
 
-    def test_2L_R3_D5(self):            #test_number == 8
+    def test_2L_R3_D5(self):            # test_number == 8
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 2
@@ -552,7 +550,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 26.260)
         print("\"Predicted\" tests Completed")
 
-    def test_2L_R4_D5(self):            #test_number == 9
+    def test_2L_R4_D5(self):            # test_number == 9
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 2
@@ -612,7 +610,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 25.759)
         print("\"Predicted\" tests Completed")
 
-    def test_2L_R3_D6(self):            #test_number == 10
+    def test_2L_R3_D6(self):            # test_number == 10
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 2
@@ -672,7 +670,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 360.752)
         print("\"Predicted\" tests Completed")
 
-    def test_2L_R4_D6(self):            #test_number == 11
+    def test_2L_R4_D6(self):            # test_number == 11
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 2
@@ -732,9 +730,9 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 51.627)
         print("\"Predicted\" tests Completed")
 
-#Layer 4 Tests
+# Layer 4 Tests
 
-    def test_4L_R5_D7(self):            #test_number == 12
+    def test_4L_R5_D7(self):            # test_number == 12
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 4
@@ -800,7 +798,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 211.336)
         print("\"Predicted\" tests Completed")
 
-    def test_4L_R6_D7(self):            #test_number == 13
+    def test_4L_R6_D7(self):            # test_number == 13
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 4
@@ -866,7 +864,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 229.887)
         print("\"Predicted\" tests Completed")
 
-    def test_4L_R7_D7(self):            #test_number == 14
+    def test_4L_R7_D7(self):            # test_number == 14
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 4
@@ -932,7 +930,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 207.723)
         print("\"Predicted\" tests Completed")
 
-    def test_4L_R7_D8(self):            #test_number == 15
+    def test_4L_R7_D8(self):            # test_number == 15
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 4
@@ -998,7 +996,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 366.955)
         print("\"Predicted\" tests Completed")
 
-    def test_4L_R6_D8(self):            #test_number == 16
+    def test_4L_R6_D8(self):            # test_number == 16
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 4
@@ -1064,7 +1062,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 398.611)
         print("\"Predicted\" tests Completed")
 
-    def test_4L_R5_D8(self):            #test_number == 17
+    def test_4L_R5_D8(self):            # test_number == 17
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
         VI.LAYERS = 4
@@ -1130,6 +1128,7 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[12], 3), 403.415)
         print("\"Predicted\" tests Completed")
 
+
 if __name__ == '__main__':
     input_number = int(sys.argv[1])
     test = VEStesting()
@@ -1141,8 +1140,3 @@ if __name__ == '__main__':
             print("Finished test", i, "\n\n")
     else:
         test.run_tests(input_number)
-
-
-
-    
-    

@@ -271,8 +271,6 @@ class VESinverse:
     def transf(self, y, i):
         self.u = 1./np.exp(y)
         self.t[1] = self.p[self.layer_index]
-        print('\n', y, '\n', i, '\n', self.p, '\n', self.t)
-        raise Exception("Pause")
         for j in range(2, self.layer+1, 1):
             pwr = -2. * self.u * self.p[self.layer + 1 - j]
             if pwr < np.log(2. * self.ep):

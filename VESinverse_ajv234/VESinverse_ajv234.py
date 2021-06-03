@@ -276,17 +276,15 @@ class VESinverse:
         # print('\n', y, '\n', i, '\n', self.p, '\n', self.t)
         # raise Exception("Pause")
         for j in range(1, self.layer, 1):
-            pwr = -2. * self.u * self.p[self.layer + 1 - j]
+            pwr = -2. * self.u * self.p[self.layer - 1 - j]
             if pwr < np.log(2. * self.ep):
                 pwr = np.log(2. * self.ep)
             a = np.exp(pwr)
             b = (1. - a)/(1. + a)
-            rs = self.p[self.layer_index + 1 - j]
+            rs = self.p[self.layer_index - 1 - j]
             tpr = b*rs
             self.t[j] = (tpr + self.t[j - 1]) / (1. + tpr * self.t[j - 1] / (rs * rs))
-            print(self.t, '\n', tpr, '\n', rs, '\n', j)
-            raise Exception("pause")
-        self.r[i] = self.t[self.layer]
+        self.r[i] = self.t[self.layer-1]
         return
 
 
@@ -294,7 +292,7 @@ class VESinverse:
         for i in range(0, self.resistivity_points_number, 1):
             re = 0.
             for j in range(0, k, 1):
-                re = re + b[j] * self.r[i + k - j]
+                re = re + b[j] * self.r[i + k - j - 1]
             self.r[i] = re
         return
 
@@ -462,9 +460,9 @@ class VESinverse:
         # output the best fitting earth model
         print('   Layer ', '   Thickness  ', 'Res_ohm-m  ')
         for i in range(0, self.layer-1, 1):
-            print("%9.1f   %9.3f  %9.3f" % (i, self.pkeep[i], self.pkeep[self.layer+i-1]))
+            print("%9.1f   %9.3f  %9.3f" % (i+1, self.pkeep[i], self.pkeep[self.layer+i-1]))
 
-        print("%9.1f" % self.layer, '  Infinite ', "%9.3f" % self.pkeep[self.layer_index])
+        print("%9.1f" % self.layer, '  Infinite ', "%9.3f" % self.pkeep[self.layer_index-1])
 
         # output the original data and the predicted data
         print('  Spacing', '  Original_Data', ' Predicted')

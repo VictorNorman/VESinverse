@@ -20,9 +20,9 @@ class VESinverse:
     def __init__(self):
         # For Testing Purposes
         # Only the Test suit should edit these Constants
-        self.LAYERS = 4
-        self.DATASET = 7
-        self.RANGE = 5
+        self.LAYERS = 0
+        self.DATASET = 0
+        self.RANGE = 0
         self.GRAPH = True
 
         ARRAYSIZE = 65
@@ -80,7 +80,12 @@ class VESinverse:
         self.new_y = [0]*1000
         self.ndat = 12
 
-    def data_init(self):
+        # number of iterations for the Monte Carlo guesses. to be input on GUI
+        self.iter = 10000
+
+        self.layer = 3
+
+    def test_data(self):
         # hard coded data input - spacing and
         # apparent resistivities measured in the field
         self.adat = [0.55, 0.95, 1.5, 2.5, 3., 4.5,
@@ -110,38 +115,6 @@ class VESinverse:
         elif self.DATASET == 8:
             self.rdat = [300., 298., 290., 270., 280.,
                          300., 330., 370., 420., 510., 507., 370.]  # DATA 8
-        self.one30 = 1.e30
-        self.rms = self.one30
-        self.errmin = 1.e10
-
-        # INPUT
-        self.index = 2   # 1 is for shchlumberger and 2 is for Wenner
-
-        if self.LAYERS == 3:
-            self.layer = 3
-        elif self.LAYERS == 2:
-            self.layer = 2
-        elif self.LAYERS == 4:
-            self.layer = 4
-
-        # layer (e) and layer_index (n) variables have been updated
-        self.layer_index = 2 * self.layer - 1
-
-        # smallest electrode spacing
-        self.electrode_spacing = 0.2
-        # number of points where resistivity is calculated (Variable was m)
-        self.resistivity_points_number = 20
-
-        self.electrode_spacing = np.log(self.electrode_spacing)
-        self.delx = np.log(10.0)/6.
-
-        # these lines apparently find the computer precision ep
-        self.ep = 1.0
-        self.ep = self.ep/2.0
-        self.fctr = self.ep+1.
-        while self.fctr > 1.:
-            self.ep = self.ep/2.0
-            self.fctr = self.ep+1.
 
         # this is where the range in parameters should be input from a GUI
         # I'm hard coding this in for now
@@ -238,13 +211,94 @@ class VESinverse:
             self.small[6] = 1.
             self.xlarge[6] = 500.
 
-        # number of iterations for the Monte Carlo guesses. to be input on GUI
-        self.iter = 10000
+        # INPUT
+        self.index = 2   # 1 is for shchlumberger and 2 is for Wenner
+
+        if self.LAYERS == 3:
+            self.layer = 3
+        elif self.LAYERS == 2:
+            self.layer = 2
+        elif self.LAYERS == 4:
+            self.layer = 4
+
+    def data_init(self):
+        self.one30 = 1.e30
+        self.rms = self.one30
+        self.errmin = 1.e10
+
+        # layer (e) and layer_index (n) variables have been updated
+        self.layer_index = 2 * self.layer - 1
+
+        # smallest electrode spacing
+        self.electrode_spacing = 0.2
+        # number of points where resistivity is calculated (Variable was m)
+        self.resistivity_points_number = 20
+
+        self.electrode_spacing = np.log(self.electrode_spacing)
+        self.delx = np.log(10.0)/6.
+
+        # these lines apparently find the computer precision ep
+        self.ep = 1.0
+        self.ep = self.ep/2.0
+        self.fctr = self.ep+1.
+        while self.fctr > 1.:
+            self.ep = self.ep/2.0
+            self.fctr = self.ep+1.
+
+    # ----------- Getters and Setters -------------
+    def get_iter(self):
+        return self.iter
+
+    def get_layers(self):
+        return self.layer
+
+    def set_layers(self, new_layer_number):
+        self.layer = new_layer_number
+
+    def get_adat(self):
+        return self.adat
+
+    def set_adat(self, gui_adat_array):
+        self.adat = gui_adat_array
+
+    def get_rdat(self):
+        return self.rdat
+
+    def set_rdat(self, gui_rdat_array):
+        self.rdat = gui_rdat_array
+
+    def set_ndat(self, new_ndat_number):
+        self.ndat = new_ndat_number
+
+    def set_small(self, new_small):
+        self.small = new_small
+
+    def get_small(self):
+        return self.small
+
+    def set_xlarge(self, new_xlarge):
+        self.xlarge = new_xlarge
+
+    def get_xlarge(self):
+        return self.xlarge
+
+    def get_pkeep(self):
+        return self.pkeep
+
+    def set_index(self, new_index):
+        self.index = new_index
+
+    def get_errmin(self):
+        return self.errmin
+
+    def get_layer_index(self):
+        return self.layer_index
+
+    # ---------------------------------------------
 
     def readData(self):
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
-
         for i in range(0, self.ndat, 1):
             self.adatl[i] = np.log10(self.adat[i])
             self.rdatl[i] = np.log10(self.rdat[i])
@@ -407,7 +461,7 @@ class VESinverse:
         return y
 
     def computePredictions(self):
-
+        self.data_init()
         # Turn off randomization (for now)
         random.seed(0)
 
@@ -478,10 +532,10 @@ class VESinverse:
         print('  Spacing', '  Original_Data', ' Predicted')
         for i in range(0, self.ndat, 1):
             print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
-        if self.GRAPH is True:
-            plt.show()
-            plt.grid(True)
-            sys.exit(0)
+
+    def graph(self):
+        plt.show()
+        plt.grid(True)
 
 
 # main here

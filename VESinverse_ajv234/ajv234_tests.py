@@ -58,7 +58,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 1
         VI.RANGE = 1
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.240)
@@ -121,7 +121,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 3
         VI.RANGE = 2
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.425)
@@ -184,7 +184,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 1
         VI.RANGE = 2
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.033)
@@ -247,7 +247,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 2
         VI.RANGE = 2
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.194)
@@ -310,7 +310,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 2
         VI.RANGE = 1
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.969)
@@ -373,7 +373,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 3
         VI.RANGE = 1
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.110)
@@ -437,7 +437,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 4
         VI.RANGE = 3
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.919)
@@ -497,7 +497,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 5
         VI.RANGE = 3
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.660)
@@ -557,7 +557,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 5
         VI.RANGE = 4
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.705)
@@ -617,7 +617,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 6
         VI.RANGE = 3
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 2.682)
@@ -677,7 +677,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 6
         VI.RANGE = 4
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 9.818)
@@ -739,7 +739,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 7
         VI.RANGE = 5
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.801)
@@ -805,7 +805,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 7
         VI.RANGE = 6
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.772)
@@ -871,7 +871,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 7
         VI.RANGE = 7
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 5.203)
@@ -937,7 +937,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 8
         VI.RANGE = 7
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.858)
@@ -1003,7 +1003,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 8
         VI.RANGE = 6
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.183)
@@ -1069,7 +1069,7 @@ class VEStesting(unittest.TestCase):
         VI.DATASET = 8
         VI.RANGE = 5
         VI.GRAPH = False
-        VI.data_init()
+        VI.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.911)
@@ -1130,7 +1130,10 @@ class VEStesting(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    input_number = int(sys.argv[1])
+    if len(sys.argv) >= 2:
+        input_number = int(sys.argv[1])
+    else:
+        input_number = 18
     test = VEStesting()
     VI = VESinverse()
     if input_number == 18:

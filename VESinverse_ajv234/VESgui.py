@@ -24,14 +24,18 @@ class VESgui:
         self.thick_max_entries = []
         self.res_min_entries = []
         self.res_max_entries = []
+
+        self.curr_num_layers = 3
+        self.computed_results_labels = []
+
         
     def display(self):
         self.preframe = Frame(self.window, background="gainsboro")
         self.preframe.pack(side=TOP, anchor=NW)
-        
+        # self.displayChosenLayers(0, 3)
         self.display_text()
         self.display_buttons()
-        self.displayChosenLayers(0, 3)
+        
 
     def display_text(self):
         # File Path Label
@@ -99,7 +103,8 @@ class VESgui:
         layersmenu = OptionMenu(self.preframe, self.num_layers_var, *layerlist)
         layersmenu.config(bg="gainsboro")
         layersmenu.grid(row=2, column=3)
-        #self.num_layers_var.trace("w", <function_name>) # does something when the dropdown menue is changed
+        self.num_layers_var.trace("w", self.numLayersChanged) # does something when the dropdown menue is changed
+        self.curr_num_layers = self.num_layers
 
         # box to enter number of iterations
         iterentry = Entry(self.preframe, textvariable=self.iterator, width=10)
@@ -136,19 +141,23 @@ class VESgui:
             self.res_max_layer.append(IntVar(self.window))
             self.res_max_entries.append(Entry(
                 self.layerinputframe, textvariable=self.res_max_layer[i], width=10))
+
+        # self.displayChosenLayers(0, self.num_layers)
         
         # ------------------ Buttons at the bottom ----------------------
 
         executionframe = Frame(self.window, background="gainsboro")
         executionframe.pack(side=BOTTOM, anchor=SW)
-        execute_VES = Button(executionframe, text="Compute Predictions")      #"Compute Predictions" button
-                            #command=self.VI.computePredictions)                      #Calls the computePredictions() function
+        execute_VES = Button(executionframe, text="Compute Predictions",     #"Compute Predictions" button
+                            command=self.computation)                      #Calls the computePredictions() function
         execute_VES.grid(row=1, column=1, padx=10, pady=5)
 
         # plot curves button
-        plot_curves = Button(executionframe, text="Plot the Curves")
-                            #command=plotCurves)
+        plot_curves = Button(executionframe, text="Plot the Curves",
+                            command=self.VI.graph)                      # if you close the graph and click the button again the graph is empty
         plot_curves.grid(row=1, column=2, padx=10, pady=5)
+
+        self.displayChosenLayers(0, self.num_layers)
 
     def displayChosenLayers(self, old_num_layers, curr_num_layers):
         assert old_num_layers != curr_num_layers
@@ -212,6 +221,7 @@ class VESgui:
         else:
             print('Algorithm choice on line 2 must be 1 or 2', file=sys.stderr)
             sys.exit(-1)
+        self.VI.set_index(algorithm_choice)
     
         # number of data values
         data_length = len(file_list) - 3 
@@ -247,7 +257,65 @@ class VESgui:
         #     rdatl[i] = np.log10(rdat[i])
         self.VI.readData()
 
+    def numLayersChanged(self, *args):
+        # Clear displayed results
+        if self.computed_results_labels != []:
+            for l in self.computed_results_labels:
+                l.grid_forget()
+        self.computed_results_labels = []
 
+        new_num_layers = self.num_layers_var.get()
+        if new_num_layers != self.curr_num_layers:
+            print(f"num_layers changed from {self.curr_num_layers} to {new_num_layers}")
+            self.displayChosenLayers(self.curr_num_layers, new_num_layers)
+        # Store new value as current value
+        self.curr_num_layers = new_num_layers
+
+    def computation(self):
+
+        g_small = self.VI.get_small()       # g_small, and g_xlarge are local instances of small and xlarge
+        g_xlarge = self.VI.get_xlarge()     # from VESinverse 
+            # set small[] and xlarge[]
+        for i in range(self.num_layers - 1):
+            g_small[i] = self.thick_min_layer[i].get()
+        for i in range(self.num_layers - 1):
+            g_xlarge[i] = self.thick_max_layer[i].get()
+        for i in range(self.num_layers):
+            g_small[i + self.num_layers - 1] = self.res_min_layer[i].get()
+        for i in range(self.num_layers):
+            g_xlarge[i + self.num_layers - 1] = self.res_max_layer[i].get()
+        self.VI.set_small(g_small)
+        self.VI.set_xlarge(g_xlarge)
+        print(g_small, '\n', g_xlarge)
+        self.VI.set_layers(self.num_layers)
+        self.VI.computePredictions()
+        self.viewModel()
+    
+    def viewModel(self):
+        g_pkeep = self.VI.get_pkeep()
+        g_errmin = self.VI.get_errmin()
+        g_layer_index = self.VI.get_layer_index()
+        
+        for i in range(0, self.num_layers - 1):
+            print(i, g_pkeep[i], g_pkeep[i + self.num_layers - 1])
+            thickness_label = Label(self.layerinputframe, bg="gainsboro",
+                                    text=str(round(g_pkeep[i], 3)))
+            thickness_label.grid(row=3+i, column=3)
+            resistivity_label = Label(self.layerinputframe, bg="gainsboro",
+                                      text=str(round(g_pkeep[self.num_layers+i-1], 3)))
+            resistivity_label.grid(row=3+i, column=4)
+
+        thickness_label = Label(self.layerinputframe,
+                                bg="gainsboro", text="Infinite")
+        thickness_label.grid(row=2+self.num_layers, column=3)
+
+        resistivity_label = Label(self.layerinputframe,
+                                  bg="gainsboro", text=str(round(g_pkeep[g_layer_index-1], 3)))
+        resistivity_label.grid(row=2+self.num_layers, column=4)
+
+        errmin_label = Label(self.layerinputframe, bg="gainsboro",
+                             text=f"RMS error of Fit = {round(g_errmin, 3)}")
+        errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
 if __name__ == '__main__':
     window = Tk()
     VS = VESgui(window)

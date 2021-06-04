@@ -11,6 +11,7 @@ from VESinverse_ajv234 import VESinverse
 
 class VEStesting(unittest.TestCase):
     def __init__(self):
+        super().__init__()
         self.t_index = 2
         self.t_rdat = [0]*65
         self.t_adat = [0]*65
@@ -68,7 +69,7 @@ class VEStesting(unittest.TestCase):
         self.test_data()
         VI.computePredictions()
 
-        self.assertEqual(round(VI.pkeep[0], 3), 1.240)
+        self.assertEqual(round(VI.pkeep[0], 3), 1.240)      # is breaking here, the assertEqual I think
         self.assertEqual(round(VI.pkeep[2], 3), 145.898)
         print("Layer 1 tests Completed")
         self.assertEqual(round(VI.pkeep[1], 3), 20.934)

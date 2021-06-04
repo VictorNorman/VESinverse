@@ -115,7 +115,7 @@ class VESinverse:
         elif self.DATASET == 8:
             self.rdat = [300., 298., 290., 270., 280.,
                          300., 330., 370., 420., 510., 507., 370.]  # DATA 8
-        
+
         # this is where the range in parameters should be input from a GUI
         # I'm hard coding this in for now
 
@@ -245,54 +245,52 @@ class VESinverse:
             self.ep = self.ep/2.0
             self.fctr = self.ep+1.
 
-        
-
     # ----------- Getters and Setters -------------
     def get_iter(self):
         return self.iter
-    
+
     def get_layers(self):
         return self.layer
-    
+
     def set_layers(self, new_layer_number):
         self.layer = new_layer_number
 
     def get_adat(self):
         return self.adat
-    
+
     def set_adat(self, gui_adat_array):
         self.adat = gui_adat_array
-    
+
     def get_rdat(self):
         return self.rdat
-    
+
     def set_rdat(self, gui_rdat_array):
         self.rdat = gui_rdat_array
-    
+
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
 
     def set_small(self, new_small):
         self.small = new_small
-    
+
     def get_small(self):
         return self.small
-    
+
     def set_xlarge(self, new_xlarge):
         self.xlarge = new_xlarge
-    
+
     def get_xlarge(self):
         return self.xlarge
-    
+
     def get_pkeep(self):
         return self.pkeep
-    
+
     def set_index(self, new_index):
         self.index = new_index
-    
+
     def get_errmin(self):
         return self.errmin
-    
+
     def get_layer_index(self):
         return self.layer_index
 
@@ -534,7 +532,7 @@ class VESinverse:
         print('  Spacing', '  Original_Data', ' Predicted')
         for i in range(0, self.ndat, 1):
             print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
-     
+
     def graph(self):
         plt.show()
         plt.grid(True)

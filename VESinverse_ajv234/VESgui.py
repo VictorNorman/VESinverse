@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import sys
 from VESinverse_ajv234 import VESinverse
+import argparse
 
 
 class VESgui:
@@ -27,6 +28,8 @@ class VESgui:
 
         self.curr_num_layers = 3
         self.computed_results_labels = []
+        self.is_input_file = False
+        self.input_file = ""
 
     def display(self):
         self.preframe = Frame(self.window)
@@ -92,8 +95,12 @@ class VESgui:
         self.file_view = Label(self.preframe, text="No file",
                                width=40, wraplength=220, justify="center")
         self.file_view.grid(row=2, column=2)
-        file_explore = Button(self.preframe, text="Select Resistivity Data File",
-                              command=self.pickFile)
+        if self.is_input_file == False:
+            file_explore = Button(self.preframe, text="Select Resistivity Data File",
+                                command=self.pickFile)
+        else:
+            file_explore = Button(self.preframe, text="Select Resistivity Data File",
+                                command=self.pickFile(self.input_file))
         file_explore.grid(row=1, column=1, rowspan=2)
 
         # drop down menu to pic number of layers
@@ -109,6 +116,7 @@ class VESgui:
 
         # - 1 here because bottom layer has Infinite thickness
         for i in range(self.MAX_LAYERS - 1):
+            print(self.thick_min_layer)
             self.thick_min_layer.append(IntVar(self.window))
             self.thick_min_entries.append(Entry(
                                           self.layerinputframe, textvariable=self.thick_min_layer[i], width=10))
@@ -190,18 +198,21 @@ class VESgui:
         inf_thickness_label = self.thick_min_entries[self.MAX_LAYERS - 1]
         inf_thickness_label.grid(row=curr_num_layers+2, column=1, columnspan=2)
 
-    def pickFile(self):
-        # # get file
-        resistivity_file = filedialog.askopenfilename(initialdir="/",
-                                                      title="Open File",
-                                                      filetypes=(("Text Files", "*.txt"),
-                                                                 ("All Files", "*.*")))
+    def pickFile(self, file=""):
+        if file=="":
+            # # get file
+            resistivity_file = filedialog.askopenfilename(initialdir="/",
+                                                        title="Open File",
+                                                        filetypes=(("Text Files", "*.txt"),
+                                                                    ("All Files", "*.*")))
 
-        # dir for testing
-        # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
-        #                                               title="Open File",
-        #                                               filetypes=(("Text Files", "*.txt"),
-        #                                                          ("All Files", "*.*")))
+            # dir for testing
+            # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
+            #                                               title="Open File",
+            #                                               filetypes=(("Text Files", "*.txt"),
+            #                                                          ("All Files", "*.*")))
+        else:
+            resistivity_file = file
         self.file_view.config(text=resistivity_file)
         file_handle = open(resistivity_file, "r")
         file_list = file_handle.readlines()
@@ -315,10 +326,52 @@ class VESgui:
         errmin_label = Label(self.layerinputframe,
                              text=f"RMS error of Fit = {round(g_errmin, 3)}")
         errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
+    
+    def parse_input(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")
+        parser.add_argument("-l", "--layers", nargs=1, help="How many layers to use")
+        parser.add_argument("-f", "--file", help="Add file path")
+        parser.add_argument("-ti", "--thick_min", nargs='*', help="The inputs for the thick min values")
+        parser.add_argument("-ta", "--thick_max", nargs='*', help="The inputs for the thick max values")
+        parser.add_argument("-ri", "--resmin", nargs='*', help="The inputs for the res min values")
+        parser.add_argument("-ra", "--resmax", nargs='*', help="The inputs for the res max values")
+        args = parser.parse_args()
+        if args.iter:
+            self.iterator = IntVar(self.window, int(args.iter[0]))
+        if args.layers:
+            self.num_layers_var = IntVar(self.window, int(args.layers[0]))
+            self.num_layers = self.curr_num_layers = int(args.layers[0])
+        if args.file:
+            self.is_input_file = True
+            self.input_file = args.file
+        if args.thick_min:
+            thick_min = args.thick_min[0]
+            thick_min = thick_min.split(',')
+            for i in range(self.num_layers-1):
+                self.thick_min_layer.append(IntVar(self.window, int(thick_min[i])))
+        if args.thick_max:
+            thick_max = args.thick_max[0]
+            thick_max = thick_max.split(',')
+            for i in range(self.num_layers-1):
+                self.thick_max_layer.append(IntVar(self.window, int(thick_max[i])))
+        if args.resmin:
+            res_min = args.resmin[0]
+            res_min = res_min.split(',')
+            for i in range(self.num_layers):
+                self.res_min_layer.append(IntVar(self.window, int(res_min[i])))
+        if args.resmax:
+            res_max = args.resmax[0]
+            res_max = res_max.split(',')
+            for i in range(self.num_layers):
+                self.res_max_layer.append(IntVar(self.window, int(res_max[i])))
 
 
 if __name__ == '__main__':
     window = Tk()
     VS = VESgui(window)
+    if len(sys.argv) >= 2:
+        VS.parse_input()
     VS.display()
+
     window.mainloop()

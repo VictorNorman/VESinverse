@@ -194,16 +194,16 @@ class VESgui:
 
     def pickFile(self):
         # # get file
-        # resistivity_file = filedialog.askopenfilename(initialdir="/",
-        #                                               title="Open File",
-        #                                               filetypes=(("Text Files", "*.txt"),
-        #                                                          ("All Files", "*.*")))
-
-        # dir for testing
-        resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
+        resistivity_file = filedialog.askopenfilename(initialdir="/",
                                                       title="Open File",
                                                       filetypes=(("Text Files", "*.txt"),
                                                                  ("All Files", "*.*")))
+
+        # dir for testing
+        # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
+        #                                               title="Open File",
+        #                                               filetypes=(("Text Files", "*.txt"),
+        #                                                          ("All Files", "*.*")))
         self.file_view.config(text=resistivity_file)
         file_handle = open(resistivity_file, "r")
         file_list = file_handle.readlines()

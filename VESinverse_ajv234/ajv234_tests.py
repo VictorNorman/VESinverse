@@ -10,6 +10,13 @@ from VESinverse_ajv234 import VESinverse
 
 
 class VEStesting(unittest.TestCase):
+    def __init__(self):
+        self.t_index = 2
+        self.t_rdat = [0]*65
+        self.t_adat = [0]*65
+        self.t_small = [0]*65
+        self.t_xlarge = [0]*65
+        self.small_array = [0]*65
 
     def run_tests(self, test_number):
         # Layer 3 tests
@@ -54,11 +61,11 @@ class VEStesting(unittest.TestCase):
     def test_3L_R1_D1(self):            # test_number == 4
         '''follows from the 3L-R1-D1 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3
-        VI.DATASET = 1
-        VI.RANGE = 1
+        VI.set_layers(3)
+        self.DATASET = 1
+        self.RANGE = 1
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.240)
@@ -117,11 +124,11 @@ class VEStesting(unittest.TestCase):
     def test_3L_R2_D3(self):            # test_number == 1
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3
-        VI.DATASET = 3
-        VI.RANGE = 2
+        VI.set_layers(3)
+        self.DATASET = 3
+        self.RANGE = 2
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.425)
@@ -180,11 +187,11 @@ class VEStesting(unittest.TestCase):
     def test_3L_R2_D1(self):            # test_number == 2
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3
-        VI.DATASET = 1
-        VI.RANGE = 2
+        VI.set_layers(3)
+        self.DATASET = 1
+        self.RANGE = 2
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.033)
@@ -243,11 +250,11 @@ class VEStesting(unittest.TestCase):
     def test_3L_R2_D2(self):            # test_number == 3
         '''follows from the 3L-R2-D2 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3
-        VI.DATASET = 2
-        VI.RANGE = 2
+        VI.set_layers(3)
+        self.DATASET = 2
+        self.RANGE = 2
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.194)
@@ -306,11 +313,11 @@ class VEStesting(unittest.TestCase):
     def test_3L_R1_D2(self):            # test_number == 5
         '''follows from the 3L-R2-D2 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3
-        VI.DATASET = 2
-        VI.RANGE = 1
+        VI.set_layers(3)
+        self.DATASET = 2
+        self.RANGE = 1
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.969)
@@ -369,11 +376,11 @@ class VEStesting(unittest.TestCase):
     def test_3L_R1_D3(self):            # test_number == 6
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 3
-        VI.DATASET = 3
-        VI.RANGE = 1
+        VI.set_layers(3)
+        self.DATASET = 3
+        self.RANGE = 1
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.110)
@@ -433,11 +440,11 @@ class VEStesting(unittest.TestCase):
     def test_2L_R3_D4(self):            # test_number == 7
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 2
-        VI.DATASET = 4
-        VI.RANGE = 3
+        VI.set_layers(2)
+        self.DATASET = 4
+        self.RANGE = 3
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 3.919)
@@ -493,11 +500,11 @@ class VEStesting(unittest.TestCase):
     def test_2L_R3_D5(self):            # test_number == 8
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 2
-        VI.DATASET = 5
-        VI.RANGE = 3
+        VI.set_layers(2)
+        self.DATASET = 5
+        self.RANGE = 3
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.660)
@@ -553,11 +560,11 @@ class VEStesting(unittest.TestCase):
     def test_2L_R4_D5(self):            # test_number == 9
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 2
-        VI.DATASET = 5
-        VI.RANGE = 4
+        VI.set_layers(2)
+        self.DATASET = 5
+        self.RANGE = 4
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.705)
@@ -613,11 +620,11 @@ class VEStesting(unittest.TestCase):
     def test_2L_R3_D6(self):            # test_number == 10
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 2
-        VI.DATASET = 6
-        VI.RANGE = 3
+        VI.set_layers(2)
+        self.DATASET = 6
+        self.RANGE = 3
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 2.682)
@@ -673,11 +680,11 @@ class VEStesting(unittest.TestCase):
     def test_2L_R4_D6(self):            # test_number == 11
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 2
-        VI.DATASET = 6
-        VI.RANGE = 4
+        VI.set_layers(2)
+        self.DATASET = 6
+        self.RANGE = 4
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 9.818)
@@ -735,11 +742,11 @@ class VEStesting(unittest.TestCase):
     def test_4L_R5_D7(self):            # test_number == 12
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 4
-        VI.DATASET = 7
-        VI.RANGE = 5
+        VI.set_layers(4)
+        self.DATASET = 7
+        self.RANGE = 5
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.801)
@@ -801,11 +808,11 @@ class VEStesting(unittest.TestCase):
     def test_4L_R6_D7(self):            # test_number == 13
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 4
-        VI.DATASET = 7
-        VI.RANGE = 6
+        VI.set_layers(4)
+        self.DATASET = 7
+        self.RANGE = 6
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.772)
@@ -867,11 +874,11 @@ class VEStesting(unittest.TestCase):
     def test_4L_R7_D7(self):            # test_number == 14
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 4
-        VI.DATASET = 7
-        VI.RANGE = 7
+        VI.set_layers(4)
+        self.DATASET = 7
+        self.RANGE = 7
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 5.203)
@@ -933,11 +940,11 @@ class VEStesting(unittest.TestCase):
     def test_4L_R7_D8(self):            # test_number == 15
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 4
-        VI.DATASET = 8
-        VI.RANGE = 7
+        VI.set_layers(4)
+        self.DATASET = 8
+        self.RANGE = 7
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 4.858)
@@ -999,11 +1006,11 @@ class VEStesting(unittest.TestCase):
     def test_4L_R6_D8(self):            # test_number == 16
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 4
-        VI.DATASET = 8
-        VI.RANGE = 6
+        VI.set_layers(4)
+        self.DATASET = 8
+        self.RANGE = 6
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.183)
@@ -1065,11 +1072,11 @@ class VEStesting(unittest.TestCase):
     def test_4L_R5_D8(self):            # test_number == 17
         '''follows from the 3L-R2-D3 page in
             modelTestsForVerification'''
-        VI.LAYERS = 4
-        VI.DATASET = 8
-        VI.RANGE = 5
+        VI.set_layers(4)
+        self.DATASET = 8
+        self.RANGE = 5
         VI.GRAPH = False
-        VI.test_data()
+        self.test_data()
         VI.computePredictions()
 
         self.assertEqual(round(VI.pkeep[0], 3), 1.911)
@@ -1127,6 +1134,142 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[10], 3), 421.277)
         self.assertEqual(round(VI.pltanswerkeep[11], 3), 403.415)
         print("\"Predicted\" tests Completed")
+
+# test_data
+    def test_data(self):
+        # hard coded data input - spacing and
+        # apparent resistivities measured in the field
+        self.t_adat = [0.55, 0.95, 1.5, 2.5, 3., 4.5,
+                     5.5, 9., 12., 20., 30., 70.]
+
+        if self.DATASET == 1:
+            self.t_rdat = [125., 110., 95., 40., 24., 15.,
+                         10.5, 8., 6., 6.5, 11., 25.]  # DATA 1
+        elif self.DATASET == 2:
+            self.t_rdat = [125., 130., 140., 150., 160.,
+                         170., 175., 170., 130., 100., 80., 60.]  # DATA 2
+        elif self.DATASET == 3:
+            self.t_rdat = [125., 124., 120., 115., 110.,
+                         95., 40., 24., 15., 10., 11., 25.]  # DATA 3
+        elif self.DATASET == 4:
+            self.t_rdat = [125., 124., 126., 129., 135.,
+                         140., 150., 170., 175., 180., 185., 187.]  # DATA 4
+        elif self.DATASET == 5:
+            self.t_rdat = [125., 124., 126., 122., 120.,
+                         110., 85., 65., 40., 30., 26., 25.]  # DATA 5
+        elif self.DATASET == 6:
+            self.t_rdat = [125., 124., 126., 129., 135.,
+                         180., 220., 250., 280., 300., 310., 315.]  # DATA 6
+        elif self.DATASET == 7:
+            self.t_rdat = [300., 303., 330., 330., 310.,
+                         300., 285., 240., 205., 180., 180., 210.]  # DATA 7
+        elif self.DATASET == 8:
+            self.t_rdat = [300., 298., 290., 270., 280.,
+                         300., 330., 370., 420., 510., 507., 370.]  # DATA 8
+
+        # this is where the range in parameters should be input from a GUI
+        # I'm hard coding this in for now
+
+        # enter thickenss range for each layer and then resistivity range.
+        # for 3 layers small[1] and small[2] are low end of thickness range
+        # small[3], small[4] and small[5] are the low end of resistivities
+        if self.RANGE == 1:
+            # range 1  3-layer case (narrow range)
+            self.t_small[0] = 1.
+            self.t_xlarge[0] = 5
+            self.t_small[1] = 10.
+            self.t_xlarge[1] = 75.
+            self.t_small[2] = 20.
+            self.t_xlarge[2] = 200.
+            self.t_small[3] = 2.
+            self.t_xlarge[3] = 100
+            self.t_small[4] = 500.
+            self.t_xlarge[4] = 3000.
+        elif self.RANGE == 2:
+            # range 2 3-layer case (broad range)
+            self.t_small[0] = 1.
+            self.t_xlarge[0] = 10
+            self.t_small[1] = 1.
+            self.t_xlarge[1] = 50.
+            self.t_small[2] = 1.
+            self.t_xlarge[2] = 500.
+            self.t_small[3] = 1.
+            self.t_xlarge[3] = 500.
+            self.t_small[4] = 1.
+            self.t_xlarge[4] = 500.
+        elif self.RANGE == 3:
+            # range 3  2-layer case (broad range)
+            self.t_small[0] = 1.
+            self.t_xlarge[0] = 20
+            self.t_small[1] = 1.
+            self.t_xlarge[1] = 500.
+            self.t_small[2] = 1.
+            self.t_xlarge[2] = 500
+        elif self.RANGE == 4:
+            # range 4  2-layer case (t_small range)
+            self.t_small[0] = 1.
+            self.t_xlarge[0] = 10
+            self.t_small[1] = 50.
+            self.t_xlarge[1] = 200.
+            self.t_small[2] = 1.
+            self.t_xlarge[2] = 50.
+        elif self.RANGE == 5:
+            # range 5 4-layer case (t_small range)
+            self.t_small[0] = 1.
+            self.t_xlarge[0] = 2
+            self.t_small[1] = 1.
+            self.t_xlarge[1] = 50.
+            self.t_small[2] = 1.
+            self.t_xlarge[2] = 50.
+            self.t_small[3] = 200.
+            self.t_xlarge[3] = 400.
+            self.t_small[4] = 400.
+            self.t_xlarge[4] = 500.
+            self.t_small[5] = 1.
+            self.t_xlarge[5] = 500.
+            self.t_small[6] = 1.
+            self.t_xlarge[6] = 500.
+        elif self.RANGE == 6:
+            # range 6 4-layer case (broad range)
+            self.t_small[0] = 1
+            self.t_xlarge[0] = 2
+            self.t_small[1] = 1.
+            self.t_xlarge[1] = 2.
+            self.t_small[2] = 1.
+            self.t_xlarge[2] = 50.
+            self.t_small[3] = 1.
+            self.t_xlarge[3] = 500.
+            self.t_small[4] = 1.
+            self.t_xlarge[4] = 500.
+            self.t_small[5] = 1.
+            self.t_xlarge[5] = 500.
+            self.t_small[6] = 1.
+            self.t_xlarge[6] = 500.
+        elif self.RANGE == 7:
+            # range 7 4-layer case (broadest range)
+            self.t_small[0] = 1
+            self.t_xlarge[0] = 50
+            self.t_small[1] = 1.
+            self.t_xlarge[1] = 50.
+            self.t_small[2] = 1.
+            self.t_xlarge[2] = 50.
+            self.t_small[3] = 1.
+            self.t_xlarge[3] = 500.
+            self.t_small[4] = 1.
+            self.t_xlarge[4] = 500.
+            self.t_small[5] = 1.
+            self.t_xlarge[5] = 500.
+            self.t_small[6] = 1.
+            self.t_xlarge[6] = 500.
+
+        # INPUT
+        self.t_index = 2   # 1 is for shchlumberger and 2 is for Wenner
+
+        VI.set_adat(self.t_adat)
+        VI.set_rdat(self.t_rdat)
+        VI.set_small(self.t_small)
+        VI.set_xlarge(self.t_xlarge)
+        VI.set_index(self.t_index)
 
 
 if __name__ == '__main__':

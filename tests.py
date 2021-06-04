@@ -1,6 +1,6 @@
 import unittest
 import sys
-from VESinverse_ajv234 import VESinverse
+from VESinverse import VESinverse
 
 ''' The tests are numbered by the page
     in the excel Doc

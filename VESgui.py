@@ -3,6 +3,7 @@ from tkinter import filedialog
 import sys
 from VESinverse import VESinverse
 
+
 class VESgui:
     def __init__(self, window):
         self.window = window
@@ -28,14 +29,12 @@ class VESgui:
         self.curr_num_layers = 3
         self.computed_results_labels = []
 
-        
     def display(self):
         self.preframe = Frame(self.window, background="gainsboro")
         self.preframe.pack(side=TOP, anchor=NW)
         # self.displayChosenLayers(0, 3)
         self.display_text()
         self.display_buttons()
-        
 
     def display_text(self):
         # File Path Label
@@ -73,29 +72,29 @@ class VESgui:
               text="Thickness\nPrediction", width=15).grid(row=2, column=3)
         Label(self.layerinputframe, bg="gainsboro",
               text="Resistivity\nPrediction", width=15).grid(row=2, column=4)
-        
+
         # resistivity minimum values
         Label(self.layerinputframe, bg="gainsboro",
               text="Minimum\nValue", width=15).grid(row=2, column=6)
         # resistivity maximum values
         Label(self.layerinputframe, bg="gainsboro",
               text="Maximum\nValue", width=15).grid(row=2, column=7)
-        
+
         # note while testing
         Label(self.layerinputframe, bg="gainsboro", font=("TkDefaultFont", 7),
               text="  --> For predictable results, enter 1 10 5 75 20 2 500 200 100 3000").grid(row=8, column=1, columnspan=3, pady=5)
-        
+
     def display_buttons(self):
 
         # ------------  below code originally by Rebeca DiCosola ------------
         # ------------  edited by AJ Vrieland
-        
+
         # file explore button
         self.file_view = Label(self.preframe, bg="gainsboro", text="No file",
-                        width=40, wraplength=220, justify="center")
+                               width=40, wraplength=220, justify="center")
         self.file_view.grid(row=2, column=2)
         file_explore = Button(self.preframe, text="Select Resistivity Data File",
-                            command=self.pickFile)              # Will create command later
+                              command=self.pickFile)
         file_explore.grid(row=1, column=1, rowspan=2)
 
         # drop down menu to pic number of layers
@@ -103,7 +102,7 @@ class VESgui:
         layersmenu = OptionMenu(self.preframe, self.num_layers_var, *layerlist)
         layersmenu.config(bg="gainsboro")
         layersmenu.grid(row=2, column=3)
-        self.num_layers_var.trace("w", self.numLayersChanged) # does something when the dropdown menue is changed
+        self.num_layers_var.trace("w", self.numLayersChanged)
         self.curr_num_layers = self.num_layers
 
         # box to enter number of iterations
@@ -114,47 +113,47 @@ class VESgui:
         for i in range(self.MAX_LAYERS - 1):
             self.thick_min_layer.append(IntVar(self.window))
             self.thick_min_entries.append(Entry(
-                self.layerinputframe, textvariable=self.thick_min_layer[i], width=10))
-       
+                                          self.layerinputframe, textvariable=self.thick_min_layer[i], width=10))
+
         # Add "Infinite" label to bottom of left column.
         # We store it in the thick_min_entries list so that when the number of
         # layers changes, we can remap it.  BUT IT IS NOT AN ENTRY!
         infinite_thickness_label = Label(self.layerinputframe, bg="gainsboro",
-                                        text="Infinite Thickness")
+                                         text="Infinite Thickness")
         infinite_thickness_label.grid(row=self.num_layers+2, column=1, columnspan=2)
         self.thick_min_entries.append(infinite_thickness_label)
 
-        #thick_max
+        # thick_max
         for i in range(self.MAX_LAYERS - 1):
             self.thick_max_layer.append(IntVar(self.window))
             self.thick_max_entries.append(Entry(
-                self.layerinputframe, textvariable=self.thick_max_layer[i], width=10))
-        
-        #res_min
+                                          self.layerinputframe, textvariable=self.thick_max_layer[i], width=10))
+
+        # res_min
         for i in range(self.MAX_LAYERS):
             self.res_min_layer.append(IntVar(self.window))
             self.res_min_entries.append(Entry(
                 self.layerinputframe, textvariable=self.res_min_layer[i], width=10))
 
-        #res_max
+        # res_max
         for i in range(self.MAX_LAYERS):
             self.res_max_layer.append(IntVar(self.window))
             self.res_max_entries.append(Entry(
                 self.layerinputframe, textvariable=self.res_max_layer[i], width=10))
 
         # self.displayChosenLayers(0, self.num_layers)
-        
+
         # ------------------ Buttons at the bottom ----------------------
 
         executionframe = Frame(self.window, background="gainsboro")
         executionframe.pack(side=BOTTOM, anchor=SW)
-        execute_VES = Button(executionframe, text="Compute Predictions",     #"Compute Predictions" button
-                            command=self.computation)                      #Calls the computePredictions() function
+        execute_VES = Button(executionframe, text="Compute Predictions",     # "Compute Predictions" button
+                             command=self.computation)                      # Calls the computePredictions() function
         execute_VES.grid(row=1, column=1, padx=10, pady=5)
 
         # plot curves button
         plot_curves = Button(executionframe, text="Plot the Curves",
-                            command=self.VI.graph)                      # if you close the graph and click the button again the graph is empty
+                             command=self.VI.graph)                      # if you close the graph and click the button again the graph is empty
         plot_curves.grid(row=1, column=2, padx=10, pady=5)
 
         self.displayChosenLayers(0, self.num_layers)
@@ -192,19 +191,19 @@ class VESgui:
         # Move the "Infinite Thickness" label
         inf_thickness_label = self.thick_min_entries[self.MAX_LAYERS - 1]
         inf_thickness_label.grid(row=curr_num_layers+2, column=1, columnspan=2)
-    
+
     def pickFile(self):
         # # get file
-        # resistivity_file = filedialog.askopenfilename(initialdir="/",
-        #                                             title="Open File",
-        #                                             filetypes=(("Text Files", "*.txt"),
-        #                                                         ("All Files", "*.*")))
+        resistivity_file = filedialog.askopenfilename(initialdir="/",
+                                                      title="Open File",
+                                                      filetypes=(("Text Files", "*.txt"),
+                                                                 ("All Files", "*.*")))
 
         # dir for testing
-        resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
-                                                    title="Open File",
-                                                    filetypes=(("Text Files", "*.txt"),
-                                                                ("All Files", "*.*")))
+        # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
+        #                                               title="Open File",
+        #                                               filetypes=(("Text Files", "*.txt"),
+        #                                                          ("All Files", "*.*")))
         self.file_view.config(text=resistivity_file)
         file_handle = open(resistivity_file, "r")
         file_list = file_handle.readlines()
@@ -222,9 +221,9 @@ class VESgui:
             print('Algorithm choice on line 2 must be 1 or 2', file=sys.stderr)
             sys.exit(-1)
         self.VI.set_index(algorithm_choice)
-    
+
         # number of data values
-        data_length = len(file_list) - 3 
+        data_length = len(file_list) - 3
         self.VI.set_ndat(data_length)
 
         g_adat = [0]*data_length          # g_adat and g_rdat (gui_xdat) are temporary arrays that this function uses and then
@@ -260,8 +259,8 @@ class VESgui:
     def numLayersChanged(self, *args):
         # Clear displayed results
         if self.computed_results_labels != []:
-            for l in self.computed_results_labels:
-                l.grid_forget()
+            for labels in self.computed_results_labels:
+                labels.grid_forget()
         self.computed_results_labels = []
 
         new_num_layers = self.num_layers_var.get()
@@ -274,8 +273,9 @@ class VESgui:
     def computation(self):
 
         g_small = self.VI.get_small()       # g_small, and g_xlarge are local instances of small and xlarge
-        g_xlarge = self.VI.get_xlarge()     # from VESinverse 
-            # set small[] and xlarge[]
+        g_xlarge = self.VI.get_xlarge()     # from VESinverse
+
+        # set small[] and xlarge[]
         for i in range(self.num_layers - 1):
             g_small[i] = self.thick_min_layer[i].get()
         for i in range(self.num_layers - 1):
@@ -286,16 +286,17 @@ class VESgui:
             g_xlarge[i + self.num_layers - 1] = self.res_max_layer[i].get()
         self.VI.set_small(g_small)
         self.VI.set_xlarge(g_xlarge)
-        print(g_small, '\n', g_xlarge)
+  
         self.VI.set_layers(self.num_layers)
         self.VI.computePredictions()
+
         self.viewModel()
-    
+
     def viewModel(self):
         g_pkeep = self.VI.get_pkeep()
         g_errmin = self.VI.get_errmin()
         g_layer_index = self.VI.get_layer_index()
-        
+
         for i in range(0, self.num_layers - 1):
             print(i, g_pkeep[i], g_pkeep[i + self.num_layers - 1])
             thickness_label = Label(self.layerinputframe, bg="gainsboro",
@@ -316,6 +317,8 @@ class VESgui:
         errmin_label = Label(self.layerinputframe, bg="gainsboro",
                              text=f"RMS error of Fit = {round(g_errmin, 3)}")
         errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
+
+
 if __name__ == '__main__':
     window = Tk()
     VS = VESgui(window)

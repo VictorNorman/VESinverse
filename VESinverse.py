@@ -18,12 +18,6 @@ import sys
 
 class VESinverse:
     def __init__(self):
-        # For Testing Purposes
-        # Only the Test suit should edit these Constants
-        self.LAYERS = 0
-        self.DATASET = 0
-        self.RANGE = 0
-        self.GRAPH = True
 
         ARRAYSIZE = 65
 
@@ -85,142 +79,6 @@ class VESinverse:
 
         self.layer = 3
 
-        # INPUT
-        self.index = 2   # 1 is for shchlumberger and 2 is for Wenner
-
-    def test_data(self):
-        # hard coded data input - spacing and
-        # apparent resistivities measured in the field
-        self.adat = [0.55, 0.95, 1.5, 2.5, 3., 4.5,
-                     5.5, 9., 12., 20., 30., 70.]
-
-        if self.DATASET == 1:
-            self.rdat = [125., 110., 95., 40., 24., 15.,
-                         10.5, 8., 6., 6.5, 11., 25.]  # DATA 1
-        elif self.DATASET == 2:
-            self.rdat = [125., 130., 140., 150., 160.,
-                         170., 175., 170., 130., 100., 80., 60.]  # DATA 2
-        elif self.DATASET == 3:
-            self.rdat = [125., 124., 120., 115., 110.,
-                         95., 40., 24., 15., 10., 11., 25.]  # DATA 3
-        elif self.DATASET == 4:
-            self.rdat = [125., 124., 126., 129., 135.,
-                         140., 150., 170., 175., 180., 185., 187.]  # DATA 4
-        elif self.DATASET == 5:
-            self.rdat = [125., 124., 126., 122., 120.,
-                         110., 85., 65., 40., 30., 26., 25.]  # DATA 5
-        elif self.DATASET == 6:
-            self.rdat = [125., 124., 126., 129., 135.,
-                         180., 220., 250., 280., 300., 310., 315.]  # DATA 6
-        elif self.DATASET == 7:
-            self.rdat = [300., 303., 330., 330., 310.,
-                         300., 285., 240., 205., 180., 180., 210.]  # DATA 7
-        elif self.DATASET == 8:
-            self.rdat = [300., 298., 290., 270., 280.,
-                         300., 330., 370., 420., 510., 507., 370.]  # DATA 8
-        
-        # this is where the range in parameters should be input from a GUI
-        # I'm hard coding this in for now
-
-        # enter thickenss range for each layer and then resistivity range.
-        # for 3 layers small[1] and small[2] are low end of thickness range
-        # small[3], small[4] and small[5] are the low end of resistivities
-        if self.RANGE == 1:
-            # range 1  3-layer case (narrow range)
-            self.small[0] = 1.
-            self.xlarge[0] = 5
-            self.small[1] = 10.
-            self.xlarge[1] = 75.
-            self.small[2] = 20.
-            self.xlarge[2] = 200.
-            self.small[3] = 2.
-            self.xlarge[3] = 100
-            self.small[4] = 500.
-            self.xlarge[4] = 3000.
-        elif self.RANGE == 2:
-            # range 2 3-layer case (broad range)
-            self.small[0] = 1.
-            self.xlarge[0] = 10
-            self.small[1] = 1.
-            self.xlarge[1] = 50.
-            self.small[2] = 1.
-            self.xlarge[2] = 500.
-            self.small[3] = 1.
-            self.xlarge[3] = 500.
-            self.small[4] = 1.
-            self.xlarge[4] = 500.
-        elif self.RANGE == 3:
-            # range 3  2-layer case (broad range)
-            self.small[0] = 1.
-            self.xlarge[0] = 20
-            self.small[1] = 1.
-            self.xlarge[1] = 500.
-            self.small[2] = 1.
-            self.xlarge[2] = 500
-        elif self.RANGE == 4:
-            # range 4  2-layer case (small range)
-            self.small[0] = 1.
-            self.xlarge[0] = 10
-            self.small[1] = 50.
-            self.xlarge[1] = 200.
-            self.small[2] = 1.
-            self.xlarge[2] = 50.
-        elif self.RANGE == 5:
-            # range 5 4-layer case (small range)
-            self.small[0] = 1.
-            self.xlarge[0] = 2
-            self.small[1] = 1.
-            self.xlarge[1] = 50.
-            self.small[2] = 1.
-            self.xlarge[2] = 50.
-            self.small[3] = 200.
-            self.xlarge[3] = 400.
-            self.small[4] = 400.
-            self.xlarge[4] = 500.
-            self.small[5] = 1.
-            self.xlarge[5] = 500.
-            self.small[6] = 1.
-            self.xlarge[6] = 500.
-        elif self.RANGE == 6:
-            # range 6 4-layer case (broad range)
-            self.small[0] = 1
-            self.xlarge[0] = 2
-            self.small[1] = 1.
-            self.xlarge[1] = 2.
-            self.small[2] = 1.
-            self.xlarge[2] = 50.
-            self.small[3] = 1.
-            self.xlarge[3] = 500.
-            self.small[4] = 1.
-            self.xlarge[4] = 500.
-            self.small[5] = 1.
-            self.xlarge[5] = 500.
-            self.small[6] = 1.
-            self.xlarge[6] = 500.
-        elif self.RANGE == 7:
-            # range 7 4-layer case (broadest range)
-            self.small[0] = 1
-            self.xlarge[0] = 50
-            self.small[1] = 1.
-            self.xlarge[1] = 50.
-            self.small[2] = 1.
-            self.xlarge[2] = 50.
-            self.small[3] = 1.
-            self.xlarge[3] = 500.
-            self.small[4] = 1.
-            self.xlarge[4] = 500.
-            self.small[5] = 1.
-            self.xlarge[5] = 500.
-            self.small[6] = 1.
-            self.xlarge[6] = 500.
-
-        if self.LAYERS == 3:
-            self.layer = 3
-        elif self.LAYERS == 2:
-            self.layer = 2
-        elif self.LAYERS == 4:
-            self.layer = 4
-
     def data_init(self):
         self.one30 = 1.e30
         self.rms = self.one30
@@ -245,54 +103,52 @@ class VESinverse:
             self.ep = self.ep/2.0
             self.fctr = self.ep+1.
 
-        
-
     # ----------- Getters and Setters -------------
     def get_iter(self):
         return self.iter
-    
+
     def get_layers(self):
         return self.layer
-    
+
     def set_layers(self, new_layer_number):
         self.layer = new_layer_number
 
     def get_adat(self):
         return self.adat
-    
+
     def set_adat(self, gui_adat_array):
         self.adat = gui_adat_array
-    
+
     def get_rdat(self):
         return self.rdat
-    
+
     def set_rdat(self, gui_rdat_array):
         self.rdat = gui_rdat_array
-    
+
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
 
     def set_small(self, new_small):
         self.small = new_small
-    
+
     def get_small(self):
         return self.small
-    
+
     def set_xlarge(self, new_xlarge):
         self.xlarge = new_xlarge
-    
+
     def get_xlarge(self):
         return self.xlarge
-    
+
     def get_pkeep(self):
         return self.pkeep
-    
+
     def set_index(self, new_index):
         self.index = new_index
-    
+
     def get_errmin(self):
         return self.errmin
-    
+
     def get_layer_index(self):
         return self.layer_index
 
@@ -534,7 +390,7 @@ class VESinverse:
         print('  Spacing', '  Original_Data', ' Predicted')
         for i in range(0, self.ndat, 1):
             print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
-     
+
     def graph(self):
         plt.show()
         plt.grid(True)

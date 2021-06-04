@@ -8,7 +8,6 @@ class VESgui:
     def __init__(self, window):
         self.window = window
         self.window.title("VES Inverse Monte Carlo")
-        self.window.configure(background="gainsboro")
 
         self.VI = VESinverse()
 
@@ -30,7 +29,7 @@ class VESgui:
         self.computed_results_labels = []
 
     def display(self):
-        self.preframe = Frame(self.window, background="gainsboro")
+        self.preframe = Frame(self.window)
         self.preframe.pack(side=TOP, anchor=NW)
         # self.displayChosenLayers(0, 3)
         self.display_text()
@@ -38,50 +37,50 @@ class VESgui:
 
     def display_text(self):
         # File Path Label
-        selected_file = Label(self.preframe, bg="gainsboro", text="Selected File Path")
+        selected_file = Label(self.preframe, text="Selected File Path")
         selected_file.grid(row=1, column=2)
 
         # Layer menu label
-        dropdown_label = Label(self.preframe, bg="gainsboro",
+        dropdown_label = Label(self.preframe,
                                text="Number of Layers", width=20)
         dropdown_label.grid(row=1, column=3)
 
         # Iteration box label
-        iter_label = Label(self.preframe, bg="gainsboro",
+        iter_label = Label(self.preframe,
                            text="Number of Iterations", width=20)
         iter_label.grid(row=1, column=4)
 
-        self.layerinputframe = Frame(self.window, background="gainsboro")
+        self.layerinputframe = Frame(self.window)
         self.layerinputframe.pack(side=TOP, anchor=SW)
 
         # thickness and resistivity labels
-        Label(self.layerinputframe, bg="gainsboro", font=("TkDefaultFont", 13),
+        Label(self.layerinputframe, font=("TkDefaultFont", 13),
               text="Model Range in Thickness (m)").grid(row=1, column=1, columnspan=3, pady=5)
-        Label(self.layerinputframe, bg="gainsboro", font=("TkDefaultFont", 13),
+        Label(self.layerinputframe, font=("TkDefaultFont", 13),
               text="Model Range in Resistivity (m)").grid(row=1, column=5, columnspan=3, pady=5)
 
         # thickness minimum values
-        Label(self.layerinputframe, bg="gainsboro",
+        Label(self.layerinputframe,
               text="Minimum\nValue", width=15).grid(row=2, column=1)
         # thickness maximum values
-        Label(self.layerinputframe, bg="gainsboro",
+        Label(self.layerinputframe,
               text="Maximum\nValue", width=15).grid(row=2, column=2)
 
         # thickness and resistivity prediction labels
-        Label(self.layerinputframe, bg="gainsboro",
+        Label(self.layerinputframe,
               text="Thickness\nPrediction", width=15).grid(row=2, column=3)
-        Label(self.layerinputframe, bg="gainsboro",
+        Label(self.layerinputframe,
               text="Resistivity\nPrediction", width=15).grid(row=2, column=4)
 
         # resistivity minimum values
-        Label(self.layerinputframe, bg="gainsboro",
+        Label(self.layerinputframe,
               text="Minimum\nValue", width=15).grid(row=2, column=6)
         # resistivity maximum values
-        Label(self.layerinputframe, bg="gainsboro",
+        Label(self.layerinputframe,
               text="Maximum\nValue", width=15).grid(row=2, column=7)
 
         # note while testing
-        Label(self.layerinputframe, bg="gainsboro", font=("TkDefaultFont", 7),
+        Label(self.layerinputframe, font=("TkDefaultFont", 7),
               text="  --> For predictable results, enter 1 10 5 75 20 2 500 200 100 3000").grid(row=8, column=1, columnspan=3, pady=5)
 
     def display_buttons(self):
@@ -90,7 +89,7 @@ class VESgui:
         # ------------  edited by AJ Vrieland
 
         # file explore button
-        self.file_view = Label(self.preframe, bg="gainsboro", text="No file",
+        self.file_view = Label(self.preframe, text="No file",
                                width=40, wraplength=220, justify="center")
         self.file_view.grid(row=2, column=2)
         file_explore = Button(self.preframe, text="Select Resistivity Data File",
@@ -100,7 +99,6 @@ class VESgui:
         # drop down menu to pic number of layers
         layerlist = list(range(1, self.MAX_LAYERS+1))
         layersmenu = OptionMenu(self.preframe, self.num_layers_var, *layerlist)
-        layersmenu.config(bg="gainsboro")
         layersmenu.grid(row=2, column=3)
         self.num_layers_var.trace("w", self.numLayersChanged)
         self.curr_num_layers = self.num_layers
@@ -118,7 +116,7 @@ class VESgui:
         # Add "Infinite" label to bottom of left column.
         # We store it in the thick_min_entries list so that when the number of
         # layers changes, we can remap it.  BUT IT IS NOT AN ENTRY!
-        infinite_thickness_label = Label(self.layerinputframe, bg="gainsboro",
+        infinite_thickness_label = Label(self.layerinputframe,
                                          text="Infinite Thickness")
         infinite_thickness_label.grid(row=self.num_layers+2, column=1, columnspan=2)
         self.thick_min_entries.append(infinite_thickness_label)
@@ -145,7 +143,7 @@ class VESgui:
 
         # ------------------ Buttons at the bottom ----------------------
 
-        executionframe = Frame(self.window, background="gainsboro")
+        executionframe = Frame(self.window)
         executionframe.pack(side=BOTTOM, anchor=SW)
         execute_VES = Button(executionframe, text="Compute Predictions",     # "Compute Predictions" button
                              command=self.computation)                      # Calls the computePredictions() function
@@ -299,22 +297,22 @@ class VESgui:
 
         for i in range(0, self.num_layers - 1):
             print(i, g_pkeep[i], g_pkeep[i + self.num_layers - 1])
-            thickness_label = Label(self.layerinputframe, bg="gainsboro",
+            thickness_label = Label(self.layerinputframe,
                                     text=str(round(g_pkeep[i], 3)))
             thickness_label.grid(row=3+i, column=3)
-            resistivity_label = Label(self.layerinputframe, bg="gainsboro",
+            resistivity_label = Label(self.layerinputframe,
                                       text=str(round(g_pkeep[self.num_layers+i-1], 3)))
             resistivity_label.grid(row=3+i, column=4)
 
         thickness_label = Label(self.layerinputframe,
-                                bg="gainsboro", text="Infinite")
+                                text="Infinite")
         thickness_label.grid(row=2+self.num_layers, column=3)
 
         resistivity_label = Label(self.layerinputframe,
-                                  bg="gainsboro", text=str(round(g_pkeep[g_layer_index-1], 3)))
+                                  text=str(round(g_pkeep[g_layer_index-1], 3)))
         resistivity_label.grid(row=2+self.num_layers, column=4)
 
-        errmin_label = Label(self.layerinputframe, bg="gainsboro",
+        errmin_label = Label(self.layerinputframe,
                              text=f"RMS error of Fit = {round(g_errmin, 3)}")
         errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
 

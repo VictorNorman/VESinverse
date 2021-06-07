@@ -297,7 +297,7 @@ class VESgui:
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
 
-        self.VI.set_layers(self.num_layers)
+        self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
 
         self.viewModel()

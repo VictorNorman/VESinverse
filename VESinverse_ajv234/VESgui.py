@@ -245,7 +245,6 @@ class VESgui:
             # print('-->' + spacing_val + '<--')
             resis_val = float(fields[1].strip())
             # print('-->' + resis_val + '<--')
-            # indexes in these array start at 0, so subtract 2
 
             # TODO: better name for adat or spacing_val?: what are these values?
             g_adat[i-3] = spacing_val
@@ -258,11 +257,6 @@ class VESgui:
 
         # Instead of doing v I am just calling the function readData() from VESinverse
         # compute log10 values of adat and rdat
-        # TODO: the values in adatl and rdatl are indexed starting a 1: yuck!
-        # TODO: we don't convert adat[0] or rdat[0]... correct?
-        # for i in range(1, ndat):
-        #     adatl[i] = np.log10(adat[i])
-        #     rdatl[i] = np.log10(rdat[i])
         self.VI.readData()
 
     def numLayersChanged(self, *args):
@@ -329,6 +323,9 @@ class VESgui:
     
     def parse_input(self):
         parser = argparse.ArgumentParser()
+        # These are all the options for Command Line Arguments, 
+        # however the thick and res varients could used better names
+        # TODO: maybe use regex to clean up how it handles thick and res inputs
         parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")
         parser.add_argument("-l", "--layers", nargs=1, help="How many layers to use")
         parser.add_argument("-f", "--file", help="Add file path")
@@ -346,8 +343,12 @@ class VESgui:
             self.is_input_file = True
             self.input_file = args.file
         if args.thick_min:
+            # args.<argument> is a list, and args.<argument>[0] is always a string
+            # as of right now the numbers must be separated by a comma and no space
+            # but I want to add it so that the number can be spaced by multiple different things
             thick_min = args.thick_min[0]
             thick_min = thick_min.split(',')
+            print(thick_min)
             for i in range(self.num_layers-1):
                 self.thick_min_layer.append(IntVar(self.window, int(thick_min[i])))
         if args.thick_max:

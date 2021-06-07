@@ -44,15 +44,15 @@ class VESinverse:
         # is an 'l' that means it is a log10 of the value
 
         # 65 is completely arbitrary
-        self.p = [0]*20                              # Prediction?
+        self.p = [0]*7                              # Prediction?
         self.r = [0]*ARRAYSIZE                       # Resistivity?
         self.rl = [0]*ARRAYSIZE                      # Resistivity?
         self.t = [0]*50
         self.b = [0]*ARRAYSIZE
         self.asav = [0]*ARRAYSIZE
         self.asavl = [0]*ARRAYSIZE
-        self.adatl = [0]*ARRAYSIZE
-        self.rdatl = [0]*ARRAYSIZE
+        self.adatl = []
+        self.rdatl = []
         self.adat = [0]*ARRAYSIZE
         self.rdat = [0]*ARRAYSIZE
         self.pkeep = [0]*ARRAYSIZE
@@ -174,8 +174,8 @@ class VESinverse:
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
         for i in range(0, self.ndat, 1):
-            self.adatl[i] = np.log10(self.adat[i])
-            self.rdatl[i] = np.log10(self.rdat[i])
+            self.adatl.append(np.log10(self.adat[i]))
+            self.rdatl.append(np.log10(self.rdat[i]))
 
         return
 
@@ -347,8 +347,6 @@ class VESinverse:
         #         randNumber = random.random()
         #         # print(randNumber, '  random')
         #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
-        print(self.resistivity_maximum)
-        print(self.resistivity_minimum)
         for iloop in range(0, self.iter, 1):
             
             for i in range(0, self.layer - 1):

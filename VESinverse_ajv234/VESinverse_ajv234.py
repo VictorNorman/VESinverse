@@ -63,10 +63,8 @@ class VESinverse:
         self.pltanswerkeep = [0]*ARRAYSIZE
         self.pltanswerkeepl = [0]*ARRAYSIZE
 
-        self.small = [0]*ARRAYSIZE
         self.thickness_minimum = []
         self.resistivity_minimum = []
-        self.xlarge = [0]*ARRAYSIZE
         self.thickness_maximum = []
         self.resistivity_maximum = []
 
@@ -131,18 +129,6 @@ class VESinverse:
 
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
-
-    def set_small(self, new_small):
-        self.small = new_small
-
-    def get_small(self):
-        return self.small
-
-    def set_xlarge(self, new_xlarge):
-        self.xlarge = new_xlarge
-
-    def get_xlarge(self):
-        return self.xlarge
     
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):

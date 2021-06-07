@@ -43,6 +43,10 @@ class VESinverse:
         # But my Python wasn't up to it. If the last letter
         # is an 'l' that means it is a log10 of the value
 
+        # I can't seem to get rid of any ARRAYSIZE except on adat and rdat
+        # because the first time they are referenced it is within a loop and
+        # thus append would not really work
+
         # 65 is completely arbitrary
         self.p = [0]*7                              # Prediction?
         self.r = [0]*ARRAYSIZE                       # Resistivity?
@@ -51,10 +55,10 @@ class VESinverse:
         self.b = [0]*ARRAYSIZE
         self.asav = [0]*ARRAYSIZE
         self.asavl = [0]*ARRAYSIZE
-        self.adatl = []
-        self.rdatl = []
-        self.adat = [0]*ARRAYSIZE
-        self.rdat = [0]*ARRAYSIZE
+        self.adatl = [0]*ARRAYSIZE
+        self.rdatl = [0]*ARRAYSIZE
+        self.adat = []
+        self.rdat = []
         self.pkeep = [0]*ARRAYSIZE
         self.rkeep = [0]*ARRAYSIZE
         self.rkeepl = [0]*ARRAYSIZE
@@ -174,8 +178,8 @@ class VESinverse:
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
         for i in range(0, self.ndat, 1):
-            self.adatl.append(np.log10(self.adat[i]))
-            self.rdatl.append(np.log10(self.rdat[i]))
+            self.adatl[i] = np.log10(self.adat[i])
+            self.rdatl[i] = np.log10(self.rdat[i])
 
         return
 

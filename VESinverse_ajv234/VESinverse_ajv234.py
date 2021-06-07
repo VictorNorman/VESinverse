@@ -64,7 +64,11 @@ class VESinverse:
         self.pltanswerkeepl = [0]*ARRAYSIZE
 
         self.small = [0]*ARRAYSIZE
+        self.thickness_minimum = []
+        self.resistivity_minimum = []
         self.xlarge = [0]*ARRAYSIZE
+        self.thickness_maximum = []
+        self.resistivity_maximum = []
 
         self.x = [0]*100
         self.y = [0]*100
@@ -139,6 +143,32 @@ class VESinverse:
 
     def get_xlarge(self):
         return self.xlarge
+    
+    # ----------- replacements for small and xlarge ----------
+    def set_thickness_minimum(self, new_thick_min):
+        self.thickness_minimum = new_thick_min
+    
+    def get_thickness_minimum(self):
+        return thickness_minimum
+    
+    def set_thickness_maximum(self, new_thick_max):
+        self.thickness_maximum = new_thick_max
+    
+    def get_thickness_maximum(self):
+        return self.thickness_maximum
+    
+    def set_resistivity_minimum(self, new_res_min):
+        self.resistivity_minimum = new_res_min
+    
+    def get_resistivity_minimum(self):
+        return self.resistivity_minimum
+    
+    def set_resistivity_maximum(self, new_res_max):
+        self.resistivity_maximum = new_res_max
+
+    def get_resistivity_maximum(self):
+        return self.resistivity_maximum
+    # -------------------------------------------------------
 
     def get_pkeep(self):
         return self.pkeep
@@ -325,12 +355,23 @@ class VESinverse:
 
         self.readData()
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])
+        # for iloop in range(0, self.iter, 1):
+        #     # print( '  iloop is ', iloop)
+        #     for i in range(0, self.layer_index, 1):
+        #         randNumber = random.random()
+        #         # print(randNumber, '  random')
+        #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
         for iloop in range(0, self.iter, 1):
-            # print( '  iloop is ', iloop)
-            for i in range(0, self.layer_index, 1):
+            
+            for i in range(0, self.layer - 1):
+                print(i)
                 randNumber = random.random()
-                # print(randNumber, '  random')
-                self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
+                self.p[i] = (self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i]
+            for i in range(0, self.layer):
+                print(self.layer+i-1)
+                randNumber = random.random()
+                self.p[i+self.layer-1] = (self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_maximum[i]
+
 
             self.rms = self.rmsfit()
 
@@ -373,8 +414,12 @@ class VESinverse:
         # output the ranges cpmstraining the model
 
         print('   Small', '   Large')
-        for i in range(0, self.layer_index, 1):
-            print("%9.3f %9.3f" % (self.small[i], self.xlarge[i]))
+        # for i in range(0, self.layer_index, 1):
+        #     print("%9.3f %9.3f" % (self.small[i], self.xlarge[i]))
+        for i in range(0, self.layer-1, 1):
+            print("%9.3f %9.3f" % (self.thickness_minimum[i], self.thickness_maximum[i]))
+        for i in range(0, self.layer, 1):
+            print("%9.3f %9.3f" % (self.resistivity_minimum[i], self.resistivity_maximum[i]))
 
     # output the final rms
         print(' RMS_=   ', "%9.6f" % self.errmin)

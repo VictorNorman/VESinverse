@@ -1,4 +1,4 @@
-Example Data
+Example Data Set 1
 2
 .00	.00
 .55	125.00

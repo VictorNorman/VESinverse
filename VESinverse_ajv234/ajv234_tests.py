@@ -1183,11 +1183,11 @@ class VEStesting(unittest.TestCase):
         if self.RANGE == 1:
             # range 1  3-layer case (narrow range)
             self.t_thick_min.append(1.)
-            self.t_thick_max.append(5.)
+            self.t_thick_max.append(5)
             self.t_thick_min.append(10.)
             self.t_thick_max.append(75.)
             self.t_res_min.append(20.)
-            self.t_res_max.append(200.)
+            self.t_res_max.append(200)
             self.t_res_min.append(2.)
             self.t_res_max.append(100.)
             self.t_res_min.append(500.)

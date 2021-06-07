@@ -361,18 +361,19 @@ class VESinverse:
         #         randNumber = random.random()
         #         # print(randNumber, '  random')
         #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
+        print(self.resistivity_maximum)
+        print(self.resistivity_minimum)
         for iloop in range(0, self.iter, 1):
             
             for i in range(0, self.layer - 1):
-                print(i)
                 randNumber = random.random()
                 self.p[i] = (self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i]
             for i in range(0, self.layer):
-                print(self.layer+i-1)
                 randNumber = random.random()
                 self.p[i+self.layer-1] = (self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_maximum[i]
+                print((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_maximum[i])
 
-
+            # print(self.p)
             self.rms = self.rmsfit()
 
             if self.rms < self.errmin:

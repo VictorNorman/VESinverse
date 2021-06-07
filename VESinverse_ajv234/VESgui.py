@@ -95,7 +95,7 @@ class VESgui:
         self.file_view = Label(self.preframe, text="No file",
                                width=40, wraplength=220, justify="center")
         self.file_view.grid(row=2, column=2)
-        if self.is_input_file == False:
+        if not self.is_input_file:
             file_explore = Button(self.preframe, text="Select Resistivity Data File",
                                 command=self.pickFile)
         else:

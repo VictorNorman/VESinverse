@@ -1186,6 +1186,7 @@ class VEStesting(unittest.TestCase):
             self.t_thick_max.append(5)
             self.t_thick_min.append(10.)
             self.t_thick_max.append(75.)
+
             self.t_res_min.append(20.)
             self.t_res_max.append(200)
             self.t_res_min.append(2.)
@@ -1194,80 +1195,86 @@ class VEStesting(unittest.TestCase):
             self.t_res_max.append(3000.)
         elif self.RANGE == 2:
             # range 2 3-layer case (broad range)
-            self.t_small[0] = 1.
-            self.t_xlarge[0] = 10
-            self.t_small[1] = 1.
-            self.t_xlarge[1] = 50.
-            self.t_small[2] = 1.
-            self.t_xlarge[2] = 500.
-            self.t_small[3] = 1.
-            self.t_xlarge[3] = 500.
-            self.t_small[4] = 1.
-            self.t_xlarge[4] = 500.
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(10)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
         elif self.RANGE == 3:
             # range 3  2-layer case (broad range)
-            self.t_small[0] = 1.
-            self.t_xlarge[0] = 20
-            self.t_small[1] = 1.
-            self.t_xlarge[1] = 500.
-            self.t_small[2] = 1.
-            self.t_xlarge[2] = 500
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(20)
+
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500)
         elif self.RANGE == 4:
-            # range 4  2-layer case (t_small range)
-            self.t_small[0] = 1.
-            self.t_xlarge[0] = 10
-            self.t_small[1] = 50.
-            self.t_xlarge[1] = 200.
-            self.t_small[2] = 1.
-            self.t_xlarge[2] = 50.
+            # range 4  2-layer case (small range)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(10)
+
+            self.t_res_min.append(50.)
+            self.t_res_max.append(200.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(50.)
         elif self.RANGE == 5:
-            # range 5 4-layer case (t_small range)
-            self.t_small[0] = 1.
-            self.t_xlarge[0] = 2
-            self.t_small[1] = 1.
-            self.t_xlarge[1] = 50.
-            self.t_small[2] = 1.
-            self.t_xlarge[2] = 50.
-            self.t_small[3] = 200.
-            self.t_xlarge[3] = 400.
-            self.t_small[4] = 400.
-            self.t_xlarge[4] = 500.
-            self.t_small[5] = 1.
-            self.t_xlarge[5] = 500.
-            self.t_small[6] = 1.
-            self.t_xlarge[6] = 500.
+            # range 5 4-layer case (small range)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(2)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+
+            self.t_res_min.append(200.)
+            self.t_res_max.append(400.)
+            self.t_res_min.append(400.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
         elif self.RANGE == 6:
             # range 6 4-layer case (broad range)
-            self.t_small[0] = 1
-            self.t_xlarge[0] = 2
-            self.t_small[1] = 1.
-            self.t_xlarge[1] = 2.
-            self.t_small[2] = 1.
-            self.t_xlarge[2] = 50.
-            self.t_small[3] = 1.
-            self.t_xlarge[3] = 500.
-            self.t_small[4] = 1.
-            self.t_xlarge[4] = 500.
-            self.t_small[5] = 1.
-            self.t_xlarge[5] = 500.
-            self.t_small[6] = 1.
-            self.t_xlarge[6] = 500.
+            self.t_thick_min.append(1)
+            self.t_thick_max.append(2.)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(2.)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
         elif self.RANGE == 7:
             # range 7 4-layer case (broadest range)
-            self.t_small[0] = 1
-            self.t_xlarge[0] = 50
-            self.t_small[1] = 1.
-            self.t_xlarge[1] = 50.
-            self.t_small[2] = 1.
-            self.t_xlarge[2] = 50.
-            self.t_small[3] = 1.
-            self.t_xlarge[3] = 500.
-            self.t_small[4] = 1.
-            self.t_xlarge[4] = 500.
-            self.t_small[5] = 1.
-            self.t_xlarge[5] = 500.
-            self.t_small[6] = 1.
-            self.t_xlarge[6] = 500.
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+            self.t_thick_min.append(1.)
+            self.t_thick_max.append(50.)
+
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
+            self.t_res_min.append(1.)
+            self.t_res_max.append(500.)
 
         # INPUT
         self.t_index = 2   # 1 is for shchlumberger and 2 is for Wenner
@@ -1285,6 +1292,10 @@ class VEStesting(unittest.TestCase):
         VI.set_resistivity_minimum(self.t_res_min)
         VI.set_resistivity_maximum(self.t_res_max)
         VI.set_index(self.t_index)
+        self.t_thick_min = []
+        self.t_thick_max = []
+        self.t_res_min = []
+        self.t_res_max = []
 
 
 if __name__ == '__main__':

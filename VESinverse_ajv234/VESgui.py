@@ -283,13 +283,13 @@ class VESgui:
         r_max = []
 
         # set small[] and xlarge[]
-        for i in range(self.num_layers - 1):
+        for i in range(self.curr_num_layers - 1):
             t_min.append(self.thick_min_layer[i].get())
-        for i in range(self.num_layers - 1):
+        for i in range(self.curr_num_layers - 1):
             t_max.append(self.thick_max_layer[i].get())
-        for i in range(self.num_layers):
+        for i in range(self.curr_num_layers):
             r_min.append(self.res_min_layer[i].get())
-        for i in range(self.num_layers):
+        for i in range(self.curr_num_layers):
             r_max.append(self.res_max_layer[i].get())
 
         self.VI.set_thickness_minimum(t_min)
@@ -307,26 +307,26 @@ class VESgui:
         g_errmin = self.VI.get_errmin()
         g_layer_index = self.VI.get_layer_index()
 
-        for i in range(0, self.num_layers - 1):
-            print(i, g_pkeep[i], g_pkeep[i + self.num_layers - 1])
+        for i in range(0, self.curr_num_layers - 1):
+            print(i, g_pkeep[i], g_pkeep[i + self.curr_num_layers - 1])
             thickness_label = Label(self.layerinputframe,
                                     text=str(round(g_pkeep[i], 3)))
             thickness_label.grid(row=3+i, column=3)
             resistivity_label = Label(self.layerinputframe,
-                                      text=str(round(g_pkeep[self.num_layers+i-1], 3)))
+                                      text=str(round(g_pkeep[self.curr_num_layers+i-1], 3)))
             resistivity_label.grid(row=3+i, column=4)
 
         thickness_label = Label(self.layerinputframe,
                                 text="Infinite")
-        thickness_label.grid(row=2+self.num_layers, column=3)
+        thickness_label.grid(row=2+self.curr_num_layers, column=3)
 
         resistivity_label = Label(self.layerinputframe,
                                   text=str(round(g_pkeep[g_layer_index-1], 3)))
-        resistivity_label.grid(row=2+self.num_layers, column=4)
+        resistivity_label.grid(row=2+self.curr_num_layers, column=4)
 
         errmin_label = Label(self.layerinputframe,
                              text=f"RMS error of Fit = {round(g_errmin, 3)}")
-        errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
+        errmin_label.grid(row=3+self.curr_num_layers, column=3, columnspan=2)
     
     def parse_input(self):
         parser = argparse.ArgumentParser()

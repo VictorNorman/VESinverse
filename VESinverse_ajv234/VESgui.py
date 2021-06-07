@@ -275,21 +275,28 @@ class VESgui:
 
     def computation(self):
 
-        g_small = self.VI.get_small()       # g_small, and g_xlarge are local instances of small and xlarge
-        g_xlarge = self.VI.get_xlarge()     # from VESinverse
+        # g_small = self.VI.get_small()       # g_small, and g_xlarge are local instances of small and xlarge
+        # g_xlarge = self.VI.get_xlarge()     # from VESinverse
+        t_min = []
+        t_max = []
+        r_min = []
+        r_max = []
 
         # set small[] and xlarge[]
         for i in range(self.num_layers - 1):
-            g_small[i] = self.thick_min_layer[i].get()
+            t_min.append(self.thick_min_layer[i].get())
         for i in range(self.num_layers - 1):
-            g_xlarge[i] = self.thick_max_layer[i].get()
+            t_max.append(self.thick_max_layer[i].get())
         for i in range(self.num_layers):
-            g_small[i + self.num_layers - 1] = self.res_min_layer[i].get()
+            r_min.append(self.res_min_layer[i].get())
         for i in range(self.num_layers):
-            g_xlarge[i + self.num_layers - 1] = self.res_max_layer[i].get()
-        self.VI.set_small(g_small)
-        self.VI.set_xlarge(g_xlarge)
-  
+            r_max.append(self.res_max_layer[i].get())
+
+        self.VI.set_thickness_minimum(t_min)
+        self.VI.set_thickness_maximum(t_max)
+        self.VI.set_resistivity_minimum(r_min)
+        self.VI.set_resistivity_maximum(r_max)
+
         self.VI.set_layers(self.num_layers)
         self.VI.computePredictions()
 

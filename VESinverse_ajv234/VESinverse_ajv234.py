@@ -129,26 +129,26 @@ class VESinverse:
 
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
-    
+
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):
         self.thickness_minimum = new_thick_min
-    
+
     def get_thickness_minimum(self):
         return thickness_minimum
-    
+
     def set_thickness_maximum(self, new_thick_max):
         self.thickness_maximum = new_thick_max
-    
+
     def get_thickness_maximum(self):
         return self.thickness_maximum
-    
+
     def set_resistivity_minimum(self, new_res_min):
         self.resistivity_minimum = new_res_min
-    
+
     def get_resistivity_minimum(self):
         return self.resistivity_minimum
-    
+
     def set_resistivity_maximum(self, new_res_max):
         self.resistivity_maximum = new_res_max
 
@@ -348,7 +348,7 @@ class VESinverse:
         #         # print(randNumber, '  random')
         #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
         for iloop in range(0, self.iter, 1):
-            
+
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
                 self.p[i] = (self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i]

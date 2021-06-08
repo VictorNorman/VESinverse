@@ -100,10 +100,10 @@ class VESgui:
         self.file_view.grid(row=2, column=2)
         if not self.is_input_file:
             file_explore = Button(self.preframe, text="Select Resistivity Data File",
-                                command=self.pickFile)
+                                  command=self.pickFile)
         else:
             file_explore = Button(self.preframe, text="Select Resistivity Data File",
-                                command=self.pickFile(self.input_file))
+                                  command=self.pickFile(self.input_file))
         file_explore.grid(row=1, column=1, rowspan=2)
 
         # drop down menu to pic number of layers
@@ -202,12 +202,12 @@ class VESgui:
         inf_thickness_label.grid(row=curr_num_layers+2, column=1, columnspan=2)
 
     def pickFile(self, file=""):
-        if file=="":
+        if file == "":
             # # get file
             resistivity_file = filedialog.askopenfilename(initialdir="/",
-                                                        title="Open File",
-                                                        filetypes=(("Text Files", "*.txt"),
-                                                                    ("All Files", "*.*")))
+                                                          title="Open File",
+                                                          filetypes=(("Text Files", "*.txt"),
+                                                                     ("All Files", "*.*")))
 
             # dir for testing
             # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
@@ -317,27 +317,27 @@ class VESgui:
         for i in range(0, self.curr_num_layers - 1):
             print(i, g_pkeep[i], g_pkeep[i + self.curr_num_layers - 1])
             self.thickness_label = Label(self.layerinputframe,
-                                    text=str(round(g_pkeep[i], 3)))
+                                         text=str(round(g_pkeep[i], 3)))
             self.thickness_label.grid(row=3+i, column=3)
             self.resistivity_label = Label(self.layerinputframe,
-                                      text=str(round(g_pkeep[self.curr_num_layers+i-1], 3)))
+                                           text=str(round(g_pkeep[self.curr_num_layers+i-1], 3)))
             self.resistivity_label.grid(row=3+i, column=4)
 
         self.thickness_label = Label(self.layerinputframe,
-                                text="Infinite")
+                                     text="Infinite")
         self.thickness_label.grid(row=2+self.curr_num_layers, column=3)
 
         self.resistivity_label = Label(self.layerinputframe,
-                                  text=str(round(g_pkeep[g_layer_index-1], 3)))
+                                       text=str(round(g_pkeep[g_layer_index-1], 3)))
         self.resistivity_label.grid(row=2+self.curr_num_layers, column=4)
 
         self.errmin_label = Label(self.layerinputframe,
-                             text=f"RMS error of Fit = {round(g_errmin, 3)}")
+                                  text=f"RMS error of Fit = {round(g_errmin, 3)}")
         self.errmin_label.grid(row=3+self.curr_num_layers, column=3, columnspan=2)
-    
+
     def parse_input(self):
         parser = argparse.ArgumentParser()
-        # These are all the options for Command Line Arguments, 
+        # These are all the options for Command Line Arguments,
         # however the thick and res varients could used better names
         # TODO: maybe use regex to clean up how it handles thick and res inputs
         parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")

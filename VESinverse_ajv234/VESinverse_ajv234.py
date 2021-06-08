@@ -55,17 +55,17 @@ class VESinverse:
         self.b = [0]*ARRAYSIZE
         self.asav = [0]*ARRAYSIZE
         self.asavl = [0]*ARRAYSIZE
-        self.adatl = [0]*ARRAYSIZE
-        self.rdatl = [0]*ARRAYSIZE
+        self.adatl = []
+        self.rdatl = []
         self.adat = []
         self.rdat = []
-        self.pkeep = [0]*ARRAYSIZE
-        self.rkeep = [0]*ARRAYSIZE
-        self.rkeepl = [0]*ARRAYSIZE
-        self.pltanswer = [0]*ARRAYSIZE
-        self.pltanswerl = [0]*ARRAYSIZE
-        self.pltanswerkeep = [0]*ARRAYSIZE
-        self.pltanswerkeepl = [0]*ARRAYSIZE
+        self.pkeep = []
+        self.rkeep = []
+        self.rkeepl = []
+        self.pltanswer = []
+        self.pltanswerl = []
+        self.pltanswerkeep = []
+        self.pltanswerkeepl = []
 
         self.thickness_minimum = []
         self.resistivity_minimum = []
@@ -178,12 +178,14 @@ class VESinverse:
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
         for i in range(0, self.ndat, 1):
-            self.adatl[i] = np.log10(self.adat[i])
-            self.rdatl[i] = np.log10(self.rdat[i])
+            self.adatl.append(np.log10(self.adat[i]))
+            self.rdatl.append(np.log10(self.rdat[i]))
 
         return
 
     def error(self):
+        self.pltanswer.clear()
+        self.pltanswerl.clear()
         sumerror = 0.
         # pltanswer = [0]*64
         self.spline(self.resistivity_points_number, self.one30, self.one30,
@@ -193,8 +195,8 @@ class VESinverse:
                               self.asavl, self.rl, self.y2)
             sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
             # print(i,sum1,rdat[i],rdatl[i],ans)
-            self.pltanswerl[i] = ans
-            self.pltanswer[i] = np.power(10, ans)
+            self.pltanswerl.append(ans)
+            self.pltanswer.append(np.power(10, ans))
         self.rms = np.sqrt(sumerror/(self.ndat))
 
         # check the spline routine
@@ -352,27 +354,32 @@ class VESinverse:
         #         # print(randNumber, '  random')
         #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
         for iloop in range(0, self.iter, 1):
-
+            self.p.clear()
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
-                self.p[i] = (self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i]
+                self.p.append((self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i])
             for i in range(0, self.layer):
                 randNumber = random.random()
-                self.p[i+self.layer-1] = (self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i]
+                self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])
 
             # print(self.p)
             self.rms = self.rmsfit()
 
             if self.rms < self.errmin:
+                self.pkeep.clear()
+                self.rkeep.clear()
+                self.rkeepl.clear()
+                self.pltanswerkeep.clear()
+                self.pltanswerkeepl.clear()
                 print('rms  ', self.rms, '   errmin ', self.errmin)
                 for i in range(0, self.layer_index, 1):
-                    self.pkeep[i] = self.p[i]
+                    self.pkeep.append(self.p[i])
                 for i in range(0, self.resistivity_points_number, 1):
-                    self.rkeep[i] = self.r[i]
-                    self.rkeepl[i] = self.rl[i]
+                    self.rkeep.append(self.r[i])
+                    self.rkeepl.append(self.rl[i])
                 for i in range(0, self.ndat, 1):
-                    self.pltanswerkeepl[i] = self.pltanswerl[i]
-                    self.pltanswerkeep[i] = self.pltanswer[i]
+                    self.pltanswerkeepl.append(self.pltanswerl[i])
+                    self.pltanswerkeep.append(self.pltanswer[i])
                 self.errmin = self.rms
 
     # output the best fitting earth model

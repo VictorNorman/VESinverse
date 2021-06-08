@@ -347,8 +347,6 @@ class VESinverse:
         #         randNumber = random.random()
         #         # print(randNumber, '  random')
         #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
-        print(self.resistivity_maximum)
-        print(self.resistivity_minimum)
         for iloop in range(0, self.iter, 1):
             
             for i in range(0, self.layer - 1):

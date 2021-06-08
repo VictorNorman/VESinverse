@@ -16,6 +16,9 @@ class VESgui:
         self.num_layers = self.VI.get_layers()
         self.num_layers_var = IntVar(self.window, 3)
         self.iterator = IntVar(self.window, self.VI.get_iter())
+        self.thickness_label = Label()
+        self.resistivity_label = Label()
+        self.errmin_label = Label()
 
         self.thick_min_layer = []
         self.thick_max_layer = []
@@ -283,13 +286,13 @@ class VESgui:
         r_max = []
 
         # set small[] and xlarge[]
-        for i in range(self.num_layers - 1):
+        for i in range(self.curr_num_layers - 1):
             t_min.append(self.thick_min_layer[i].get())
-        for i in range(self.num_layers - 1):
+        for i in range(self.curr_num_layers - 1):
             t_max.append(self.thick_max_layer[i].get())
-        for i in range(self.num_layers):
+        for i in range(self.curr_num_layers):
             r_min.append(self.res_min_layer[i].get())
-        for i in range(self.num_layers):
+        for i in range(self.curr_num_layers):
             r_max.append(self.res_max_layer[i].get())
 
         self.VI.set_thickness_minimum(t_min)
@@ -297,36 +300,40 @@ class VESgui:
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
 
-        self.VI.set_layers(self.num_layers)
+        self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
 
         self.viewModel()
 
     def viewModel(self):
+        self.thickness_label.grid_forget()
+        self.resistivity_label.grid_forget()
+        self.errmin_label.grid_forget()
+        # Somewhere in here remove the labels when computing predictions for a new layer
         g_pkeep = self.VI.get_pkeep()
         g_errmin = self.VI.get_errmin()
         g_layer_index = self.VI.get_layer_index()
 
-        for i in range(0, self.num_layers - 1):
-            print(i, g_pkeep[i], g_pkeep[i + self.num_layers - 1])
-            thickness_label = Label(self.layerinputframe,
+        for i in range(0, self.curr_num_layers - 1):
+            print(i, g_pkeep[i], g_pkeep[i + self.curr_num_layers - 1])
+            self.thickness_label = Label(self.layerinputframe,
                                     text=str(round(g_pkeep[i], 3)))
-            thickness_label.grid(row=3+i, column=3)
-            resistivity_label = Label(self.layerinputframe,
-                                      text=str(round(g_pkeep[self.num_layers+i-1], 3)))
-            resistivity_label.grid(row=3+i, column=4)
+            self.thickness_label.grid(row=3+i, column=3)
+            self.resistivity_label = Label(self.layerinputframe,
+                                      text=str(round(g_pkeep[self.curr_num_layers+i-1], 3)))
+            self.resistivity_label.grid(row=3+i, column=4)
 
-        thickness_label = Label(self.layerinputframe,
+        self.thickness_label = Label(self.layerinputframe,
                                 text="Infinite")
-        thickness_label.grid(row=2+self.num_layers, column=3)
+        self.thickness_label.grid(row=2+self.curr_num_layers, column=3)
 
-        resistivity_label = Label(self.layerinputframe,
+        self.resistivity_label = Label(self.layerinputframe,
                                   text=str(round(g_pkeep[g_layer_index-1], 3)))
-        resistivity_label.grid(row=2+self.num_layers, column=4)
+        self.resistivity_label.grid(row=2+self.curr_num_layers, column=4)
 
-        errmin_label = Label(self.layerinputframe,
+        self.errmin_label = Label(self.layerinputframe,
                              text=f"RMS error of Fit = {round(g_errmin, 3)}")
-        errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
+        self.errmin_label.grid(row=3+self.curr_num_layers, column=3, columnspan=2)
     
     def parse_input(self):
         parser = argparse.ArgumentParser()

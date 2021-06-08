@@ -1281,12 +1281,6 @@ class VEStesting(unittest.TestCase):
 
         VI.set_adat(self.t_adat)
         VI.set_rdat(self.t_rdat)
-        # VI.set_small(self.t_small)
-        # VI.set_xlarge(self.t_xlarge)
-        print(self.t_thick_min)
-        print(self.t_thick_max)
-        print(self.t_res_min)
-        print(self.t_res_max)
         VI.set_thickness_minimum(self.t_thick_min)
         VI.set_thickness_maximum(self.t_thick_max)
         VI.set_resistivity_minimum(self.t_res_min)

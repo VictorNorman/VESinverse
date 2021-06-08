@@ -347,6 +347,7 @@ class VESgui:
         parser.add_argument("-ta", "--thickmax", nargs='*', help="The inputs for the thick max values")
         parser.add_argument("-ri", "--resmin", nargs='*', help="The inputs for the res min values")
         parser.add_argument("-ra", "--resmax", nargs='*', help="The inputs for the res max values")
+        parser.add_argument("--no_random", action="store_true", help="Sets the random seed to 0")
         args = parser.parse_args()
         if args.iter:
             self.iterator = IntVar(self.window, int(args.iter[0]))
@@ -380,6 +381,8 @@ class VESgui:
             res_max = res_max.split(',')
             for i in range(self.num_layers):
                 self.res_max_layer.append(IntVar(self.window, int(res_max[i])))
+        if args.no_random:
+            self.VI.set_random(0)
 
 
 if __name__ == '__main__':

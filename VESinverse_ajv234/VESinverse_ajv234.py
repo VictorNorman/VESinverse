@@ -57,15 +57,15 @@ class VESinverse:
         self.asavl = [0]*ARRAYSIZE
         self.adatl = [0]*ARRAYSIZE
         self.rdatl = [0]*ARRAYSIZE
-        self.adat = []
-        self.rdat = []
-        self.pkeep = []
+        self.adat = []                              # Spacing? out puts under the spacing tag 
+        self.rdat = []                              # Original_data? outputs under the original_data tag
+        self.pkeep = []                             # Final predictions? it is the array where the layer data ends up
         self.rkeep = []
         self.rkeepl = []
         self.pltanswer = []
         self.pltanswerl = []
-        self.pltanswerkeep = []
-        self.pltanswerkeepl = []
+        self.pltanswerkeep = []                     # Predictions? outputs under the Predictions tag
+        self.pltanswerkeepl = []                    
 
         self.thickness_minimum = []
         self.resistivity_minimum = []
@@ -90,7 +90,7 @@ class VESinverse:
         self.rms = self.one30
         self.errmin = 1.e10
 
-        # layer (e) and layer_index (n) variables have been updated
+        # self.layer_index is used to offset now only pkeep for 
         self.layer_index = 2 * self.layer - 1
 
         # smallest electrode spacing
@@ -171,7 +171,9 @@ class VESinverse:
 
     def get_layer_index(self):
         return self.layer_index
-
+    
+    def set_random(self, seed):
+        random.seed(seed)
     # ---------------------------------------------
 
     def readData(self):
@@ -337,7 +339,7 @@ class VESinverse:
     def computePredictions(self):
         self.data_init()
         # Turn off randomization (for now)
-        random.seed(0)
+        # set_random(0)
 
         self.readData()
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])

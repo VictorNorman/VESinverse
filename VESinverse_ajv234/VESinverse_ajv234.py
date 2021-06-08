@@ -339,7 +339,7 @@ class VESinverse:
     def computePredictions(self):
         self.data_init()
         # Turn off randomization (for now)
-        # set_random(0)
+        self.set_random(0)
 
         self.readData()
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])

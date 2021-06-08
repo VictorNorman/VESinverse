@@ -1299,6 +1299,7 @@ if __name__ == '__main__':
         input_number = 18
     test = VEStesting()
     VI = VESinverse()
+    VI.set_random(0)
     if input_number == 18:
         for i in range(1, 18):
             print("Runing test", i)

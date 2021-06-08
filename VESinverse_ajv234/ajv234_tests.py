@@ -1147,32 +1147,32 @@ class VEStesting(unittest.TestCase):
         # hard coded data input - spacing and
         # apparent resistivities measured in the field
         self.t_adat = [0.55, 0.95, 1.5, 2.5, 3., 4.5,
-                     5.5, 9., 12., 20., 30., 70.]
+                       5.5, 9., 12., 20., 30., 70.]
 
         if self.DATASET == 1:
             self.t_rdat = [125., 110., 95., 40., 24., 15.,
-                         10.5, 8., 6., 6.5, 11., 25.]  # DATA 1
+                           10.5, 8., 6., 6.5, 11., 25.]  # DATA 1
         elif self.DATASET == 2:
             self.t_rdat = [125., 130., 140., 150., 160.,
-                         170., 175., 170., 130., 100., 80., 60.]  # DATA 2
+                           170., 175., 170., 130., 100., 80., 60.]  # DATA 2
         elif self.DATASET == 3:
             self.t_rdat = [125., 124., 120., 115., 110.,
-                         95., 40., 24., 15., 10., 11., 25.]  # DATA 3
+                           95., 40., 24., 15., 10., 11., 25.]  # DATA 3
         elif self.DATASET == 4:
             self.t_rdat = [125., 124., 126., 129., 135.,
-                         140., 150., 170., 175., 180., 185., 187.]  # DATA 4
+                           140., 150., 170., 175., 180., 185., 187.]  # DATA 4
         elif self.DATASET == 5:
             self.t_rdat = [125., 124., 126., 122., 120.,
-                         110., 85., 65., 40., 30., 26., 25.]  # DATA 5
+                           110., 85., 65., 40., 30., 26., 25.]  # DATA 5
         elif self.DATASET == 6:
             self.t_rdat = [125., 124., 126., 129., 135.,
-                         180., 220., 250., 280., 300., 310., 315.]  # DATA 6
+                           180., 220., 250., 280., 300., 310., 315.]  # DATA 6
         elif self.DATASET == 7:
             self.t_rdat = [300., 303., 330., 330., 310.,
-                         300., 285., 240., 205., 180., 180., 210.]  # DATA 7
+                           300., 285., 240., 205., 180., 180., 210.]  # DATA 7
         elif self.DATASET == 8:
             self.t_rdat = [300., 298., 290., 270., 280.,
-                         300., 330., 370., 420., 510., 507., 370.]  # DATA 8
+                           300., 330., 370., 420., 510., 507., 370.]  # DATA 8
 
         # this is where the range in parameters should be input from a GUI
         # I'm hard coding this in for now
@@ -1299,6 +1299,7 @@ if __name__ == '__main__':
         input_number = 18
     test = VEStesting()
     VI = VESinverse()
+    VI.set_random(0)
     if input_number == 18:
         for i in range(1, 18):
             print("Runing test", i)

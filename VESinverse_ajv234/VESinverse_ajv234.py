@@ -43,8 +43,12 @@ class VESinverse:
         # But my Python wasn't up to it. If the last letter
         # is an 'l' that means it is a log10 of the value
 
+        # I can't seem to get rid of any ARRAYSIZE except on adat and rdat
+        # because the first time they are referenced it is within a loop and
+        # thus append would not really work
+
         # 65 is completely arbitrary
-        self.p = [0]*20                              # Prediction?
+        self.p = []                             # Prediction?
         self.r = [0]*ARRAYSIZE                       # Resistivity?
         self.rl = [0]*ARRAYSIZE                      # Resistivity?
         self.t = [0]*50
@@ -53,15 +57,15 @@ class VESinverse:
         self.asavl = [0]*ARRAYSIZE
         self.adatl = [0]*ARRAYSIZE
         self.rdatl = [0]*ARRAYSIZE
-        self.adat = [0]*ARRAYSIZE
-        self.rdat = [0]*ARRAYSIZE
-        self.pkeep = [0]*ARRAYSIZE
-        self.rkeep = [0]*ARRAYSIZE
-        self.rkeepl = [0]*ARRAYSIZE
-        self.pltanswer = [0]*ARRAYSIZE
-        self.pltanswerl = [0]*ARRAYSIZE
-        self.pltanswerkeep = [0]*ARRAYSIZE
-        self.pltanswerkeepl = [0]*ARRAYSIZE
+        self.adat = []                              # Spacing? out puts under the spacing tag 
+        self.rdat = []                              # Original_data? outputs under the original_data tag
+        self.pkeep = []                             # Final predictions? it is the array where the layer data ends up
+        self.rkeep = []
+        self.rkeepl = []
+        self.pltanswer = []
+        self.pltanswerl = []
+        self.pltanswerkeep = []                     # Predictions? outputs under the Predictions tag
+        self.pltanswerkeepl = []                    
 
         self.thickness_minimum = []
         self.resistivity_minimum = []
@@ -86,7 +90,7 @@ class VESinverse:
         self.rms = self.one30
         self.errmin = 1.e10
 
-        # layer (e) and layer_index (n) variables have been updated
+        # self.layer_index is used to offset now only pkeep for 
         self.layer_index = 2 * self.layer - 1
 
         # smallest electrode spacing
@@ -129,26 +133,26 @@ class VESinverse:
 
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
-    
+
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):
         self.thickness_minimum = new_thick_min
-    
+
     def get_thickness_minimum(self):
         return thickness_minimum
-    
+
     def set_thickness_maximum(self, new_thick_max):
         self.thickness_maximum = new_thick_max
-    
+
     def get_thickness_maximum(self):
         return self.thickness_maximum
-    
+
     def set_resistivity_minimum(self, new_res_min):
         self.resistivity_minimum = new_res_min
-    
+
     def get_resistivity_minimum(self):
         return self.resistivity_minimum
-    
+
     def set_resistivity_maximum(self, new_res_max):
         self.resistivity_maximum = new_res_max
 
@@ -167,7 +171,9 @@ class VESinverse:
 
     def get_layer_index(self):
         return self.layer_index
-
+    
+    def set_random(self, seed):
+        random.seed(seed)
     # ---------------------------------------------
 
     def readData(self):
@@ -177,9 +183,9 @@ class VESinverse:
             self.adatl[i] = np.log10(self.adat[i])
             self.rdatl[i] = np.log10(self.rdat[i])
 
-        return
-
     def error(self):
+        self.pltanswer.clear()
+        self.pltanswerl.clear()
         sumerror = 0.
         # pltanswer = [0]*64
         self.spline(self.resistivity_points_number, self.one30, self.one30,
@@ -189,8 +195,8 @@ class VESinverse:
                               self.asavl, self.rl, self.y2)
             sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
             # print(i,sum1,rdat[i],rdatl[i],ans)
-            self.pltanswerl[i] = ans
-            self.pltanswer[i] = np.power(10, ans)
+            self.pltanswerl.append(ans)
+            self.pltanswer.append(np.power(10, ans))
         self.rms = np.sqrt(sumerror/(self.ndat))
 
         # check the spline routine
@@ -219,7 +225,6 @@ class VESinverse:
             self.t[j] = (tpr + self.t[j - 1]) / (1. + tpr * self.t[j - 1] /
                                                  (rs * rs))
         self.r[i] = self.t[self.layer-1]
-        return
 
     def filters(self, b, k):
         for i in range(0, self.resistivity_points_number, 1):
@@ -227,7 +232,6 @@ class VESinverse:
             for j in range(0, k, 1):
                 re = re + b[j] * self.r[i + k - j - 1]
             self.r[i] = re
-        return
 
     def rmsfit(self):
         if self.index == 1:
@@ -309,8 +313,6 @@ class VESinverse:
         for k in range(n-1, -1, -1):
             y2[k] = y2[k] * y2[k + 1] + u[k]
 
-        return
-
     def splint(self, n, x, xa=[], ya=[], y2a=[]):
         klo = 0
         khi = n
@@ -337,7 +339,7 @@ class VESinverse:
     def computePredictions(self):
         self.data_init()
         # Turn off randomization (for now)
-        random.seed(0)
+        self.set_random(0)
 
         self.readData()
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])
@@ -348,27 +350,32 @@ class VESinverse:
         #         # print(randNumber, '  random')
         #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
         for iloop in range(0, self.iter, 1):
-            
+            self.p.clear()
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
-                self.p[i] = (self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i]
+                self.p.append((self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i])
             for i in range(0, self.layer):
                 randNumber = random.random()
-                self.p[i+self.layer-1] = (self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i]
+                self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])
 
             # print(self.p)
             self.rms = self.rmsfit()
 
             if self.rms < self.errmin:
+                self.pkeep.clear()
+                self.rkeep.clear()
+                self.rkeepl.clear()
+                self.pltanswerkeep.clear()
+                self.pltanswerkeepl.clear()
                 print('rms  ', self.rms, '   errmin ', self.errmin)
                 for i in range(0, self.layer_index, 1):
-                    self.pkeep[i] = self.p[i]
+                    self.pkeep.append(self.p[i])
                 for i in range(0, self.resistivity_points_number, 1):
-                    self.rkeep[i] = self.r[i]
-                    self.rkeepl[i] = self.rl[i]
+                    self.rkeep.append(self.r[i])
+                    self.rkeepl.append(self.rl[i])
                 for i in range(0, self.ndat, 1):
-                    self.pltanswerkeepl[i] = self.pltanswerl[i]
-                    self.pltanswerkeep[i] = self.pltanswer[i]
+                    self.pltanswerkeepl.append(self.pltanswerl[i])
+                    self.pltanswerkeep.append(self.pltanswer[i])
                 self.errmin = self.rms
 
     # output the best fitting earth model

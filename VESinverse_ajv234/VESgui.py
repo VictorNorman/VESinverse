@@ -343,8 +343,8 @@ class VESgui:
         parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")
         parser.add_argument("-l", "--layers", nargs=1, help="How many layers to use")
         parser.add_argument("-f", "--file", help="Add file path")
-        parser.add_argument("-ti", "--thick_min", nargs='*', help="The inputs for the thick min values")
-        parser.add_argument("-ta", "--thick_max", nargs='*', help="The inputs for the thick max values")
+        parser.add_argument("-ti", "--thickmin", nargs='*', help="The inputs for the thick min values")
+        parser.add_argument("-ta", "--thickmax", nargs='*', help="The inputs for the thick max values")
         parser.add_argument("-ri", "--resmin", nargs='*', help="The inputs for the res min values")
         parser.add_argument("-ra", "--resmax", nargs='*', help="The inputs for the res max values")
         args = parser.parse_args()
@@ -356,17 +356,17 @@ class VESgui:
         if args.file:
             self.is_input_file = True
             self.input_file = args.file
-        if args.thick_min:
+        if args.thickmin:
             # args.<argument> is a list, and args.<argument>[0] is always a string
             # as of right now the numbers must be separated by a comma and no space
             # but I want to add it so that the number can be spaced by multiple different things
-            thick_min = args.thick_min[0]
+            thick_min = args.thickmin[0]
             thick_min = thick_min.split(',')
             print(thick_min)
             for i in range(self.num_layers-1):
                 self.thick_min_layer.append(IntVar(self.window, int(thick_min[i])))
-        if args.thick_max:
-            thick_max = args.thick_max[0]
+        if args.thickmax:
+            thick_max = args.thickmax[0]
             thick_max = thick_max.split(',')
             for i in range(self.num_layers-1):
                 self.thick_max_layer.append(IntVar(self.window, int(thick_max[i])))

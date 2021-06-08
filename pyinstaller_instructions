@@ -1,0 +1,5 @@
+Windows:
+    in cmd in another folder use this command
+        pyinstaller --windowed --name "<name>" "<path-to-script>"
+    example:
+        pyinstaller --windowed --name "VESinverse" "c:\Documents\VESinverse\VESinverse_ajv234\VESgui.txt"

@@ -16,6 +16,9 @@ class VESgui:
         self.num_layers = self.VI.get_layers()
         self.num_layers_var = IntVar(self.window, 3)
         self.iterator = IntVar(self.window, self.VI.get_iter())
+        self.thickness_label = Label()
+        self.resistivity_label = Label()
+        self.errmin_label = Label()
 
         self.thick_min_layer = []
         self.thick_max_layer = []
@@ -97,10 +100,10 @@ class VESgui:
         self.file_view.grid(row=2, column=2)
         if not self.is_input_file:
             file_explore = Button(self.preframe, text="Select Resistivity Data File",
-                                command=self.pickFile)
+                                  command=self.pickFile)
         else:
             file_explore = Button(self.preframe, text="Select Resistivity Data File",
-                                command=self.pickFile(self.input_file))
+                                  command=self.pickFile(self.input_file))
         file_explore.grid(row=1, column=1, rowspan=2)
 
         # drop down menu to pic number of layers
@@ -199,12 +202,12 @@ class VESgui:
         inf_thickness_label.grid(row=curr_num_layers+2, column=1, columnspan=2)
 
     def pickFile(self, file=""):
-        if file=="":
+        if file == "":
             # # get file
             resistivity_file = filedialog.askopenfilename(initialdir="/",
-                                                        title="Open File",
-                                                        filetypes=(("Text Files", "*.txt"),
-                                                                    ("All Files", "*.*")))
+                                                          title="Open File",
+                                                          filetypes=(("Text Files", "*.txt"),
+                                                                     ("All Files", "*.*")))
 
             # dir for testing
             # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
@@ -283,13 +286,13 @@ class VESgui:
         r_max = []
 
         # set small[] and xlarge[]
-        for i in range(self.num_layers - 1):
+        for i in range(self.curr_num_layers - 1):
             t_min.append(self.thick_min_layer[i].get())
-        for i in range(self.num_layers - 1):
+        for i in range(self.curr_num_layers - 1):
             t_max.append(self.thick_max_layer[i].get())
-        for i in range(self.num_layers):
+        for i in range(self.curr_num_layers):
             r_min.append(self.res_min_layer[i].get())
-        for i in range(self.num_layers):
+        for i in range(self.curr_num_layers):
             r_max.append(self.res_max_layer[i].get())
 
         self.VI.set_thickness_minimum(t_min)
@@ -297,47 +300,51 @@ class VESgui:
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
 
-        self.VI.set_layers(self.num_layers)
+        self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
 
         self.viewModel()
 
     def viewModel(self):
+        self.thickness_label.grid_forget()
+        self.resistivity_label.grid_forget()
+        self.errmin_label.grid_forget()
+        # Somewhere in here remove the labels when computing predictions for a new layer
         g_pkeep = self.VI.get_pkeep()
         g_errmin = self.VI.get_errmin()
         g_layer_index = self.VI.get_layer_index()
 
-        for i in range(0, self.num_layers - 1):
-            print(i, g_pkeep[i], g_pkeep[i + self.num_layers - 1])
-            thickness_label = Label(self.layerinputframe,
-                                    text=str(round(g_pkeep[i], 3)))
-            thickness_label.grid(row=3+i, column=3)
-            resistivity_label = Label(self.layerinputframe,
-                                      text=str(round(g_pkeep[self.num_layers+i-1], 3)))
-            resistivity_label.grid(row=3+i, column=4)
+        for i in range(0, self.curr_num_layers - 1):
+            print(i, g_pkeep[i], g_pkeep[i + self.curr_num_layers - 1])
+            self.thickness_label = Label(self.layerinputframe,
+                                         text=str(round(g_pkeep[i], 3)))
+            self.thickness_label.grid(row=3+i, column=3)
+            self.resistivity_label = Label(self.layerinputframe,
+                                           text=str(round(g_pkeep[self.curr_num_layers+i-1], 3)))
+            self.resistivity_label.grid(row=3+i, column=4)
 
-        thickness_label = Label(self.layerinputframe,
-                                text="Infinite")
-        thickness_label.grid(row=2+self.num_layers, column=3)
+        self.thickness_label = Label(self.layerinputframe,
+                                     text="Infinite")
+        self.thickness_label.grid(row=2+self.curr_num_layers, column=3)
 
-        resistivity_label = Label(self.layerinputframe,
-                                  text=str(round(g_pkeep[g_layer_index-1], 3)))
-        resistivity_label.grid(row=2+self.num_layers, column=4)
+        self.resistivity_label = Label(self.layerinputframe,
+                                       text=str(round(g_pkeep[g_layer_index-1], 3)))
+        self.resistivity_label.grid(row=2+self.curr_num_layers, column=4)
 
-        errmin_label = Label(self.layerinputframe,
-                             text=f"RMS error of Fit = {round(g_errmin, 3)}")
-        errmin_label.grid(row=3+self.num_layers, column=3, columnspan=2)
-    
+        self.errmin_label = Label(self.layerinputframe,
+                                  text=f"RMS error of Fit = {round(g_errmin, 3)}")
+        self.errmin_label.grid(row=3+self.curr_num_layers, column=3, columnspan=2)
+
     def parse_input(self):
         parser = argparse.ArgumentParser()
-        # These are all the options for Command Line Arguments, 
+        # These are all the options for Command Line Arguments,
         # however the thick and res varients could used better names
         # TODO: maybe use regex to clean up how it handles thick and res inputs
         parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")
         parser.add_argument("-l", "--layers", nargs=1, help="How many layers to use")
         parser.add_argument("-f", "--file", help="Add file path")
-        parser.add_argument("-ti", "--thick_min", nargs='*', help="The inputs for the thick min values")
-        parser.add_argument("-ta", "--thick_max", nargs='*', help="The inputs for the thick max values")
+        parser.add_argument("-ti", "--thickmin", nargs='*', help="The inputs for the thick min values")
+        parser.add_argument("-ta", "--thickmax", nargs='*', help="The inputs for the thick max values")
         parser.add_argument("-ri", "--resmin", nargs='*', help="The inputs for the res min values")
         parser.add_argument("-ra", "--resmax", nargs='*', help="The inputs for the res max values")
         args = parser.parse_args()
@@ -349,17 +356,17 @@ class VESgui:
         if args.file:
             self.is_input_file = True
             self.input_file = args.file
-        if args.thick_min:
+        if args.thickmin:
             # args.<argument> is a list, and args.<argument>[0] is always a string
             # as of right now the numbers must be separated by a comma and no space
             # but I want to add it so that the number can be spaced by multiple different things
-            thick_min = args.thick_min[0]
+            thick_min = args.thickmin[0]
             thick_min = thick_min.split(',')
             print(thick_min)
             for i in range(self.num_layers-1):
                 self.thick_min_layer.append(IntVar(self.window, int(thick_min[i])))
-        if args.thick_max:
-            thick_max = args.thick_max[0]
+        if args.thickmax:
+            thick_max = args.thickmax[0]
             thick_max = thick_max.split(',')
             for i in range(self.num_layers-1):
                 self.thick_max_layer.append(IntVar(self.window, int(thick_max[i])))

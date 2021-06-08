@@ -55,8 +55,8 @@ class VESinverse:
         self.b = [0]*ARRAYSIZE
         self.asav = [0]*ARRAYSIZE
         self.asavl = [0]*ARRAYSIZE
-        self.adatl = []
-        self.rdatl = []
+        self.adatl = [0]*ARRAYSIZE
+        self.rdatl = [0]*ARRAYSIZE
         self.adat = []
         self.rdat = []
         self.pkeep = []
@@ -178,10 +178,8 @@ class VESinverse:
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
         for i in range(0, self.ndat, 1):
-            self.adatl.append(np.log10(self.adat[i]))
-            self.rdatl.append(np.log10(self.rdat[i]))
-
-        return
+            self.adatl[i] = np.log10(self.adat[i])
+            self.rdatl[i] = np.log10(self.rdat[i])
 
     def error(self):
         self.pltanswer.clear()
@@ -225,7 +223,6 @@ class VESinverse:
             self.t[j] = (tpr + self.t[j - 1]) / (1. + tpr * self.t[j - 1] /
                                                  (rs * rs))
         self.r[i] = self.t[self.layer-1]
-        return
 
     def filters(self, b, k):
         for i in range(0, self.resistivity_points_number, 1):
@@ -233,7 +230,6 @@ class VESinverse:
             for j in range(0, k, 1):
                 re = re + b[j] * self.r[i + k - j - 1]
             self.r[i] = re
-        return
 
     def rmsfit(self):
         if self.index == 1:
@@ -314,8 +310,6 @@ class VESinverse:
         y2[n] = (un - qn * u[n - 1]) / (qn * y2[n - 1] + 1.)
         for k in range(n-1, -1, -1):
             y2[k] = y2[k] * y2[k + 1] + u[k]
-
-        return
 
     def splint(self, n, x, xa=[], ya=[], y2a=[]):
         klo = 0

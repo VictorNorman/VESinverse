@@ -48,7 +48,7 @@ class VESinverse:
         # thus append would not really work
 
         # 65 is completely arbitrary
-        self.p = [0]*7                              # Prediction?
+        self.p = []                             # Prediction?
         self.r = [0]*ARRAYSIZE                       # Resistivity?
         self.rl = [0]*ARRAYSIZE                      # Resistivity?
         self.t = [0]*50

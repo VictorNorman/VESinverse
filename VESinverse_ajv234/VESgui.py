@@ -120,7 +120,6 @@ class VESgui:
 
         # - 1 here because bottom layer has Infinite thickness
         for i in range(self.MAX_LAYERS - 1):
-            print(self.thick_min_layer)
             self.thick_min_layer.append(IntVar(self.window))
             self.thick_min_entries.append(Entry(
                                           self.layerinputframe, textvariable=self.thick_min_layer[i], width=10))
@@ -202,7 +201,7 @@ class VESgui:
         inf_thickness_label = self.thick_min_entries[self.MAX_LAYERS - 1]
         inf_thickness_label.grid(row=curr_num_layers+2, column=1, columnspan=2)
 
-    def pickFile(self, file=""):
+    def pickFile(self, file="", test=0):
         if file == "":
             # # get file
             resistivity_file = filedialog.askopenfilename(initialdir="/",
@@ -217,16 +216,15 @@ class VESgui:
             #                                                          ("All Files", "*.*")))
         else:
             resistivity_file = file
-        try:
+        if not test:
             self.file_view.config(text=resistivity_file)
-        except:
-            print("")
+
         file_handle = open(resistivity_file, "r")
         file_list = file_handle.readlines()
 
         # when printing, skip first 2 lines: data starts in line 3.
-        for i in range(0, len(file_list)):
-            print(file_list[i])
+        # for i in range(0, len(file_list)):
+        #     print(file_list[i])
 
         # algorithm to use is on line 1 (second line).
         if int(file_list[1].strip()) == 1:
@@ -275,12 +273,12 @@ class VESgui:
 
         new_num_layers = self.num_layers_var.get()
         if new_num_layers != self.curr_num_layers:
-            print(f"num_layers changed from {self.curr_num_layers} to {new_num_layers}")
+            # print(f"num_layers changed from {self.curr_num_layers} to {new_num_layers}")
             self.displayChosenLayers(self.curr_num_layers, new_num_layers)
         # Store new value as current value
         self.curr_num_layers = new_num_layers
 
-    def computation(self):
+    def computation(self, test=0):
 
         # g_small = self.VI.get_small()       # g_small, and g_xlarge are local instances of small and xlarge
         # g_xlarge = self.VI.get_xlarge()     # from VESinverse
@@ -306,10 +304,9 @@ class VESgui:
 
         self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
-        try:
+        if not test:
             self.viewModel()
-        except:
-            print("")
+
 
     def viewModel(self):
         self.thickness_label.grid_forget()
@@ -321,7 +318,7 @@ class VESgui:
         g_layer_index = self.VI.get_layer_index()
 
         for i in range(0, self.curr_num_layers - 1):
-            print(i, g_pkeep[i], g_pkeep[i + self.curr_num_layers - 1])
+            # print(i, g_pkeep[i], g_pkeep[i + self.curr_num_layers - 1])
             self.thickness_label = Label(self.layerinputframe,
                                          text=str(round(g_pkeep[i], 3)))
             self.thickness_label.grid(row=3+i, column=3)

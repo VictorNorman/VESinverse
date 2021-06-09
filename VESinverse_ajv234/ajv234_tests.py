@@ -82,8 +82,10 @@ class VEStesting(unittest.TestCase):
         VI.GRAPH = False
         self.test_data()
         VI.computePredictions()
+        self.test_3L_R1_D1_asserts()
 
-        self.assertEqual(round(VI.pkeep[0], 3), 1.240)      # is breaking here, the assertEqual I think
+    def test_3L_R1_D1_asserts(self):
+        self.assertEqual(round(VI.pkeep[0], 3), 1.240)
         self.assertEqual(round(VI.pkeep[2], 3), 145.898)
         print("Layer 1 tests Completed")
         self.assertEqual(round(VI.pkeep[1], 3), 20.934)
@@ -1150,6 +1152,8 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[11], 3), 403.415)
         print("\"Predicted\" tests Completed")
 
+# GUI Tests
+
     def gui_test_1(self):
         window = Tk()
         gui = VESgui(window)
@@ -1208,8 +1212,9 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(gui.res_max_layer[1].get(), 100)
         self.assertEqual(gui.res_max_layer[2].get(), 3000)
 
-        gui.pickFile("/home/zer0relm/Documents/VESinverse/dataSets/DataSet1.txt")
-        gui.computation()
+        gui.pickFile("/home/zer0relm/Documents/VESinverse/dataSets/DataSet1.txt", 1)
+        gui.computation(1)
+        # self.test_3L_R1_D1_asserts()          # THis doesn't work and I'm not sure why
 
 # test_data
     def test_data(self):

@@ -68,7 +68,7 @@ class VEStesting(unittest.TestCase):
             self.test_4L_R5_D8()
         
         elif test_number == 18:
-            self.test_gui()
+            self.gui_test_1()
 # Layer 3 Tests
 
     def test_3L_R1_D1(self):            # test_number == 4
@@ -1148,14 +1148,12 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[11], 3), 403.415)
         print("\"Predicted\" tests Completed")
 
-    def test_gui(self):
+    def gui_test_1(self):
         window = Tk()
         gui = VESgui(window)
         gui.argument_init()
-        # gui.args = gui.parser.parse_args(["-l 4", "-i 30", "-f /home/zer0relm/Documents/dataSets/DataSet1.txt", "--no_random"])
         gui.args = gui.parser.parse_args(["-l", "4", "-i", "30", "-f", "/home/zer0relm/Documents/dataSets/DataSet8.txt", "-ti", "1,1,1", "-ta", "2,2,50", "-ri", "1,1,1,1",
                                           "-ra", "500,500,500,500"])
-        # "-ti 1,10", "-ta 5,75", "-ri 20,2,500", "-ra 200,100,300"])
         gui.check_arguments()
         self.assertEqual(gui.num_layers, 4)
         print("--layer test Completed")

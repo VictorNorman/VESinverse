@@ -369,7 +369,6 @@ class VESgui:
             # but I want to add it so that the number can be spaced by multiple different things
             thick_min = self.args.thickmin[0]
             thick_min = thick_min.split(',')
-            print(thick_min)
             for i in range(self.num_layers-1):
                 self.thick_min_layer.append(IntVar(self.window, int(thick_min[i])))
         if self.args.thickmax:

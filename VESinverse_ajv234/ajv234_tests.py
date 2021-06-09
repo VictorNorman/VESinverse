@@ -1152,12 +1152,34 @@ class VEStesting(unittest.TestCase):
         window = Tk()
         gui = VESgui(window)
         gui.argument_init()
-        gui.args = gui.parser.parse_args(["-l 4", "-i 30", "-f /home/zer0relm/Documents/dataSets/DataSet1.txt", "--no_random"])
+        # gui.args = gui.parser.parse_args(["-l 4", "-i 30", "-f /home/zer0relm/Documents/dataSets/DataSet1.txt", "--no_random"])
+        gui.args = gui.parser.parse_args(["-l", "4", "-i", "30", "-f", "/home/zer0relm/Documents/dataSets/DataSet8.txt", "-ti", "1,1,1", "-ta", "2,2,50", "-ri", "1,1,1,1",
+                                          "-ra", "500,500,500,500"])
         # "-ti 1,10", "-ta 5,75", "-ri 20,2,500", "-ra 200,100,300"])
         gui.check_arguments()
         self.assertEqual(gui.num_layers, 4)
+        print("--layer test Completed")
         self.assertEqual(gui.iterator.get(), 30)
-        self.assertEqual(gui.input_file, " /home/zer0relm/Documents/dataSets/DataSet1.txt")
+        print("--iter test Completed")
+        self.assertEqual(gui.input_file, "/home/zer0relm/Documents/dataSets/DataSet8.txt")
+        print("--file test Completed")
+        self.assertEqual(gui.thick_min_layer[0].get(), 1)
+        self.assertEqual(gui.thick_min_layer[1].get(), 1)
+        self.assertEqual(gui.thick_min_layer[2].get(), 1)
+        print("--thickmin test Completed")
+        self.assertEqual(gui.thick_max_layer[0].get(), 2)
+        self.assertEqual(gui.thick_max_layer[1].get(), 2)
+        self.assertEqual(gui.thick_max_layer[2].get(), 50)
+        print("--thickmax test Completed")
+        self.assertEqual(gui.res_min_layer[0].get(), 1)
+        self.assertEqual(gui.res_min_layer[1].get(), 1)
+        self.assertEqual(gui.res_min_layer[2].get(), 1)
+        self.assertEqual(gui.res_min_layer[3].get(), 1)
+        print("--resmin test Completed")
+        self.assertEqual(gui.res_max_layer[0].get(), 500)
+        self.assertEqual(gui.res_max_layer[1].get(), 500)
+        self.assertEqual(gui.res_max_layer[2].get(), 500)
+        self.assertEqual(gui.res_max_layer[3].get(), 500)
 
 # test_data
     def test_data(self):
@@ -1319,7 +1341,7 @@ if __name__ == '__main__':
         test.run_tests(input_number)
         print('\n\nFinished test,', input_number)
     else:
-        for i in range(1, 18):
+        for i in range(1, 19):
             print("Runing test", i)
             test.run_tests(i)
             print("Finished test", i, "\n\n")

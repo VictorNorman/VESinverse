@@ -2,6 +2,9 @@ import unittest
 import sys
 from VESinverse_ajv234 import VESinverse
 import numpy as np
+from VESgui import VESgui
+import os
+from tkinter import Tk, IntVar
 
 ''' The tests are numbered by the page
     in the excel Doc
@@ -63,6 +66,11 @@ class VEStesting(unittest.TestCase):
             self.test_4L_R6_D8()
         elif test_number == 17:
             self.test_4L_R5_D8()
+        
+        elif test_number == 18:
+            self.gui_test_1()
+        elif test_number == 19:
+            self.gui_test_2()
 # Layer 3 Tests
 
     def test_3L_R1_D1(self):            # test_number == 4
@@ -74,8 +82,10 @@ class VEStesting(unittest.TestCase):
         VI.GRAPH = False
         self.test_data()
         VI.computePredictions()
+        self.test_3L_R1_D1_asserts()
 
-        self.assertEqual(round(VI.pkeep[0], 3), 1.240)      # is breaking here, the assertEqual I think
+    def test_3L_R1_D1_asserts(self):
+        self.assertEqual(round(VI.pkeep[0], 3), 1.240)
         self.assertEqual(round(VI.pkeep[2], 3), 145.898)
         print("Layer 1 tests Completed")
         self.assertEqual(round(VI.pkeep[1], 3), 20.934)
@@ -1142,6 +1152,69 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[11], 3), 403.415)
         print("\"Predicted\" tests Completed")
 
+# GUI Tests
+
+    def gui_test_1(self):
+        window = Tk()
+        gui = VESgui(window)
+        gui.argument_init()
+        gui.args = gui.parser.parse_args(["-l", "4", "-i", "10000", "-f", "/home/zer0relm/Documents/VESinverse/dataSets/DataSet8.txt", 
+                                          "-ti", "1,1,1", "-ta", "2,2,50", "-ri", "1,1,1,1", "-ra", "500,500,500,500"])
+        gui.check_arguments()
+        self.assertEqual(gui.num_layers, 4)
+        print("--layer test Completed")
+        self.assertEqual(gui.iterator.get(), 10000)
+        print("--iter test Completed")
+        self.assertEqual(gui.input_file, "/home/zer0relm/Documents/VESinverse/dataSets/DataSet8.txt")
+        print("--file test Completed")
+        self.assertEqual(gui.thick_min_layer[0].get(), 1)
+        self.assertEqual(gui.thick_min_layer[1].get(), 1)
+        self.assertEqual(gui.thick_min_layer[2].get(), 1)
+        print("--thickmin test Completed")
+        self.assertEqual(gui.thick_max_layer[0].get(), 2)
+        self.assertEqual(gui.thick_max_layer[1].get(), 2)
+        self.assertEqual(gui.thick_max_layer[2].get(), 50)
+        print("--thickmax test Completed")
+        self.assertEqual(gui.res_min_layer[0].get(), 1)
+        self.assertEqual(gui.res_min_layer[1].get(), 1)
+        self.assertEqual(gui.res_min_layer[2].get(), 1)
+        self.assertEqual(gui.res_min_layer[3].get(), 1)
+        print("--resmin test Completed")
+        self.assertEqual(gui.res_max_layer[0].get(), 500)
+        self.assertEqual(gui.res_max_layer[1].get(), 500)
+        self.assertEqual(gui.res_max_layer[2].get(), 500)
+        self.assertEqual(gui.res_max_layer[3].get(), 500)
+    
+    def gui_test_2(self):
+        window = Tk()
+        gui = VESgui(window)
+        gui.argument_init()
+        gui.args = gui.parser.parse_args(["-l", "3", "-i", "10000", "-f", "/home/zer0relm/Documents/VESinverse/dataSets/DataSet1.txt", 
+                                          "-ti", "1,10", "-ta", "5,75", "-ri", "20,2,500", "-ra", "200,100,3000"])
+        gui.check_arguments()
+        self.assertEqual(gui.num_layers, 3)
+        print("--layer test Completed")
+        self.assertEqual(gui.iterator.get(), 10000)
+        print("--iter test Completed")
+        self.assertEqual(gui.input_file, "/home/zer0relm/Documents/VESinverse/dataSets/DataSet1.txt")
+        print("--file test Completed")
+        self.assertEqual(gui.thick_min_layer[0].get(), 1)
+        self.assertEqual(gui.thick_min_layer[1].get(), 10)
+        print("--thickmin test Completed")
+        self.assertEqual(gui.thick_max_layer[0].get(), 5)
+        self.assertEqual(gui.thick_max_layer[1].get(), 75)
+        print("--thickmax test Completed")
+        self.assertEqual(gui.res_min_layer[0].get(), 20)
+        self.assertEqual(gui.res_min_layer[1].get(), 2)
+        self.assertEqual(gui.res_min_layer[2].get(), 500)
+        print("--resmin test Completed")
+        self.assertEqual(gui.res_max_layer[0].get(), 200)
+        self.assertEqual(gui.res_max_layer[1].get(), 100)
+        self.assertEqual(gui.res_max_layer[2].get(), 3000)
+
+        gui.pickFile("/home/zer0relm/Documents/VESinverse/dataSets/DataSet1.txt", 1)
+        gui.computation(1)
+
 # test_data
     def test_data(self):
         # hard coded data input - spacing and
@@ -1293,19 +1366,17 @@ class VEStesting(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2:
-        input_number = int(sys.argv[1])
-    else:
-        input_number = 18
     test = VEStesting()
     VI = VESinverse()
     VI.set_random(0)
-    if input_number == 18:
-        for i in range(1, 18):
-            print("Runing test", i)
-            test.run_tests(i)
-            print("Finished test", i, "\n\n")
-    else:
+    if len(sys.argv) >= 2:
+        input_number = int(sys.argv[1])
         print('\n\nRunning test', input_number)
         test.run_tests(input_number)
         print('\n\nFinished test,', input_number)
+    else:
+        for i in range(1, 20):
+            print("Runing test", i)
+            test.run_tests(i)
+            print("Finished test", i, "\n\n")
+

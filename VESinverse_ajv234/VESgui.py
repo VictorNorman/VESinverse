@@ -33,6 +33,7 @@ class VESgui:
         self.computed_results_labels = []
         self.is_input_file = False
         self.input_file = ""
+        self.parser = argparse.ArgumentParser()
 
     def display(self):
         self.preframe = Frame(self.window)
@@ -335,53 +336,58 @@ class VESgui:
                                   text=f"RMS error of Fit = {round(g_errmin, 3)}")
         self.errmin_label.grid(row=3+self.curr_num_layers, column=3, columnspan=2)
 
-    def parse_input(self):
-        parser = argparse.ArgumentParser()
+    def argument_init(self):
         # These are all the options for Command Line Arguments,
         # however the thick and res varients could used better names
         # TODO: maybe use regex to clean up how it handles thick and res inputs
-        parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")
-        parser.add_argument("-l", "--layers", nargs=1, help="How many layers to use")
-        parser.add_argument("-f", "--file", help="Add file path")
-        parser.add_argument("-ti", "--thickmin", nargs='*', help="The inputs for the thick min values")
-        parser.add_argument("-ta", "--thickmax", nargs='*', help="The inputs for the thick max values")
-        parser.add_argument("-ri", "--resmin", nargs='*', help="The inputs for the res min values")
-        parser.add_argument("-ra", "--resmax", nargs='*', help="The inputs for the res max values")
-        parser.add_argument("--no_random", action="store_true", help="Sets the random seed to 0")
-        args = parser.parse_args()
-        if args.iter:
-            self.iterator = IntVar(self.window, int(args.iter[0]))
-        if args.layers:
-            self.num_layers_var = IntVar(self.window, int(args.layers[0]))
-            self.num_layers = self.curr_num_layers = int(args.layers[0])
-        if args.file:
+        self.parser.add_argument("-i", "--iter", nargs=1, help="Fills in the iterator")
+        self.parser.add_argument("-l", "--layers", nargs=1, help="How many layers to use")
+        self.parser.add_argument("-f", "--file", help="Add file path")
+        self.parser.add_argument("-ti", "--thickmin", nargs='*', help="The inputs for the thick min values")
+        self.parser.add_argument("-ta", "--thickmax", nargs='*', help="The inputs for the thick max values")
+        self.parser.add_argument("-ri", "--resmin", nargs='*', help="The inputs for the res min values")
+        self.parser.add_argument("-ra", "--resmax", nargs='*', help="The inputs for the res max values")
+        self.parser.add_argument("--no_random", action="store_true", help="Sets the random seed to 0")
+
+    def parse_input(self):
+        self.argument_init()
+        self.args = self.parser.parse_args()
+        self.check_arguments()
+
+    def check_arguments(self):
+        if self.args.iter:
+            self.iterator = IntVar(self.window, int(self.args.iter[0]))
+        if self.args.layers:
+            self.num_layers_var = IntVar(self.window, int(self.args.layers[0]))
+            self.num_layers = self.curr_num_layers = int(self.args.layers[0])
+        if self.args.file:
             self.is_input_file = True
-            self.input_file = args.file
-        if args.thickmin:
+            self.input_file = self.args.file
+        if self.args.thickmin:
             # args.<argument> is a list, and args.<argument>[0] is always a string
             # as of right now the numbers must be separated by a comma and no space
             # but I want to add it so that the number can be spaced by multiple different things
-            thick_min = args.thickmin[0]
+            thick_min = self.args.thickmin[0]
             thick_min = thick_min.split(',')
             print(thick_min)
             for i in range(self.num_layers-1):
                 self.thick_min_layer.append(IntVar(self.window, int(thick_min[i])))
-        if args.thickmax:
-            thick_max = args.thickmax[0]
+        if self.args.thickmax:
+            thick_max = self.args.thickmax[0]
             thick_max = thick_max.split(',')
             for i in range(self.num_layers-1):
                 self.thick_max_layer.append(IntVar(self.window, int(thick_max[i])))
-        if args.resmin:
-            res_min = args.resmin[0]
+        if self.args.resmin:
+            res_min = self.args.resmin[0]
             res_min = res_min.split(',')
             for i in range(self.num_layers):
                 self.res_min_layer.append(IntVar(self.window, int(res_min[i])))
-        if args.resmax:
-            res_max = args.resmax[0]
+        if self.args.resmax:
+            res_max = self.args.resmax[0]
             res_max = res_max.split(',')
             for i in range(self.num_layers):
                 self.res_max_layer.append(IntVar(self.window, int(res_max[i])))
-        if args.no_random:
+        if self.args.no_random:
             self.VI.set_random(0)
 
 

@@ -2,6 +2,9 @@ import unittest
 import sys
 from VESinverse_ajv234 import VESinverse
 import numpy as np
+from VESgui import VESgui
+import os
+from tkinter import Tk, IntVar
 
 ''' The tests are numbered by the page
     in the excel Doc
@@ -63,6 +66,9 @@ class VEStesting(unittest.TestCase):
             self.test_4L_R6_D8()
         elif test_number == 17:
             self.test_4L_R5_D8()
+        
+        elif test_number == 18:
+            self.test_gui()
 # Layer 3 Tests
 
     def test_3L_R1_D1(self):            # test_number == 4
@@ -1142,6 +1148,17 @@ class VEStesting(unittest.TestCase):
         self.assertEqual(round(VI.pltanswerkeep[11], 3), 403.415)
         print("\"Predicted\" tests Completed")
 
+    def test_gui(self):
+        window = Tk()
+        gui = VESgui(window)
+        gui.argument_init()
+        gui.args = gui.parser.parse_args(["-l 4", "-i 30", "-f /home/zer0relm/Documents/dataSets/DataSet1.txt", "--no_random"])
+        # "-ti 1,10", "-ta 5,75", "-ri 20,2,500", "-ra 200,100,300"])
+        gui.check_arguments()
+        self.assertEqual(gui.num_layers, 4)
+        self.assertEqual(gui.iterator.get(), 30)
+        self.assertEqual(gui.input_file, " /home/zer0relm/Documents/dataSets/DataSet1.txt")
+
 # test_data
     def test_data(self):
         # hard coded data input - spacing and
@@ -1293,19 +1310,17 @@ class VEStesting(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2:
-        input_number = int(sys.argv[1])
-    else:
-        input_number = 18
     test = VEStesting()
     VI = VESinverse()
     VI.set_random(0)
-    if input_number == 18:
+    if len(sys.argv) >= 2:
+        input_number = int(sys.argv[1])
+        print('\n\nRunning test', input_number)
+        test.run_tests(input_number)
+        print('\n\nFinished test,', input_number)
+    else:
         for i in range(1, 18):
             print("Runing test", i)
             test.run_tests(i)
             print("Finished test", i, "\n\n")
-    else:
-        print('\n\nRunning test', input_number)
-        test.run_tests(input_number)
-        print('\n\nFinished test,', input_number)
+

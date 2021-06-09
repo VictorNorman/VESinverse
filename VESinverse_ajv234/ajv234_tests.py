@@ -1158,12 +1158,12 @@ class VEStesting(unittest.TestCase):
         window = Tk()
         gui = VESgui(window)
         gui.argument_init()
-        gui.args = gui.parser.parse_args(["-l", "4", "-i", "30", "-f", "/home/zer0relm/Documents/VESinverse/dataSets/DataSet8.txt", 
+        gui.args = gui.parser.parse_args(["-l", "4", "-i", "10000", "-f", "/home/zer0relm/Documents/VESinverse/dataSets/DataSet8.txt", 
                                           "-ti", "1,1,1", "-ta", "2,2,50", "-ri", "1,1,1,1", "-ra", "500,500,500,500"])
         gui.check_arguments()
         self.assertEqual(gui.num_layers, 4)
         print("--layer test Completed")
-        self.assertEqual(gui.iterator.get(), 30)
+        self.assertEqual(gui.iterator.get(), 10000)
         print("--iter test Completed")
         self.assertEqual(gui.input_file, "/home/zer0relm/Documents/VESinverse/dataSets/DataSet8.txt")
         print("--file test Completed")
@@ -1214,7 +1214,6 @@ class VEStesting(unittest.TestCase):
 
         gui.pickFile("/home/zer0relm/Documents/VESinverse/dataSets/DataSet1.txt", 1)
         gui.computation(1)
-        # self.test_3L_R1_D1_asserts()          # THis doesn't work and I'm not sure why
 
 # test_data
     def test_data(self):
@@ -1376,7 +1375,7 @@ if __name__ == '__main__':
         test.run_tests(input_number)
         print('\n\nFinished test,', input_number)
     else:
-        for i in range(1, 19):
+        for i in range(1, 20):
             print("Runing test", i)
             test.run_tests(i)
             print("Finished test", i, "\n\n")

@@ -217,7 +217,10 @@ class VESgui:
             #                                                          ("All Files", "*.*")))
         else:
             resistivity_file = file
-        self.file_view.config(text=resistivity_file)
+        try:
+            self.file_view.config(text=resistivity_file)
+        except:
+            print("")
         file_handle = open(resistivity_file, "r")
         file_list = file_handle.readlines()
 
@@ -303,8 +306,10 @@ class VESgui:
 
         self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
-
-        self.viewModel()
+        try:
+            self.viewModel()
+        except:
+            print("")
 
     def viewModel(self):
         self.thickness_label.grid_forget()

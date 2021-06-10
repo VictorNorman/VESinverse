@@ -1,6 +1,6 @@
 import unittest
 import sys
-from VESinverse_ajv234 import VESinverse
+from VESinverse import VESinverse
 import numpy as np
 from VESgui import VESgui
 import os

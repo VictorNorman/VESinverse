@@ -255,8 +255,8 @@ class VESgui:
             g_adat[i-3] = spacing_val
             g_rdat[i-3] = resis_val
 
-        self.VI.set_adat(g_adat)
-        self.VI.set_rdat(g_rdat)
+        self.VI.set_location_data(g_adat)
+        self.VI.set_field_data(g_rdat)
 
         # TODO: do we handle files with the ending line of 0 0 ? Should we?
 

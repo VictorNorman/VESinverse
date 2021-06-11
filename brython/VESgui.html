@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="brython.js"></script>
+    <script type="text/javascript" src="brython_stdlib.js"></script>
+
+    <style>
+        button {
+            background-color: darkgray;
+        }
+        text {
+            vertical-align: top;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body onload="brython(1)">
+    <!-- HTML -->
+    <Text id="pick_file">Select Resistivity Data File: </Text>
+    <input name="Selected File" type="file" id="file-upload">
+    <br>
+    <textarea id="file-text" cols="30" rows="10"></textarea>
+    <span id="file_span"></span>
+    <!-- Python -->
+    <script type="text/python">
+        import main    
+    </script>
+</body>
+
+</html>

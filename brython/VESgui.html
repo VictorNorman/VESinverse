@@ -21,12 +21,23 @@
     <!-- HTML -->
     <Text id="pick_file">Select Resistivity Data File: </Text>
     <input name="Selected File" type="file" id="file-upload">
+    <span cols = "30"></span>
+    <span id="layer_choice"></span>
     <br>
     <textarea id="file-text" cols="30" rows="10"></textarea>
-    <span id="file_span"></span>
+    <br>
+    <Text cols="30"> Thickness min</Text>
+    <Text cols="30"> Thickness max</Text>
+    <br>
+    <span id="thick_input"></span>
+    <Text>Resistivity min Resistivity max</Text>
+    <br>
+    <span id="res_input"></span>
+
     <!-- Python -->
     <script type="text/python">
-        import main    
+        import main  
+        wg = main.web_gui()
     </script>
 </body>
 

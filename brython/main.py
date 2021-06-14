@@ -5,8 +5,11 @@ class web_gui:
     def __init__(self):
         # VI = VESinverse()
         document['file-upload'].bind('input', self.read_file)
+        document['Compute'].bind('click', self.computePredictions)
+        document['Show_graph'].bind('click', self.showGraph)
         self.layer_dropdown()
         self.inputs()
+        self.layers = 3
 
     def read_file(self, e):
         def onload(e):
@@ -41,18 +44,28 @@ class web_gui:
 
     def changeLayer(self, e):
         print("Layer will be changed")
+        print(e.target.selectedIndex)
+        self.layers = e.target.selectedIndex
+        self.inputs()
 
     def inputs(self):
-        for i in range(2):
+        document['thick_input'].clear()
+        document['res_input'].clear()
+        for i in range(self.layers - 1):
             thickness_inputs = html.INPUT(type = "Text", id = f"thick_min{i}")
             document['thick_input'] <= thickness_inputs
             thickness_inputs = html.INPUT(type = "Text", id = f"thick_max{i}")
             document['thick_input'] <= thickness_inputs
             document['thick_input'] <= html.BR()
-        for i in range(3):
+        for i in range(self.layers):
             resistivity_inputs = html.INPUT(type = "Text", id = f"res_min{i}")
             document['res_input'] <= resistivity_inputs
             resistivity_inputs = html.INPUT(type = "Text", id = f"res_max{i}")
             document['res_input'] <= resistivity_inputs
             document['res_input'] <= html.BR()
         
+    def computePredictions(self, e):
+        print("Might not work without numpy")
+    
+    def showGraph(self, e):
+        print("Also might not work")

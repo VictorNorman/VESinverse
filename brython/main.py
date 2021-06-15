@@ -31,8 +31,8 @@ class web_gui:
             data_length = len(file_list) - 3
             self.VI.set_ndat(data_length)
 
-            g_adat = [0]*data_length
-            g_rdat = [0]*data_length
+            g_adat = []
+            g_rdat = []
 
             for i in range(3, len(file_list)):
                 line_str = file_list[i].split()
@@ -41,8 +41,8 @@ class web_gui:
                 resis_val = float(line_str[1].strip())
                 print(f"resis_val: {resis_val}")
 
-                g_adat[i-3] = spacing_val
-                g_rdat[i-3] = resis_val
+                g_adat.append(spacing_val)
+                g_rdat.append(resis_val)
 
             self.VI.set_adat(g_adat)
             self.VI.set_rdat(g_rdat)
@@ -90,11 +90,11 @@ class web_gui:
         r_min = []
         r_max = []
         for i in range(self.layers - 1):
-            t_min.append(float(document[f'thick_min{i}'].value))
-            t_max.append(float(document[f'thick_max{i}'].value))
+            t_min.append(int(document[f'thick_min{i}'].value))
+            t_max.append(int(document[f'thick_max{i}'].value))
         for i in range(self.layers):
-            r_min.append(float(document[f'res_min{i}'].value))
-            r_max.append(float(document[f'res_max{i}'].value))
+            r_min.append(int(document[f'res_min{i}'].value))
+            r_max.append(int(document[f'res_max{i}'].value))
         
         self.VI.set_thickness_minimum(t_min)   # thickness_minimum is not being set or somehow the getter is not working
         self.VI.set_thickness_maximum(t_max)
@@ -102,11 +102,12 @@ class web_gui:
         self.VI.set_resistivity_maximum(r_max)
 
         print(f"adat: {self.VI.get_adat()} \nrdat: {self.VI.get_rdat()}")
-        print(t_min)
-        # print(self.VI.get_thickness_minimum())
+        # print(t_min)
+        print(self.VI.get_thickness_minimum())
         print(self.VI.get_thickness_maximum())
         print(self.VI.get_resistivity_minimum())
         print(self.VI.get_resistivity_maximum())
+        print(self.VI.get_layers())
         self.VI.computePredictions()
         # self.viewModel()
 

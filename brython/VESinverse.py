@@ -10,7 +10,7 @@ can be used
 """
 
 
-import math as np
+import math
 import random
 # import matplotlib.pyplot as plt
 import sys
@@ -100,8 +100,8 @@ class VESinverse:
         # number of points where resistivity is calculated (Variable was m)
         self.resistivity_points_number = 20
 
-        self.electrode_spacing = np.log(self.electrode_spacing)
-        self.delx = np.log(10.0)/6.
+        self.electrode_spacing = math.log(self.electrode_spacing)
+        self.delx = math.log(10.0)/6.
 
         # these lines apparently find the computer precision ep
         self.ep = 1.0
@@ -141,7 +141,7 @@ class VESinverse:
         self.thickness_minimum = new_thick_min
 
     def get_thickness_minimum(self):
-        return thickness_minimum
+        return self.thickness_minimum
 
     def set_thickness_maximum(self, new_thick_max):
         self.thickness_maximum = new_thick_max
@@ -182,8 +182,8 @@ class VESinverse:
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
         for i in range(0, self.ndat, 1):
-            self.adatl[i] = np.log10(self.adat[i])
-            self.rdatl[i] = np.log10(self.rdat[i])
+            self.adatl[i] = math.log10(self.adat[i])
+            self.rdatl[i] = math.log10(self.rdat[i])
 
     def error(self):
         self.pltanswer.clear()
@@ -198,8 +198,8 @@ class VESinverse:
             sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
             # print(i,sum1,rdat[i],rdatl[i],ans)
             self.pltanswerl.append(ans)
-            self.pltanswer.append(np.pow(10, ans))
-        self.rms = np.sqrt(sumerror/(self.ndat))
+            self.pltanswer.append(math.pow(10, ans))
+        self.rms = math.sqrt(sumerror/(self.ndat))
 
         # check the spline routine
         # for i in range(1,m+1,1):
@@ -212,15 +212,15 @@ class VESinverse:
         return self.rms
 
     def transf(self, y, i):
-        self.u = 1./np.exp(y)
+        self.u = 1./math.exp(y)
         self.t[0] = self.p[self.layer_index-1]
         # print('\n', y, '\n', i, '\n', self.p, '\n', self.t)
         # raise Exception("Pause")
         for j in range(1, self.layer, 1):
             pwr = -2. * self.u * self.p[self.layer - 1 - j]
-            if pwr < np.log(2. * self.ep):
-                pwr = np.log(2. * self.ep)
-            a = np.exp(pwr)
+            if pwr < math.log(2. * self.ep):
+                pwr = math.log(2. * self.ep)
+            a = math.exp(pwr)
             b = (1. - a)/(1. + a)
             rs = self.p[self.layer_index - 1 - j]
             tpr = b*rs
@@ -244,7 +244,7 @@ class VESinverse:
                 self.y = self.y + self.delx
             self.filters(self.fltr1, 29)
         elif self.index == 2:
-            s = np.log(2.)
+            s = math.log(2.)
             self.y = self.electrode_spacing - 10.8792495 * self.delx
             mum2 = self.resistivity_points_number + 33
             for i in range(0, mum2, 1):
@@ -262,10 +262,10 @@ class VESinverse:
         x = self.electrode_spacing
         # print("A-Spacing   App. Resistivity")
         for i in range(0, self.resistivity_points_number, 1):
-            a = np.exp(x)
+            a = math.exp(x)
             self.asav[i] = a
-            self.asavl[i] = np.log10(a)
-            self.rl[i] = np.log10(self.r[i])
+            self.asavl[i] = math.log10(a)
+            self.rl[i] = math.log10(self.r[i])
             x = x + self.delx
             # print("%7.2f   %9.3f " % ( asav[i], r[i]))
 
@@ -387,7 +387,7 @@ class VESinverse:
 
         print(self.layer, '  Infinite ', self.pkeep[self.layer_index-1])
         for i in range(0, self.resistivity_points_number, 1):
-            self.asavl[i] = np.log10(self.asav[i])
+            self.asavl[i] = math.log10(self.asav[i])
 
     # output the error of fit
         print(' RMS error   ', self.errmin)

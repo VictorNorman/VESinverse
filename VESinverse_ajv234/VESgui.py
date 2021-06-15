@@ -302,6 +302,11 @@ class VESgui:
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
 
+        print(self.VI.get_thickness_minimum())
+        print(self.VI.get_thickness_maximum())
+        print(self.VI.get_resistivity_minimum())
+        print(self.VI.get_resistivity_maximum())
+
         self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
         if not test:

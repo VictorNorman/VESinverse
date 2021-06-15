@@ -1,9 +1,9 @@
 from browser import bind, window, document, html
-# from VESinverse import VESinverse
+from VESinverse import VESinverse
 
 class web_gui:
     def __init__(self):
-        # VI = VESinverse()
+        self.VI = VESinverse()
         document['file-upload'].bind('input', self.read_file)
         document['Compute'].bind('click', self.computePredictions)
         document['Show_graph'].bind('click', self.showGraph)
@@ -19,21 +19,33 @@ class web_gui:
             print(file_list)
 
             # line 1 chooses what algorithm to run
-            # if int(file_list[1]) == 1:
-            #     algorithm_choice = 1
-            # elif int(file_list[1]) == 2:
-            #     algorithm_choice = 2
-            # VI.set_index(algorithm_choice)
+            if int(file_list[1]) == 1:
+                algorithm_choice = 1
+                print(algorithm_choice)
+            elif int(file_list[1]) == 2:
+                algorithm_choice = 2
+            self.VI.set_index(algorithm_choice)
 
-            # data_length = len(file_list) - 3
-            # VI.set_ndat(data_length)
+            data_length = len(file_list) - 3
+            self.VI.set_ndat(data_length)
+
+            g_adat = [0]*data_length
+            g_rdat = [0]*data_length
+
+            for i in range(3, len(file_list)):
+                line_str = file_list[i].split()
+                spacing_val = float(line_str[0].strip())
+                resis_val = float(line_str[1].strip())
+
+                g_adat[i-3] = spacing_val
+                g_rdat[i-3] = resis_val
+
+            self.VI.set_adat(g_adat)
+            self.VI.set_rdat(g_rdat)
 
         resistivity_file = document['file-upload'].files[0]
         reader = window.FileReader.new()
         reader.readAsText(resistivity_file)
-        # file_handle = open(resistivity_file.name, 'r')
-        # file_list = file_handle.readlines()
-        # print(resistivity_file.path)
         reader.bind('load', onload)
 
     def layer_dropdown(self):
@@ -66,6 +78,7 @@ class web_gui:
         
     def computePredictions(self, e):
         print("Might not work without numpy")
+        print(document['thick_input0'].value)
     
     def showGraph(self, e):
         print("Also might not work")

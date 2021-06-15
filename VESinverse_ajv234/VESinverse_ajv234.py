@@ -10,7 +10,7 @@ can be used
 """
 
 
-import numpy as np
+import math as np
 import random
 import matplotlib.pyplot as plt
 import sys
@@ -196,7 +196,7 @@ class VESinverse:
             sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
             # print(i,sum1,rdat[i],rdatl[i],ans)
             self.pltanswerl.append(ans)
-            self.pltanswer.append(np.power(10, ans))
+            self.pltanswer.append(np.pow(10, ans))
         self.rms = np.sqrt(sumerror/(self.ndat))
 
         # check the spline routine

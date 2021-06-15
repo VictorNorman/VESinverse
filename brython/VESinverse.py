@@ -10,9 +10,9 @@ can be used
 """
 
 
-import numpy as np
+import math as np
 import random
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import sys
 
 
@@ -198,7 +198,7 @@ class VESinverse:
             sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
             # print(i,sum1,rdat[i],rdatl[i],ans)
             self.pltanswerl.append(ans)
-            self.pltanswer.append(np.power(10, ans))
+            self.pltanswer.append(np.pow(10, ans))
         self.rms = np.sqrt(sumerror/(self.ndat))
 
         # check the spline routine
@@ -397,12 +397,12 @@ class VESinverse:
             print("%9.3f   %9.3f  %9.3f  %9.3f" % (self.asav[i], self.rkeep[i],
                                                    self.asavl[i], self.rkeepl[i]))
 
-        plt.loglog(self.asav[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
-        plt.loglog(self.adat[1:self.ndat], self.pltanswerkeep[1:self.ndat],
-                   'ro')  # predicted data red dots
-        s = 7
-        plt.loglog(self.adat[1:self.ndat], self.rdat[1:self.ndat], 'bo',
-                   markersize=s)  # original data blue dots
+        # plt.loglog(self.asav[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
+        # plt.loglog(self.adat[1:self.ndat], self.pltanswerkeep[1:self.ndat],
+        #            'ro')  # predicted data red dots
+        # s = 7
+        # plt.loglog(self.adat[1:self.ndat], self.rdat[1:self.ndat], 'bo',
+                #    markersize=s)  # original data blue dots
 
         # output the ranges cpmstraining the model
 
@@ -429,9 +429,9 @@ class VESinverse:
         for i in range(0, self.ndat, 1):
             print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
 
-    def graph(self):
-        plt.show()
-        plt.grid(True)
+    # def graph(self):
+        # plt.show()
+        # plt.grid(True)
 
 
 # main here

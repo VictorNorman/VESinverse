@@ -161,9 +161,9 @@ class VESgui:
         execute_VES.grid(row=1, column=1, padx=10, pady=5)
 
         # plot curves button
-        plot_curves = Button(executionframe, text="Plot the Curves",
-                             command=self.VI.graph)                      # if you close the graph and click the button again the graph is empty
-        plot_curves.grid(row=1, column=2, padx=10, pady=5)
+        # plot_curves = Button(executionframe, text="Plot the Curves",
+        #                      command=self.VI.graph)                      # if you close the graph and click the button again the graph is empty
+        # plot_curves.grid(row=1, column=2, padx=10, pady=5)
 
         self.displayChosenLayers(0, self.num_layers)
 

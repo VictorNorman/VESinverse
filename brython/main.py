@@ -10,12 +10,12 @@ class web_gui:
         self.layer_dropdown()
         self.layers = 3
         self.inputs()
-        # self.viewModel()
+        self.viewModel()
         
 
     def read_file(self, e):
         def onload(e):
-            document['file-text'].value = e.target.result
+            # document['file-text'].value = e.target.result
             my_str = e.target.result
             file_list = my_str.split("\n")
             print(file_list)
@@ -108,12 +108,20 @@ class web_gui:
         print(self.VI.get_resistivity_minimum())
         print(self.VI.get_resistivity_maximum())
         print(self.VI.get_layers())
+        self.VI.data_init()
         self.VI.computePredictions()
-        # self.viewModel()
+        self.viewModel()
 
-    # def viewModel(self):
-    #     heading = html.H1(text = "Thickness results,  Resistivity resluts")
-    #     document['results'] <= heading
+    def viewModel(self):
+        document['results'].clear()
+        heading = html.H4("Thickness results,  Resistivity results")
+        document['results'] <= heading
+        results = self.VI.get_pkeep()
+        for i in range(self.layers - 1):
+            output = html.H4("%9.1f   \t%9.3f  %9.3f" % (i+1, results[i], results[self.layers+i-1]))
+            document['results'] <= output
+            document['results'] <= html.BR()
+        output = html.H4("%9.1f" % self.layers, '  Infinite ', "%9.3f" % results[self.VI.get_layer_index()-1])
 
     
     def showGraph(self, e):

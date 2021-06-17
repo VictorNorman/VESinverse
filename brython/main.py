@@ -36,8 +36,8 @@ class web_gui:
 
             # Initializing some local variables to put 
             # file data into
-            g_adat = []
-            g_rdat = []
+            g_adat = [0]*data_length
+            g_rdat = [0]*data_length
 
             # Puts data from file into the local variables
             for i in range(3, len(file_list)):
@@ -47,15 +47,15 @@ class web_gui:
                 resis_val = float(line_str[1].strip())
                 print(f"resis_val: {resis_val}")
 
-                g_adat.append(spacing_val)
-                g_rdat.append(resis_val)
+                g_adat[i-3] = spacing_val
+                g_rdat[i-3] = resis_val
 
             # Passes the local variables back into VESinverse
             # to be used in computation
             self.VI.set_adat(g_adat)
             self.VI.set_rdat(g_rdat)
 
-            self.VI.readData()
+            # self.VI.readData()
 
         # Takes in the file selected, converts it into a string
         # and sends it to the onload nested function 
@@ -112,29 +112,30 @@ class web_gui:
         r_max = []
         # Reads inputs into above mentioned local variables based on number of layers
         for i in range(self.layers - 1):
-            t_min.append(int(document[f'thick_min{i}'].value))
-            t_max.append(int(document[f'thick_max{i}'].value))
+            t_min.append(float(document[f'thick_min{i}'].value))
+            t_max.append(float(document[f'thick_max{i}'].value))
         for i in range(self.layers):
-            r_min.append(int(document[f'res_min{i}'].value))
-            r_max.append(int(document[f'res_max{i}'].value))
+            r_min.append(float(document[f'res_min{i}'].value))
+            r_max.append(float(document[f'res_max{i}'].value))
         
         # Passing local variables to VESinverse via setter methods
         self.VI.set_thickness_minimum(t_min)
         self.VI.set_thickness_maximum(t_max)
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
+        self.VI.set_random(0)
 
-        print(f"adat: {self.VI.get_adat()} \nrdat: {self.VI.get_rdat()}")
+        # print(f"adat: {self.VI.get_adat()} \nrdat: {self.VI.get_rdat()}")
         # print(t_min)
-        print(self.VI.get_thickness_minimum())
-        print(self.VI.get_thickness_maximum())
-        print(self.VI.get_resistivity_minimum())
-        print(self.VI.get_resistivity_maximum())
-        print(self.VI.get_layers())
-        print(f"ndat: {self.VI.get_ndat()}")
+        # print(self.VI.get_thickness_minimum())
+        # print(self.VI.get_thickness_maximum())
+        # print(self.VI.get_resistivity_minimum())
+        # print(self.VI.get_resistivity_maximum())
+        # print(self.VI.get_layers())
+        # print(f"ndat: {self.VI.get_ndat()}")
         # Initiallize some variables within VESinverse based on inputs and file
         # then computes prediction and outputs results
-        self.VI.data_init()
+        # self.VI.data_init()
         self.VI.computePredictions()
         self.viewModel()
 
@@ -151,7 +152,6 @@ class web_gui:
             document['results'] <= output
             document['results'] <= html.BR()
             print(i)
-        # infinite = html.H4("%9.1f:" % self.layers, '  Infinite ', "%9.3f" % results[layer_index-1])
         infinite = html.H4("%9.1f:  Infinite   %9.3f" % (self.layers, results[layer_index-1]))
         print(self.layers)
         print(layer_index)

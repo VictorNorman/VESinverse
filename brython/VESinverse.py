@@ -75,7 +75,7 @@ class VESinverse:
         self.resistivity_maximum = []
 
         self.x = [0]*100
-        self.y = [0]*100
+        # self.y = [0]*100
         self.y2 = [0]*100
         self.u = [0]*5000
         self.new_x = [0]*1000
@@ -347,6 +347,18 @@ class VESinverse:
         self.set_random(0)
 
         self.readData()
+
+        print(f"adat: {self.adat} \nrdat: {self.rdat}")
+        print(self.thickness_minimum)
+        print(type(self.thickness_maximum))
+        print(type(self.thickness_maximum[0]))
+        print(self.thickness_maximum)
+        print(self.resistivity_minimum)
+        print(self.resistivity_maximum)
+        print(self.layer)
+        print(self.ndat)
+
+        print("\n##############\n")
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])
         # for iloop in range(0, self.iter, 1):
         #     # print( '  iloop is ', iloop)

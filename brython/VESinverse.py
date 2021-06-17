@@ -136,6 +136,9 @@ class VESinverse:
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
 
+    def get_ndat(self):
+        return self.ndat
+
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):
         self.thickness_minimum = new_thick_min

@@ -10,12 +10,14 @@ class web_gui:
         self.layer_dropdown()
         self.layers = 3
         self.inputs()
-        self.viewModel()
+        # self.viewModel()
         
 
     def read_file(self, e):
+    # I'm not sure why the nested function is necessary
+    # but brython documentation shows this is how it is done
         def onload(e):
-            # document['file-text'].value = e.target.result
+            # Takes in the string of the file and splits at newlines
             my_str = e.target.result
             file_list = my_str.split("\n")
             print(file_list)
@@ -28,12 +30,16 @@ class web_gui:
                 algorithm_choice = 2
             self.VI.set_index(algorithm_choice)
 
+            # Sets ndat in VESinverse based on length of data in file
             data_length = len(file_list) - 3
             self.VI.set_ndat(data_length)
 
+            # Initializing some local variables to put 
+            # file data into
             g_adat = []
             g_rdat = []
 
+            # Puts data from file into the local variables
             for i in range(3, len(file_list)):
                 line_str = file_list[i].split()
                 spacing_val = float(line_str[0].strip())
@@ -44,17 +50,23 @@ class web_gui:
                 g_adat.append(spacing_val)
                 g_rdat.append(resis_val)
 
+            # Passes the local variables back into VESinverse
+            # to be used in computation
             self.VI.set_adat(g_adat)
             self.VI.set_rdat(g_rdat)
 
             self.VI.readData()
 
+        # Takes in the file selected, converts it into a string
+        # and sends it to the onload nested function 
         resistivity_file = document['file-upload'].files[0]
         reader = window.FileReader.new()
         reader.readAsText(resistivity_file)
         reader.bind('load', onload)
 
     def layer_dropdown(self):
+        # Displays the layer dropdown initialized at 3 layers
+        # and passes changes to the changeLayer function
         document['layer_choice'] <= "Choose layer: "
         dropdown = html.SELECT(html.OPTION(i) for i in range(6))
         dropdown.bind("change", self.changeLayer)
@@ -62,11 +74,16 @@ class web_gui:
         document['layer_choice'] <= dropdown
 
     def changeLayer(self, e):
+        # Puts new layer # into self.layers and calls self.inputs()
         self.layers = e.target.selectedIndex
         self.inputs()
         
 
     def inputs(self):
+        # On inital call will draw number of text boxes based on number of layers
+        # When called through a change of layers, it first clears the screen and 
+        # draws layers based on new number of layers and passes number of layers to
+        # VESinverse
         document['thick_input'].clear()
         document['res_input'].clear()
         for i in range(self.layers - 1):
@@ -84,11 +101,16 @@ class web_gui:
         self.VI.set_layers(self.layers)
         
     def computePredictions(self, e):
-        
+        # Takes in the inputs from the text boxes and puts passes them to
+        # VESinverse 
+
+        # Initalizing local variables to put input values into and then pass these
+        # directly to VESinverse
         t_min = []
         t_max = []
         r_min = []
         r_max = []
+        # Reads inputs into above mentioned local variables based on number of layers
         for i in range(self.layers - 1):
             t_min.append(int(document[f'thick_min{i}'].value))
             t_max.append(int(document[f'thick_max{i}'].value))
@@ -96,7 +118,8 @@ class web_gui:
             r_min.append(int(document[f'res_min{i}'].value))
             r_max.append(int(document[f'res_max{i}'].value))
         
-        self.VI.set_thickness_minimum(t_min)   # thickness_minimum is not being set or somehow the getter is not working
+        # Passing local variables to VESinverse via setter methods
+        self.VI.set_thickness_minimum(t_min)
         self.VI.set_thickness_maximum(t_max)
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
@@ -108,20 +131,32 @@ class web_gui:
         print(self.VI.get_resistivity_minimum())
         print(self.VI.get_resistivity_maximum())
         print(self.VI.get_layers())
+        print(f"ndat: {self.VI.get_ndat()}")
+        # Initiallize some variables within VESinverse based on inputs and file
+        # then computes prediction and outputs results
         self.VI.data_init()
         self.VI.computePredictions()
         self.viewModel()
 
     def viewModel(self):
+        # Displays the outputs of the computation underneath the input boxes
+        # TODO: Not working fully atm, the infinite span is not displaying
         document['results'].clear()
         heading = html.H4("Thickness results,  Resistivity results")
         document['results'] <= heading
         results = self.VI.get_pkeep()
+        layer_index = self.VI.get_layer_index()
         for i in range(self.layers - 1):
-            output = html.H4("%9.1f   \t%9.3f  %9.3f" % (i+1, results[i], results[self.layers+i-1]))
+            output = html.H4("%9.1f:   \t%9.3f  \t%9.3f" % (i+1, results[i], results[self.layers+i-1]))
             document['results'] <= output
             document['results'] <= html.BR()
-        output = html.H4("%9.1f" % self.layers, '  Infinite ', "%9.3f" % results[self.VI.get_layer_index()-1])
+            print(i)
+        # infinite = html.H4("%9.1f:" % self.layers, '  Infinite ', "%9.3f" % results[layer_index-1])
+        infinite = html.H4("%9.1f:  Infinite   %9.3f" % (self.layers, results[layer_index-1]))
+        print(self.layers)
+        print(layer_index)
+        print(results[layer_index-1])
+        document['results'] <= infinite
 
     
     def showGraph(self, e):

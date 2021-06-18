@@ -178,6 +178,7 @@ class VESinverse:
         return self.layer_index
     
     def set_random(self, seed):
+        print(seed)
         random.seed(seed)
     # ---------------------------------------------
 
@@ -348,17 +349,6 @@ class VESinverse:
 
         self.readData()
 
-        print(f"adat: {self.adat} \nrdat: {self.rdat}")
-        print(self.thickness_minimum)
-        print(type(self.thickness_maximum))
-        print(type(self.thickness_maximum[0]))
-        print(self.thickness_maximum)
-        print(self.resistivity_minimum)
-        print(self.resistivity_maximum)
-        print(self.layer)
-        print(self.ndat)
-
-        print("\n##############\n")
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])
         # for iloop in range(0, self.iter, 1):
         #     # print( '  iloop is ', iloop)
@@ -371,15 +361,12 @@ class VESinverse:
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
                 self.p.append((self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i])
-                # print(self.thickness_maximum[i])
-                # print(self.thickness_minimum[i])
-                # print((self.thickness_maximum[i] - self.thickness_minimum[i]))
-                # print(randNumber)
-                # print(self.p[i])
-                # raise Exception("pause")
+                # print(f"thickness random: {randNumber}")
             for i in range(0, self.layer):
                 randNumber = random.random()
                 self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])
+                # print(f"resistivity random: {randNumber}")
+                # raise Exception("debug")
 
             # print(self.p)
             self.rms = self.rmsfit()

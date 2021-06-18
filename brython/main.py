@@ -20,12 +20,12 @@ class web_gui:
             # Takes in the string of the file and splits at newlines
             my_str = e.target.result
             file_list = my_str.split("\n")
-            print(file_list)
+            # print(file_list)
 
             # line 1 chooses what algorithm to run
             if int(file_list[1]) == 1:
                 algorithm_choice = 1
-                print(algorithm_choice)
+                # print(algorithm_choice)
             elif int(file_list[1]) == 2:
                 algorithm_choice = 2
             self.VI.set_index(algorithm_choice)
@@ -43,9 +43,9 @@ class web_gui:
             for i in range(3, len(file_list)):
                 line_str = file_list[i].split()
                 spacing_val = float(line_str[0].strip())
-                print(f"spacing_val: {spacing_val}")
+                # print(f"spacing_val: {spacing_val}")
                 resis_val = float(line_str[1].strip())
-                print(f"resis_val: {resis_val}")
+                # print(f"resis_val: {resis_val}")
 
                 g_adat[i-3] = spacing_val
                 g_rdat[i-3] = resis_val
@@ -153,9 +153,6 @@ class web_gui:
             document['results'] <= html.BR()
             print(i)
         infinite = html.H4("%9.1f:  Infinite   %9.3f" % (self.layers, results[layer_index-1]))
-        print(self.layers)
-        print(layer_index)
-        print(results[layer_index-1])
         document['results'] <= infinite
 
     

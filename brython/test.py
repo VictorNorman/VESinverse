@@ -1359,6 +1359,7 @@ class VEStesting(unittest.TestCase):
         VI.set_resistivity_minimum(self.t_res_min)
         VI.set_resistivity_maximum(self.t_res_max)
         VI.set_index(self.t_index)
+        VI.set_random(0)
         self.t_thick_min = []
         self.t_thick_max = []
         self.t_res_min = []

@@ -344,7 +344,7 @@ class VESinverse:
     def computePredictions(self):
         self.data_init()
         # Turn off randomization (for now)
-        self.set_random(0)
+        # self.set_random(0)
 
         self.readData()
 
@@ -371,10 +371,12 @@ class VESinverse:
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
                 self.p.append((self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i])
-                print(self.thickness_maximum[i])
-                print(self.thickness_minimum[i])
-                print(self.p[i])
-                raise Exception("pause")
+                # print(self.thickness_maximum[i])
+                # print(self.thickness_minimum[i])
+                # print((self.thickness_maximum[i] - self.thickness_minimum[i]))
+                # print(randNumber)
+                # print(self.p[i])
+                # raise Exception("pause")
             for i in range(0, self.layer):
                 randNumber = random.random()
                 self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])

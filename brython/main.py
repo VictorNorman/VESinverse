@@ -1,5 +1,6 @@
 from browser import bind, window, document, html
 from VESinverse import VESinverse
+import brycharts
 
 class web_gui:
     def __init__(self):
@@ -7,6 +8,7 @@ class web_gui:
         document['file-upload'].bind('input', self.read_file)
         document['Compute'].bind('click', self.computePredictions)
         document['Show_graph'].bind('click', self.showGraph)
+        document['iteration'].value = self.VI.get_iter()
         self.layer_dropdown()
         self.layers = 3
         self.inputs()
@@ -119,6 +121,7 @@ class web_gui:
             r_max.append(float(document[f'res_max{i}'].value))
         
         # Passing local variables to VESinverse via setter methods
+        self.VI.set_iter(int(document['iteration'].value))
         self.VI.set_thickness_minimum(t_min)
         self.VI.set_thickness_maximum(t_max)
         self.VI.set_resistivity_minimum(r_min)
@@ -156,5 +159,33 @@ class web_gui:
         document['results'] <= infinite
 
     
+    # def showGraph(self, e):
+    #     x_axis = self.VI.get_x_axis()
+    #     y_axis = self.VI.get_y_axis()
+    #     blue_x = self.VI.get_blue_x()
+    #     blue_y = self.VI.get_blue_y()
+    #     red_x = self.VI.get_red_x()
+    #     red_y = self.VI.get_red_y()
+    #     rpn = self.VI.get_resistivity_point()
+    #     graph_dict = {"Red" : [], "Blue" : []}
+    #     red_coordinates = []
+    #     blue_coordinates = []
+    #     test_data_1 = [(1,2), (10, 10), (4, 89)]
+
+
+    #     for i in range(self.VI.get_ndat()):
+    #         red_coordinates.append((red_x[i], red_y[i]))
+    #         blue_coordinates.append((blue_x[i], blue_y[i]))
+        
+    #     graph_dict["Red"].append(red_coordinates)
+    #     graph_dict["Blue"].append(blue_coordinates)
+
+    #     print(graph_dict)
+
+    #     data = brycharts.PairedData("X", "Y", test_data_1)
+    #     brycharts.LineGraph(document, data)
+
     def showGraph(self, e):
-        print("Also might not work")
+        test_data_1 = [(1,2), (10, 10), (4, 89)]
+        data = brycharts.PairedData("X", "Y", test_data_1)
+        brycharts.LineGraph(document, data)

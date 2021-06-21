@@ -16,6 +16,8 @@ import random
 import sys
 
 
+
+
 class VESinverse:
     def __init__(self):
 
@@ -73,7 +75,7 @@ class VESinverse:
         self.resistivity_maximum = []
 
         self.x = [0]*100
-        self.y = [0]*100
+        # self.y = [0]*100
         self.y2 = [0]*100
         self.u = [0]*5000
         self.new_x = [0]*1000
@@ -134,6 +136,9 @@ class VESinverse:
     def set_ndat(self, new_ndat_number):
         self.ndat = new_ndat_number
 
+    def get_ndat(self):
+        return self.ndat
+
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):
         self.thickness_minimum = new_thick_min
@@ -173,6 +178,7 @@ class VESinverse:
         return self.layer_index
     
     def set_random(self, seed):
+        print(seed)
         random.seed(seed)
     # ---------------------------------------------
 
@@ -343,17 +349,6 @@ class VESinverse:
 
         self.readData()
 
-        print(f"adat: {self.adat} \nrdat: {self.rdat}")
-        print(self.thickness_minimum)
-        print(type(self.thickness_maximum))
-        print(type(self.thickness_maximum[0]))
-        print(self.thickness_maximum)
-        print(self.resistivity_minimum)
-        print(self.resistivity_maximum)
-        print(self.layer)
-        print(self.ndat)
-
-        print("\n##############\n")
         print(self.adat[0:self.ndat], self.rdat[0:self.ndat])
         # for iloop in range(0, self.iter, 1):
         #     # print( '  iloop is ', iloop)
@@ -366,10 +361,12 @@ class VESinverse:
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
                 self.p.append((self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i])
-                print(randNumber)
+                # print(f"thickness random: {randNumber}")
             for i in range(0, self.layer):
                 randNumber = random.random()
                 self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])
+                # print(f"resistivity random: {randNumber}")
+                # raise Exception("debug")
 
             # print(self.p)
             self.rms = self.rmsfit()
@@ -413,7 +410,7 @@ class VESinverse:
         #            'ro')  # predicted data red dots
         # s = 7
         # plt.loglog(self.adat[1:self.ndat], self.rdat[1:self.ndat], 'bo',
-        #            markersize=s)  # original data blue dots
+                #    markersize=s)  # original data blue dots
 
         # output the ranges cpmstraining the model
 
@@ -441,8 +438,8 @@ class VESinverse:
             print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
 
     # def graph(self):
-    #     plt.show()
-    #     plt.grid(True)
+        # plt.show()
+        # plt.grid(True)
 
 
 # main here

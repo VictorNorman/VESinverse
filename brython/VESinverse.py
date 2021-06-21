@@ -82,6 +82,14 @@ class VESinverse:
         self.new_y = [0]*1000
         self.ndat = 12
 
+        # These variables are temp names to replace matplotlib
+        self.x_axis = []
+        self.y_axis = []
+        self.red_x = []
+        self.red_y = []
+        self.blue_x = []
+        self.blue_y = []
+
         # number of iterations for the Monte Carlo guesses. to be input on GUI
         self.iter = 10000
 
@@ -114,6 +122,9 @@ class VESinverse:
     # ----------- Getters and Setters -------------
     def get_iter(self):
         return self.iter
+
+    def set_iter(self, new_iterations):
+        self.iter = new_iterations
 
     def get_layers(self):
         return self.layer
@@ -178,8 +189,28 @@ class VESinverse:
         return self.layer_index
     
     def set_random(self, seed):
-        print(seed)
         random.seed(seed)
+    
+    def get_x_axis(self):
+        return self.x_axis
+    
+    def get_y_axis(self):
+        return self.y_axis
+
+    def get_red_x(self):
+        return self.red_x
+    
+    def get_red_y(self):
+        return self.red_y
+    
+    def get_blue_x(self):
+        return self.blue_x
+
+    def get_blue_y(self):
+        return self.blue_y
+    
+    def get_resistivity_point(self):
+        return self.resistivity_points_number
     # ---------------------------------------------
 
     def readData(self):
@@ -406,6 +437,15 @@ class VESinverse:
                                                    self.asavl[i], self.rkeepl[i]))
 
         # plt.loglog(self.asav[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
+        for i in range(self.resistivity_points_number):
+            self.x_axis.append(self.asav[i])
+            self.y_axis.append(self.rkeep[i])
+        for i in range(self.ndat):
+            self.red_x.append(self.adat[i])
+            self.blue_x.append(self.adat[i])
+            self.red_y.append(self.pltanswerkeep[i])
+            self.blue_y.append(self.rdat[i])
+
         # plt.loglog(self.adat[1:self.ndat], self.pltanswerkeep[1:self.ndat],
         #            'ro')  # predicted data red dots
         # s = 7

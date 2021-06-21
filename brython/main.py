@@ -1,6 +1,7 @@
 from browser import bind, window, document, html
 from VESinverse import VESinverse
 import brycharts
+import math
 
 class web_gui:
     def __init__(self):
@@ -167,25 +168,26 @@ class web_gui:
     #     red_x = self.VI.get_red_x()
     #     red_y = self.VI.get_red_y()
     #     rpn = self.VI.get_resistivity_point()
-    #     graph_dict = {"Red" : [], "Blue" : []}
+    #     graph_dict = {}
     #     red_coordinates = []
     #     blue_coordinates = []
-    #     test_data_1 = [(1,2), (10, 10), (4, 89)]
 
 
     #     for i in range(self.VI.get_ndat()):
-    #         red_coordinates.append((red_x[i], red_y[i]))
-    #         blue_coordinates.append((blue_x[i], blue_y[i]))
+    #         red_coordinates.append((math.log10(red_x[i]), math.log10(red_y[i])))
+    #         blue_coordinates.append((math.log10(blue_x[i]), math.log10(blue_y[i])))
         
-    #     graph_dict["Red"].append(red_coordinates)
-    #     graph_dict["Blue"].append(blue_coordinates)
+    #     graph_dict.update({"Red" : red_coordinates})
+    #     graph_dict.update({"Blue" : blue_coordinates})
 
     #     print(graph_dict)
 
-    #     data = brycharts.PairedData("X", "Y", test_data_1)
+    #     data = brycharts.PairedDataDict("X", "Y", red_coordinates)
     #     brycharts.LineGraph(document, data)
 
     def showGraph(self, e):
-        test_data_1 = [(1,2), (10, 10), (4, 89)]
-        data = brycharts.PairedData("X", "Y", test_data_1)
-        brycharts.LineGraph(document, data)
+        test_data = {'Red': [(0.55, 166.14263017794934), (0.95, 144.61364592255018), (1.5, 105.04598912178614), (2.5, 48.83571122528307), (3.0, 32.83026459665723), (4.5, 12.801035602947227), (5.5, 9.228401648725931), (9.0, 7.171213708784913), (12.0, 7.304350354890194), (20.0, 8.554243593549), (30.0, 11.163028270745915), (70.0, 24.675940225896102)], 'Blue': [(0.55, 125.0), (0.95, 110.0), (1.5, 95.0), (2.5, 40.0), (3.0, 24.0), (4.5, 15.0), (5.5, 10.5), (9.0, 8.0), (12.0, 6.0), (20.0, 6.5), (30.0, 11.0), (70.0, 25.0)]} 
+        test_data_log = {'Red': [(-0.2596373105057561, 2.2204810814315428), (-0.022276394711152253, 2.1602092754567583), (0.17609125905568124, 2.0213794747759533), (0.3979400086720376, 1.68873751700548), (0.47712125471966244, 1.5162743829548988), (0.6532125137753437, 1.1072451054644536), (0.7403626894942439, 0.9651264881062437), (0.9542425094393249, 0.8555926650708239), (1.0791812460476249, 0.8635815960632541), (1.3010299956639813, 0.9321816132142069), (1.4771212547196624, 1.0477820246080247), (1.845098040014257, 1.392273709553992)], 'Blue': [(-0.2596373105057561, 2.0969100130080562), (-0.022276394711152253, 2.041392685158225), (0.17609125905568124, 1.9777236052888478), (0.3979400086720376, 1.6020599913279625), (0.47712125471966244, 1.380211241711606), (0.6532125137753437, 1.1760912590556813), (0.7403626894942439, 1.021189299069938), (0.9542425094393249, 0.9030899869919435), (1.0791812460476249, 0.7781512503836436), (1.3010299956639813, 0.8129133566428556), (1.4771212547196624, 1.041392685158225), (1.845098040014257, 1.3979400086720377)]} 
+        pairedData = brycharts.PairedDataDict("x", "y", test_data_log)
+        print(pairedData)
+        brycharts.LineGraph(document, pairedData)

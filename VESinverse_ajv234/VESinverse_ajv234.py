@@ -408,13 +408,6 @@ class VESinverse:
             print("%9.3f   %9.3f  %9.3f  %9.3f" % (self.asav[i], self.rkeep[i],
                                                    self.asavl[i], self.rkeepl[i]))
 
-        plt.loglog(self.asav[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
-        plt.loglog(self.adat[1:self.ndat], self.pltanswerkeep[1:self.ndat],
-                   'ro')  # predicted data red dots
-        s = 7
-        plt.loglog(self.adat[1:self.ndat], self.rdat[1:self.ndat], 'bo',
-                   markersize=s)  # original data blue dots
-
         # output the ranges cpmstraining the model
 
         print('   Small', '   Large')
@@ -441,6 +434,12 @@ class VESinverse:
             print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
 
     def graph(self):
+        plt.loglog(self.asav[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
+        plt.loglog(self.adat[1:self.ndat], self.pltanswerkeep[1:self.ndat],
+                   'ro')  # predicted data red dots
+        s = 7
+        plt.loglog(self.adat[1:self.ndat], self.rdat[1:self.ndat], 'bo',
+                   markersize=s)  # original data blue dots
         plt.show()
         plt.grid(True)
 

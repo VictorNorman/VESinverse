@@ -114,6 +114,9 @@ class VESinverse:
     # ----------- Getters and Setters -------------
     def get_iter(self):
         return self.iter
+    
+    def set_iter(self, new_iterations):
+        self.iter = new_iterations
 
     def get_layers(self):
         return self.layer

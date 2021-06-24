@@ -10,10 +10,12 @@ can be used
 """
 
 
-import numpy as np
+import math
 import random
 import matplotlib.pyplot as plt
 import sys
+
+
 
 
 class VESinverse:
@@ -43,23 +45,23 @@ class VESinverse:
         # But my Python wasn't up to it. If the last letter
         # is an 'l' that means it is a log10 of the value
 
-        # I can't seem to get rid of any ARRAYSIZE except on adat and rdat
+        # I can't seem to get rid of any ARRAYSIZE except on location_data and field_data
         # because the first time they are referenced it is within a loop and
         # thus append would not really work
 
         # 65 is completely arbitrary
-        self.p = []                             # Prediction?
+        self.p = []                                  # model_thicknesses_resistivities
         self.r = [0]*ARRAYSIZE                       # Resistivity?
         self.rl = [0]*ARRAYSIZE                      # Resistivity?
         self.t = [0]*50
         self.b = [0]*ARRAYSIZE
-        self.asav = [0]*ARRAYSIZE
-        self.asavl = [0]*ARRAYSIZE
-        self.adatl = [0]*ARRAYSIZE
-        self.rdatl = [0]*ARRAYSIZE
-        self.adat = []                              # Spacing? out puts under the spacing tag 
-        self.rdat = []                              # Original_data? outputs under the original_data tag
-        self.pkeep = []                             # Final predictions? it is the array where the layer data ends up
+        self.a_spacing = [0]*ARRAYSIZE              # a_spacing : asav
+        self.a_spacing_log = [0]*ARRAYSIZE          # a_spacing_log : asavl
+        self.location_data_log = [0]*ARRAYSIZE      # location_data_log : adatl
+        self.field_data_log = [0]*ARRAYSIZE         # field_data_log : rdat
+        self.location_data = []                     # Location_data : adat
+        self.field_data = []                        # Field_data : rdat
+        self.lowest_rms_values = []                 # Lowest_rms_values : pkeep
         self.rkeep = []
         self.rkeepl = []
         self.pltanswer = []
@@ -73,12 +75,12 @@ class VESinverse:
         self.resistivity_maximum = []
 
         self.x = [0]*100
-        self.y = [0]*100
+        # self.y = [0]*100
         self.y2 = [0]*100
         self.u = [0]*5000
         self.new_x = [0]*1000
         self.new_y = [0]*1000
-        self.ndat = 12
+        self.data_amount = 12
 
         # number of iterations for the Monte Carlo guesses. to be input on GUI
         self.iter = 10000
@@ -90,7 +92,7 @@ class VESinverse:
         self.rms = self.one30
         self.errmin = 1.e10
 
-        # self.layer_index is used to offset now only pkeep for 
+        # self.layer_index is used to offset now only lowest_rms_values for 
         self.layer_index = 2 * self.layer - 1
 
         # smallest electrode spacing
@@ -98,8 +100,8 @@ class VESinverse:
         # number of points where resistivity is calculated (Variable was m)
         self.resistivity_points_number = 20
 
-        self.electrode_spacing = np.log(self.electrode_spacing)
-        self.delx = np.log(10.0)/6.
+        self.electrode_spacing = math.log(self.electrode_spacing)
+        self.delx = math.log(10.0)/6.
 
         # these lines apparently find the computer precision ep
         self.ep = 1.0
@@ -112,6 +114,9 @@ class VESinverse:
     # ----------- Getters and Setters -------------
     def get_iter(self):
         return self.iter
+    
+    def set_iter(self, new_iterations):
+        self.iter = new_iterations
 
     def get_layers(self):
         return self.layer
@@ -119,27 +124,30 @@ class VESinverse:
     def set_layers(self, new_layer_number):
         self.layer = new_layer_number
 
-    def get_adat(self):
-        return self.adat
+    def get_location_data(self):
+        return self.location_data
 
-    def set_adat(self, gui_adat_array):
-        self.adat = gui_adat_array
+    def set_location_data(self, gui_adat_array):
+        self.location_data = gui_adat_array
 
-    def get_rdat(self):
-        return self.rdat
+    def get_field_data(self):
+        return self.field_data
 
-    def set_rdat(self, gui_rdat_array):
-        self.rdat = gui_rdat_array
+    def set_field_data(self, gui_rdat_array):
+        self.field_data = gui_rdat_array
 
-    def set_ndat(self, new_ndat_number):
-        self.ndat = new_ndat_number
+    def set_data_amount(self, new_ndat_number):
+        self.data_amount = new_ndat_number
+
+    def get_data_amount(self):
+        return self.data_amount
 
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):
         self.thickness_minimum = new_thick_min
 
     def get_thickness_minimum(self):
-        return thickness_minimum
+        return self.thickness_minimum
 
     def set_thickness_maximum(self, new_thick_max):
         self.thickness_maximum = new_thick_max
@@ -160,8 +168,8 @@ class VESinverse:
         return self.resistivity_maximum
     # -------------------------------------------------------
 
-    def get_pkeep(self):
-        return self.pkeep
+    def get_lowest_rms_values(self):
+        return self.lowest_rms_values
 
     def set_index(self, new_index):
         self.index = new_index
@@ -173,15 +181,16 @@ class VESinverse:
         return self.layer_index
     
     def set_random(self, seed):
+        print(seed)
         random.seed(seed)
     # ---------------------------------------------
 
     def readData(self):
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
-        for i in range(0, self.ndat, 1):
-            self.adatl[i] = np.log10(self.adat[i])
-            self.rdatl[i] = np.log10(self.rdat[i])
+        for i in range(0, self.data_amount, 1):
+            self.location_data_log[i] = math.log10(self.location_data[i])
+            self.field_data_log[i] = math.log10(self.field_data[i])
 
     def error(self):
         self.pltanswer.clear()
@@ -189,36 +198,26 @@ class VESinverse:
         sumerror = 0.
         # pltanswer = [0]*64
         self.spline(self.resistivity_points_number, self.one30, self.one30,
-                    self.asavl, self.rl, self.y2)
-        for i in range(0, self.ndat, 1):
-            ans = self.splint(self.resistivity_points_number, self.adatl[i],
-                              self.asavl, self.rl, self.y2)
-            sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
-            # print(i,sum1,rdat[i],rdatl[i],ans)
+                    self.a_spacing_log, self.rl, self.y2)
+        for i in range(0, self.data_amount, 1):
+            ans = self.splint(self.resistivity_points_number, self.location_data_log[i],
+                              self.a_spacing_log, self.rl, self.y2)
+            sumerror = sumerror + (self.field_data_log[i] - ans) * (self.field_data_log[i] - ans)
+            # print(i,sum1,field_data[i],rdatl[i],ans)
             self.pltanswerl.append(ans)
-            self.pltanswer.append(np.power(10, ans))
-        self.rms = np.sqrt(sumerror/(self.ndat))
+            self.pltanswer.append(math.pow(10, ans))
+        self.rms = math.sqrt(sumerror/(self.data_amount))
 
-        # check the spline routine
-        # for i in range(1,m+1,1):
-        #     anstest = splint(m, asavl[i],asavl,rl,y2)
-        #     print( asavl[i], rl[i], anstest)
-        # print(' rms  =  ', rms)
-    # if you erally want to get a good idea of all perdictions from Montecarlo
-    # perform the following plot (caution - change iter to a smaller number)
-        # plt.loglog(adat[1:ndat],pltanswer[1:ndat])
         return self.rms
 
     def transf(self, y, i):
-        self.u = 1./np.exp(y)
+        self.u = 1./math.exp(y)
         self.t[0] = self.p[self.layer_index-1]
-        # print('\n', y, '\n', i, '\n', self.p, '\n', self.t)
-        # raise Exception("Pause")
         for j in range(1, self.layer, 1):
             pwr = -2. * self.u * self.p[self.layer - 1 - j]
-            if pwr < np.log(2. * self.ep):
-                pwr = np.log(2. * self.ep)
-            a = np.exp(pwr)
+            if pwr < math.log(2. * self.ep):
+                pwr = math.log(2. * self.ep)
+            a = math.exp(pwr)
             b = (1. - a)/(1. + a)
             rs = self.p[self.layer_index - 1 - j]
             tpr = b*rs
@@ -242,7 +241,7 @@ class VESinverse:
                 self.y = self.y + self.delx
             self.filters(self.fltr1, 29)
         elif self.index == 2:
-            s = np.log(2.)
+            s = math.log(2.)
             self.y = self.electrode_spacing - 10.8792495 * self.delx
             mum2 = self.resistivity_points_number + 33
             for i in range(0, mum2, 1):
@@ -258,14 +257,12 @@ class VESinverse:
             sys.exit()
 
         x = self.electrode_spacing
-        # print("A-Spacing   App. Resistivity")
         for i in range(0, self.resistivity_points_number, 1):
-            a = np.exp(x)
-            self.asav[i] = a
-            self.asavl[i] = np.log10(a)
-            self.rl[i] = np.log10(self.r[i])
+            a = math.exp(x)
+            self.a_spacing[i] = a
+            self.a_spacing_log[i] = math.log10(a)
+            self.rl[i] = math.log10(self.r[i])
             x = x + self.delx
-            # print("%7.2f   %9.3f " % ( asav[i], r[i]))
 
         self.rms = self.error()
 
@@ -275,11 +272,6 @@ class VESinverse:
     # use splint to determine the spline interpolated prediction at the
     # spacing where the measured resistivity was taken - to compare observation
     # to prediction
-
-    # What does this do? It doesn't modify any self. variable
-    # x, y, y2 and p are the only ones that are self. variables and the first
-    # three are local and the operations done on p mean that it cannot be
-    # self.p because it is an array
     def spline(self, n, yp1, ypn, x=[], y=[], y2=[]):
         u = [0] * 1000
         one29 = 0.99e30
@@ -292,7 +284,6 @@ class VESinverse:
             u[0] = (3. / (x[1] - x[0])) * ((y[1] - y[0]) / (x[1] - x[0]) - yp1)
 
         for i in range(0, n-1):
-            # print(i,x[i])
             sig = (x[i] - x[i - 1]) / (x[i + 1] - x[i - 1])
             p = sig * y2[i - 1] + 2.
             y2[i] = (sig - 1.) / p
@@ -325,14 +316,11 @@ class VESinverse:
         h = xa[khi] - xa[klo]
         if abs(h) < 1e-20:
             print(" bad xa input")
-        # print(x,xa[khi],xa[klo])
         a = (xa[khi] - x) / h
         b = (x - xa[klo]) / h
         y = (a * ya[klo] + b * ya[khi] + ((a * a * a - a) * y2a[klo] +
                                           (b * b * b - b) * y2a[khi]) *
              (h * h) / 6.)
-        # print("x=   ", x,"y=  ", y, "  ya=  ", ya[khi],"
-        #       y2a=  ", y2a[khi], "  h=  ",h)
 
         return y
 
@@ -342,13 +330,7 @@ class VESinverse:
         self.set_random(0)
 
         self.readData()
-        print(self.adat[0:self.ndat], self.rdat[0:self.ndat])
-        # for iloop in range(0, self.iter, 1):
-        #     # print( '  iloop is ', iloop)
-        #     for i in range(0, self.layer_index, 1):
-        #         randNumber = random.random()
-        #         # print(randNumber, '  random')
-        #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
+        print(self.location_data[0:self.data_amount], self.field_data[0:self.data_amount])
         for iloop in range(0, self.iter, 1):
             self.p.clear()
             for i in range(0, self.layer - 1):
@@ -358,22 +340,21 @@ class VESinverse:
                 randNumber = random.random()
                 self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])
 
-            # print(self.p)
             self.rms = self.rmsfit()
 
             if self.rms < self.errmin:
-                self.pkeep.clear()
+                self.lowest_rms_values.clear()
                 self.rkeep.clear()
                 self.rkeepl.clear()
                 self.pltanswerkeep.clear()
                 self.pltanswerkeepl.clear()
                 print('rms  ', self.rms, '   errmin ', self.errmin)
                 for i in range(0, self.layer_index, 1):
-                    self.pkeep.append(self.p[i])
+                    self.lowest_rms_values.append(self.p[i])
                 for i in range(0, self.resistivity_points_number, 1):
                     self.rkeep.append(self.r[i])
                     self.rkeepl.append(self.rl[i])
-                for i in range(0, self.ndat, 1):
+                for i in range(0, self.data_amount, 1):
                     self.pltanswerkeepl.append(self.pltanswerl[i])
                     self.pltanswerkeep.append(self.pltanswer[i])
                 self.errmin = self.rms
@@ -381,32 +362,23 @@ class VESinverse:
     # output the best fitting earth model
         print(' Layer ', '     Thickness  ', '   Res_ohm-m  ')
         for i in range(0, self.layer - 1, 1):
-            print(i, self.pkeep[i], self.pkeep[self.layer+i-1])
+            print(i, self.lowest_rms_values[i], self.lowest_rms_values[self.layer+i-1])
 
-        print(self.layer, '  Infinite ', self.pkeep[self.layer_index-1])
+        print(self.layer, '  Infinite ', self.lowest_rms_values[self.layer_index-1])
         for i in range(0, self.resistivity_points_number, 1):
-            self.asavl[i] = np.log10(self.asav[i])
+            self.a_spacing_log[i] = math.log10(self.a_spacing[i])
 
     # output the error of fit
         print(' RMS error   ', self.errmin)
         print('  Spacing', '  Res_pred  ', ' Log10_spacing  ', ' Log10_Res_pred ')
         for i in range(0, self.resistivity_points_number, 1):
-            # print(asav[i], rkeep[i], asavl[i], rkeepl[i])
-            print("%9.3f   %9.3f  %9.3f  %9.3f" % (self.asav[i], self.rkeep[i],
-                                                   self.asavl[i], self.rkeepl[i]))
-
-        plt.loglog(self.asav[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
-        plt.loglog(self.adat[1:self.ndat], self.pltanswerkeep[1:self.ndat],
-                   'ro')  # predicted data red dots
-        s = 7
-        plt.loglog(self.adat[1:self.ndat], self.rdat[1:self.ndat], 'bo',
-                   markersize=s)  # original data blue dots
+            # print(a_spacing[i], rkeep[i], asavl[i], rkeepl[i])
+            print("%9.3f   %9.3f  %9.3f  %9.3f" % (self.a_spacing[i], self.rkeep[i],
+                                                   self.a_spacing_log[i], self.rkeepl[i]))
 
         # output the ranges cpmstraining the model
 
         print('   Small', '   Large')
-        # for i in range(0, self.layer_index, 1):
-        #     print("%9.3f %9.3f" % (self.small[i], self.xlarge[i]))
         for i in range(0, self.layer-1, 1):
             print("%9.3f %9.3f" % (self.thickness_minimum[i], self.thickness_maximum[i]))
         for i in range(0, self.layer, 1):
@@ -418,16 +390,22 @@ class VESinverse:
         # output the best fitting earth model
         print('   Layer ', '   Thickness  ', 'Res_ohm-m  ')
         for i in range(0, self.layer-1, 1):
-            print("%9.1f   %9.3f  %9.3f" % (i+1, self.pkeep[i], self.pkeep[self.layer+i-1]))
+            print("%9.1f   %9.3f  %9.3f" % (i+1, self.lowest_rms_values[i], self.lowest_rms_values[self.layer+i-1]))
 
-        print("%9.1f" % self.layer, '  Infinite ', "%9.3f" % self.pkeep[self.layer_index-1])
+        print("%9.1f" % self.layer, '  Infinite ', "%9.3f" % self.lowest_rms_values[self.layer_index-1])
 
         # output the original data and the predicted data
         print('  Spacing', '  Original_Data', ' Predicted')
-        for i in range(0, self.ndat, 1):
-            print("%9.3f  %9.3f  %9.3f" % (self.adat[i], self.rdat[i], self.pltanswerkeep[i]))
+        for i in range(0, self.data_amount, 1):
+            print("%9.3f  %9.3f  %9.3f" % (self.location_data[i], self.field_data[i], self.pltanswerkeep[i]))
 
     def graph(self):
+        plt.loglog(self.a_spacing[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
+        plt.loglog(self.location_data[1:self.data_amount], self.pltanswerkeep[1:self.data_amount],
+                   'ro')  # predicted data red dots
+        s = 7
+        plt.loglog(self.location_data[1:self.data_amount], self.field_data[1:self.data_amount], 'bo',
+                   markersize=s)  # original data blue dots
         plt.show()
         plt.grid(True)
 

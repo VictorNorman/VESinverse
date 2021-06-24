@@ -55,13 +55,13 @@ class VESinverse:
         self.rl = [0]*ARRAYSIZE                      # Resistivity?
         self.t = [0]*50
         self.b = [0]*ARRAYSIZE
-        self.a_spacing = [0]*ARRAYSIZE                   # a_spacing
-        self.asavl = [0]*ARRAYSIZE
-        self.adatl = [0]*ARRAYSIZE                  #
-        self.rdatl = [0]*ARRAYSIZE                  #     
-        self.location_data = []                              # Location_data adat
-        self.field_data = []                              # Field_data  rdat
-        self.lowest_rms_values = []                             # Lowest_rms_values pkeep
+        self.a_spacing = [0]*ARRAYSIZE              # a_spacing : asav
+        self.a_spacing_log = [0]*ARRAYSIZE          # a_spacing_log : asavl
+        self.location_data_log = [0]*ARRAYSIZE      # location_data_log : adatl
+        self.field_data_log = [0]*ARRAYSIZE         # field_data_log : rdat
+        self.location_data = []                     # Location_data : adat
+        self.field_data = []                        # Field_data : rdat
+        self.lowest_rms_values = []                 # Lowest_rms_values : pkeep
         self.rkeep = []
         self.rkeepl = []
         self.pltanswer = []
@@ -80,7 +80,7 @@ class VESinverse:
         self.u = [0]*5000
         self.new_x = [0]*1000
         self.new_y = [0]*1000
-        self.ndat = 12
+        self.data_amount = 12
 
         # number of iterations for the Monte Carlo guesses. to be input on GUI
         self.iter = 10000
@@ -124,23 +124,23 @@ class VESinverse:
     def set_layers(self, new_layer_number):
         self.layer = new_layer_number
 
-    def get_adat(self):
+    def get_location_data(self):
         return self.location_data
 
     def set_location_data(self, gui_adat_array):
         self.location_data = gui_adat_array
 
-    def get_rdat(self):
+    def get_field_data(self):
         return self.field_data
 
     def set_field_data(self, gui_rdat_array):
         self.field_data = gui_rdat_array
 
-    def set_ndat(self, new_ndat_number):
-        self.ndat = new_ndat_number
+    def set_data_amount(self, new_ndat_number):
+        self.data_amount = new_ndat_number
 
-    def get_ndat(self):
-        return self.ndat
+    def get_data_amount(self):
+        return self.data_amount
 
     # ----------- replacements for small and xlarge ----------
     def set_thickness_minimum(self, new_thick_min):
@@ -168,7 +168,7 @@ class VESinverse:
         return self.resistivity_maximum
     # -------------------------------------------------------
 
-    def get_pkeep(self):
+    def get_lowest_rms_values(self):
         return self.lowest_rms_values
 
     def set_index(self, new_index):
@@ -188,9 +188,9 @@ class VESinverse:
     def readData(self):
         # normally this is where the data would be read from the csv file
         # but now I'm just hard coding it in as global lists
-        for i in range(0, self.ndat, 1):
-            self.adatl[i] = math.log10(self.location_data[i])
-            self.rdatl[i] = math.log10(self.field_data[i])
+        for i in range(0, self.data_amount, 1):
+            self.location_data_log[i] = math.log10(self.location_data[i])
+            self.field_data_log[i] = math.log10(self.field_data[i])
 
     def error(self):
         self.pltanswer.clear()
@@ -198,31 +198,21 @@ class VESinverse:
         sumerror = 0.
         # pltanswer = [0]*64
         self.spline(self.resistivity_points_number, self.one30, self.one30,
-                    self.asavl, self.rl, self.y2)
-        for i in range(0, self.ndat, 1):
-            ans = self.splint(self.resistivity_points_number, self.adatl[i],
-                              self.asavl, self.rl, self.y2)
-            sumerror = sumerror + (self.rdatl[i] - ans) * (self.rdatl[i] - ans)
+                    self.a_spacing_log, self.rl, self.y2)
+        for i in range(0, self.data_amount, 1):
+            ans = self.splint(self.resistivity_points_number, self.location_data_log[i],
+                              self.a_spacing_log, self.rl, self.y2)
+            sumerror = sumerror + (self.field_data_log[i] - ans) * (self.field_data_log[i] - ans)
             # print(i,sum1,field_data[i],rdatl[i],ans)
             self.pltanswerl.append(ans)
             self.pltanswer.append(math.pow(10, ans))
-        self.rms = math.sqrt(sumerror/(self.ndat))
+        self.rms = math.sqrt(sumerror/(self.data_amount))
 
-        # check the spline routine
-        # for i in range(1,m+1,1):
-        #     anstest = splint(m, asavl[i],asavl,rl,y2)
-        #     print( asavl[i], rl[i], anstest)
-        # print(' rms  =  ', rms)
-    # if you erally want to get a good idea of all perdictions from Montecarlo
-    # perform the following plot (caution - change iter to a smaller number)
-        # plt.loglog(location_data[1:ndat],pltanswer[1:ndat])
         return self.rms
 
     def transf(self, y, i):
         self.u = 1./math.exp(y)
         self.t[0] = self.p[self.layer_index-1]
-        # print('\n', y, '\n', i, '\n', self.p, '\n', self.t)
-        # raise Exception("Pause")
         for j in range(1, self.layer, 1):
             pwr = -2. * self.u * self.p[self.layer - 1 - j]
             if pwr < math.log(2. * self.ep):
@@ -267,14 +257,12 @@ class VESinverse:
             sys.exit()
 
         x = self.electrode_spacing
-        # print("A-Spacing   App. Resistivity")
         for i in range(0, self.resistivity_points_number, 1):
             a = math.exp(x)
             self.a_spacing[i] = a
-            self.asavl[i] = math.log10(a)
+            self.a_spacing_log[i] = math.log10(a)
             self.rl[i] = math.log10(self.r[i])
             x = x + self.delx
-            # print("%7.2f   %9.3f " % ( a_spacing[i], r[i]))
 
         self.rms = self.error()
 
@@ -284,11 +272,6 @@ class VESinverse:
     # use splint to determine the spline interpolated prediction at the
     # spacing where the measured resistivity was taken - to compare observation
     # to prediction
-
-    # What does this do? It doesn't modify any self. variable
-    # x, y, y2 and p are the only ones that are self. variables and the first
-    # three are local and the operations done on p mean that it cannot be
-    # self.p because it is an array
     def spline(self, n, yp1, ypn, x=[], y=[], y2=[]):
         u = [0] * 1000
         one29 = 0.99e30
@@ -301,7 +284,6 @@ class VESinverse:
             u[0] = (3. / (x[1] - x[0])) * ((y[1] - y[0]) / (x[1] - x[0]) - yp1)
 
         for i in range(0, n-1):
-            # print(i,x[i])
             sig = (x[i] - x[i - 1]) / (x[i + 1] - x[i - 1])
             p = sig * y2[i - 1] + 2.
             y2[i] = (sig - 1.) / p
@@ -334,14 +316,11 @@ class VESinverse:
         h = xa[khi] - xa[klo]
         if abs(h) < 1e-20:
             print(" bad xa input")
-        # print(x,xa[khi],xa[klo])
         a = (xa[khi] - x) / h
         b = (x - xa[klo]) / h
         y = (a * ya[klo] + b * ya[khi] + ((a * a * a - a) * y2a[klo] +
                                           (b * b * b - b) * y2a[khi]) *
              (h * h) / 6.)
-        # print("x=   ", x,"y=  ", y, "  ya=  ", ya[khi],"
-        #       y2a=  ", y2a[khi], "  h=  ",h)
 
         return y
 
@@ -351,26 +330,16 @@ class VESinverse:
         self.set_random(0)
 
         self.readData()
-        print(self.location_data[0:self.ndat], self.field_data[0:self.ndat])
-        # for iloop in range(0, self.iter, 1):
-        #     # print( '  iloop is ', iloop)
-        #     for i in range(0, self.layer_index, 1):
-        #         randNumber = random.random()
-        #         # print(randNumber, '  random')
-        #         self.p[i] = (self.xlarge[i] - self.small[i])*randNumber + self.small[i]
+        print(self.location_data[0:self.data_amount], self.field_data[0:self.data_amount])
         for iloop in range(0, self.iter, 1):
             self.p.clear()
             for i in range(0, self.layer - 1):
                 randNumber = random.random()
                 self.p.append((self.thickness_maximum[i] - self.thickness_minimum[i])*randNumber + self.thickness_minimum[i])
-                # print(f"thickness random: {randNumber}")
             for i in range(0, self.layer):
                 randNumber = random.random()
                 self.p.append((self.resistivity_maximum[i] - self.resistivity_minimum[i])*randNumber + self.resistivity_minimum[i])
-                # print(f"resistivity random: {randNumber}")
-                # raise Exception("debug")
 
-            # print(self.p)
             self.rms = self.rmsfit()
 
             if self.rms < self.errmin:
@@ -385,7 +354,7 @@ class VESinverse:
                 for i in range(0, self.resistivity_points_number, 1):
                     self.rkeep.append(self.r[i])
                     self.rkeepl.append(self.rl[i])
-                for i in range(0, self.ndat, 1):
+                for i in range(0, self.data_amount, 1):
                     self.pltanswerkeepl.append(self.pltanswerl[i])
                     self.pltanswerkeep.append(self.pltanswer[i])
                 self.errmin = self.rms
@@ -397,7 +366,7 @@ class VESinverse:
 
         print(self.layer, '  Infinite ', self.lowest_rms_values[self.layer_index-1])
         for i in range(0, self.resistivity_points_number, 1):
-            self.asavl[i] = math.log10(self.a_spacing[i])
+            self.a_spacing_log[i] = math.log10(self.a_spacing[i])
 
     # output the error of fit
         print(' RMS error   ', self.errmin)
@@ -405,13 +374,11 @@ class VESinverse:
         for i in range(0, self.resistivity_points_number, 1):
             # print(a_spacing[i], rkeep[i], asavl[i], rkeepl[i])
             print("%9.3f   %9.3f  %9.3f  %9.3f" % (self.a_spacing[i], self.rkeep[i],
-                                                   self.asavl[i], self.rkeepl[i]))
+                                                   self.a_spacing_log[i], self.rkeepl[i]))
 
         # output the ranges cpmstraining the model
 
         print('   Small', '   Large')
-        # for i in range(0, self.layer_index, 1):
-        #     print("%9.3f %9.3f" % (self.small[i], self.xlarge[i]))
         for i in range(0, self.layer-1, 1):
             print("%9.3f %9.3f" % (self.thickness_minimum[i], self.thickness_maximum[i]))
         for i in range(0, self.layer, 1):
@@ -429,15 +396,15 @@ class VESinverse:
 
         # output the original data and the predicted data
         print('  Spacing', '  Original_Data', ' Predicted')
-        for i in range(0, self.ndat, 1):
+        for i in range(0, self.data_amount, 1):
             print("%9.3f  %9.3f  %9.3f" % (self.location_data[i], self.field_data[i], self.pltanswerkeep[i]))
 
     def graph(self):
         plt.loglog(self.a_spacing[1:self.resistivity_points_number], self.rkeep[1:self.resistivity_points_number], '-')  # resistivity prediction curve
-        plt.loglog(self.location_data[1:self.ndat], self.pltanswerkeep[1:self.ndat],
+        plt.loglog(self.location_data[1:self.data_amount], self.pltanswerkeep[1:self.data_amount],
                    'ro')  # predicted data red dots
         s = 7
-        plt.loglog(self.location_data[1:self.ndat], self.field_data[1:self.ndat], 'bo',
+        plt.loglog(self.location_data[1:self.data_amount], self.field_data[1:self.data_amount], 'bo',
                    markersize=s)  # original data blue dots
         plt.show()
         plt.grid(True)

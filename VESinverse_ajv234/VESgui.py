@@ -38,7 +38,6 @@ class VESgui:
     def display(self):
         self.preframe = Frame(self.window)
         self.preframe.pack(side=TOP, anchor=NW)
-        # self.displayChosenLayers(0, 3)
         self.display_text()
         self.display_buttons()
 
@@ -208,12 +207,6 @@ class VESgui:
                                                           title="Open File",
                                                           filetypes=(("Text Files", "*.txt"),
                                                                      ("All Files", "*.*")))
-
-            # dir for testing
-            # resistivity_file = filedialog.askopenfilename(initialdir="/home/ajv234/Documents/VESinverse",
-            #                                               title="Open File",
-            #                                               filetypes=(("Text Files", "*.txt"),
-            #                                                          ("All Files", "*.*")))
         else:
             resistivity_file = file
         if not test:
@@ -221,10 +214,6 @@ class VESgui:
 
         file_handle = open(resistivity_file, "r")
         file_list = file_handle.readlines()
-
-        # when printing, skip first 2 lines: data starts in line 3.
-        # for i in range(0, len(file_list)):
-        #     print(file_list[i])
 
         # algorithm to use is on line 1 (second line).
         if int(file_list[1].strip()) == 1:
@@ -238,10 +227,10 @@ class VESgui:
 
         # number of data values
         data_length = len(file_list) - 3
-        self.VI.set_ndat(data_length)
+        self.VI.set_data_amount(data_length)
 
-        g_adat = [0]*data_length          # g_adat and g_rdat (gui_xdat) are temporary arrays that this function uses and then
-        g_rdat = [0]*data_length          # passes through the VI's adat and rdat setter
+        g_location_data = [0]*data_length          # g_adat and g_rdat (gui_xdat) are temporary arrays that this function uses and then
+        g_field_data = [0]*data_length          # passes through the VI's adat and rdat setter
 
         # for each data line
         for i in range(3, len(file_list)):
@@ -252,11 +241,11 @@ class VESgui:
             # print('-->' + resis_val + '<--')
 
             # TODO: better name for adat or spacing_val?: what are these values?
-            g_adat[i-3] = spacing_val
-            g_rdat[i-3] = resis_val
+            g_location_data[i-3] = spacing_val
+            g_field_data[i-3] = resis_val
 
-        self.VI.set_location_data(g_adat)
-        self.VI.set_field_data(g_rdat)
+        self.VI.set_location_data(g_location_data)
+        self.VI.set_field_data(g_field_data)
 
         # TODO: do we handle files with the ending line of 0 0 ? Should we?
 
@@ -280,8 +269,6 @@ class VESgui:
 
     def computation(self, test=0):
 
-        # g_small = self.VI.get_small()       # g_small, and g_xlarge are local instances of small and xlarge
-        # g_xlarge = self.VI.get_xlarge()     # from VESinverse
         t_min = []
         t_max = []
         r_min = []
@@ -302,11 +289,6 @@ class VESgui:
         self.VI.set_resistivity_minimum(r_min)
         self.VI.set_resistivity_maximum(r_max)
 
-        print(self.VI.get_thickness_minimum())
-        print(self.VI.get_thickness_maximum())
-        print(self.VI.get_resistivity_minimum())
-        print(self.VI.get_resistivity_maximum())
-
         self.VI.set_iter(self.iterator.get())
         self.VI.set_layers(self.curr_num_layers)
         self.VI.computePredictions()
@@ -319,7 +301,7 @@ class VESgui:
         self.resistivity_label.grid_forget()
         self.errmin_label.grid_forget()
         # Somewhere in here remove the labels when computing predictions for a new layer
-        g_pkeep = self.VI.get_pkeep()
+        g_pkeep = self.VI.get_lowest_rms_values()
         g_errmin = self.VI.get_errmin()
         g_layer_index = self.VI.get_layer_index()
 

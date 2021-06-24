@@ -67,10 +67,10 @@ class VEStesting(unittest.TestCase):
         elif test_number == 17:
             self.test_4L_R5_D8()
         
-        elif test_number == 18:
-            self.gui_test_1()
-        elif test_number == 19:
-            self.gui_test_2()
+        # elif test_number == 18:
+        #     self.gui_test_1()
+        # elif test_number == 19:
+        #     self.gui_test_2()
 # Layer 3 Tests
 
     def test_3L_R1_D1(self):            # test_number == 4

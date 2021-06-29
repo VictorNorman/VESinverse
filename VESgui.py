@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 import sys
-from VESinverse_ajv234 import VESinverse
+from VESinverse import VESinverse
 import argparse
 
 

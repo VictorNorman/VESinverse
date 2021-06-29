@@ -327,7 +327,7 @@ class VESgui:
         self.errout_label = Label(self.layerinputframe,
                                   text=str(round(g_errmin, 3)))
         self.errmin_label.grid(row=3+self.curr_num_layers, column=3, columnspan=2)
-        self.errmin_label.grid(row=3+self.curr_num_layers, column=4, columnspan=2)
+        self.errout_label.grid(row=3+self.curr_num_layers, column=4, columnspan=2)
 
     def argument_init(self):
         # These are all the options for Command Line Arguments,
